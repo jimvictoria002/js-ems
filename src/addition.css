@@ -1,0 +1,50 @@
+.transition-default {
+    transition: all ease .3s;
+}
+
+.nav-anchor {
+    position: relative;
+    transition: all ease .4s;
+}
+
+.nav-anchor::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #ffecbc;
+    border-radius: 20px;
+    transition: all ease .3s;
+}
+
+#top-nav{
+    transition: all ease .4s;
+}
+
+.nav-anchor.active::after {
+    width: 100%;
+}
+
+.nav-anchor.active {
+    color: #ffecbc;
+
+}
+
+.nav-anchor:hover::after {
+    width: 100%;
+}
+
+.nav-anchor:hover {
+    color: #ffecbc;
+}
+
+.rotate {
+    rotate: 90deg;
+}
+
+::selection {
+    background-color: rgb(9, 71, 9);
+    color: white; 
+}
