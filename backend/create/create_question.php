@@ -5,16 +5,19 @@ require "../../connection.php";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $f_id = $_POST['f_id'];
+    $type = $_POST['type'];
 
-    $query = "INSERT INTO questionnaire (f_id, question, type) VALUES ($f_id, NULL, 'radio');";
+    $query = "INSERT INTO questionnaire (f_id, question, type) VALUES ($f_id, NULL, '$type');";
     $result = $conn->query($query);
 
     $question_id = $conn->insert_id;
 
-    $query = "INSERT INTO choices (q_id, choice_name) VALUES ($question_id, NULL );";
-    $result = $conn->query($query);
+    if ($type == 'radio') {
+        $query = "INSERT INTO choices (q_id, choice_name) VALUES ($question_id, NULL );";
+        $result = $conn->query($query);
 
-    $choice_id = $conn->insert_id;
+        $choice_id = $conn->insert_id;
+    }
 
     $question_card = '';
 
@@ -29,27 +32,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="" class="font-semibold">Question</label>
                     <input type="text" placeholder="Enter question"
                         class=" p-1  outline-none border-b border-gray-400 rounded-sm w-full"
-                        id="question-<?= $question_id ?>" name="question" data-question-id="<?= $question_id ?>"
-                        value="" onchange="saveQuestionInput(this)">
+                        id="question-<?= $question_id ?>" name="question" data-question-id="<?= $question_id ?>" value=""
+                        onchange="saveQuestionInput(this)">
                 </div>
                 <div class="w-full" id="question-container-<?= $question_id ?>">
-                    
+
+
+                    <?php if ($type == 'radio'): ?>
                         <div class="flex flex-col w-[80%] my-2 items-start">
 
-
-                                <div class="flex items-center gap-2 my-3 text-lg w-full">
-                                    <input type="radio" id="" disabled>
-                                    <div class="flex flex-col w-full">
-                                        <input type="text" name="question-choice-<?= $question_id ?>[]"
-                                            class="question-choice p-1 border-b outline-none border-gray-400 text-sm rounded-sm w-full" onkeyup="checkIfEnter(this)"
-                                            placeholder="Choice 1" data-choice-count="1" value=""
-                                            id="<?= $choice_id ?>" data-choice-id="<?= $choice_id ?>"
-                                            onchange="saveChoice($(this),$(this).val(),<?= $choice_id ?>)">
-                                    </div>
-                                    <i class="fa-solid fa-x text-xs text-gray-400 cursor-pointer"
-                                        onclick="removeChoice(<?= $choice_id ?>,this);"></i>
-
+                            <div class="flex items-center gap-2 my-3 text-lg w-full">
+                                <input type="radio" id="" disabled>
+                                <div class="flex flex-col w-full">
+                                    <input type="text" name="question-choice-<?= $question_id ?>[]"
+                                        class="question-choice p-1 border-b outline-none border-gray-400 text-sm rounded-sm w-full"
+                                        onkeyup="checkIfEnter(this)" placeholder="Choice 1" data-choice-count="1" value=""
+                                        id="<?= $choice_id ?>" data-choice-id="<?= $choice_id ?>"
+                                        onchange="saveChoice($(this),$(this).val(),<?= $choice_id ?>)">
                                 </div>
+                                <i class="fa-solid fa-x text-xs text-gray-400 cursor-pointer"
+                                    onclick="removeChoice(<?= $choice_id ?>,this);"></i>
+
+                            </div>
 
 
 
@@ -59,6 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <i class="fa-solid fa-plus"></i>
                             </p>
                         </div>
+
+                    <?php else: ?>
+                        <input type="text" placeholder="Answer"
+                            class="p-1 border-b mb-3 border-gray-400 mt-4 outline-none text-sm rounded-sm w-[80%]"
+                            name="event_title" disabled>
+                    <?php endif; ?>
                 </div>
 
 
@@ -76,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="radio">Multiple choice</option>
                     </select>
                     <script>
-                        $('#question-type-<?= $question_id ?>').val('radio');
+                        $('#question-type-<?= $question_id ?>').val('<?= $type ?>');
                     </script>
                 </div>
             </div>

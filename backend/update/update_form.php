@@ -6,14 +6,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $field = $_POST['field'];
     $value = $_POST['value'];
-    $q_id = $_POST['q_id'];
+    $f_id = $_POST['f_id'];
 
-    $query = "UPDATE questionnaire SET $field = ? WHERE q_id = ?";
+    $query = "UPDATE forms SET $field = ? WHERE f_id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("si", $value, $q_id);
+    $stmt->bind_param("si", $value, $f_id);
     $stmt->execute();
 
-    // echo "UPDATE questionnaire SET $field = '$value' WHERE q_id = $q_id ";
 
     if ($stmt->affected_rows > 0) {
         echo '1';

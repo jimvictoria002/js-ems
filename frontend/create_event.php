@@ -8,6 +8,7 @@ require "./components/side-nav.php";
 
     <?php
     $active = 'event';
+    $event_id = $_GET['event_id'];
     require "./components/top-nav.php";
     require "./components/inputs-form/create-event.php";
     ?>
