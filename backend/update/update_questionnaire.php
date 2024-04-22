@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("si", $value, $q_id);
     $stmt->execute();
 
-    // echo "UPDATE questionnaire SET $field = '$value' WHERE q_id = $q_id ";
 
     if ($stmt->affected_rows > 0) {
         echo '1';

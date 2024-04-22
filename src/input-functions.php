@@ -1,31 +1,6 @@
 <script>
 
 
-    function create_form(e) {
-        $(e).prop('disabled', true);
-        $(e).removeClass('hover:bg-green-700');
-        $(e).css({
-            'opacity': '.5',
-            'cursor': 'not-allowed'
-        });
-        $('#creating-note').show();
-        setTimeout(() => {
-            $('#creating-note').hide();
-            $(e).hide();
-        }, 1000);
-
-        $.ajax({
-            type: "POST",
-            url: "../backend/create/create_evaluation_form.php",
-            data: {
-                event_id: <?= $_GET['event_id'] ?>
-            },
-            success: function (response) {
-                console.log(response);
-                window.location = '';
-            }
-        });
-    }
 
     function removeChoice(c_id, e) {
         $.ajax({
@@ -41,7 +16,7 @@
         });
     }
 
-    
+
 
     function saveChoice(e, choice_name, c_id) {
         $(e).after(`<p class="text-xs" id="save-note">Saving...</p>`);
@@ -113,8 +88,15 @@
                 },
                 success: function (response) {
 
+                    $('#form-container').html('<p class="text-sm m-1 font-semibold">For feedback purposes (optional)</p>');
+                    $('#create-form-btn').show();
+                    $('#create-form-btn').css({
+                        'opacity': '',
+                        'cursor': ''
+                    });
 
-                    window.location = '';
+                    $('#create-form-btn').prop('disabled', false);
+                    $('#create-form-btn').addClass('hover:bg-green-700');
 
                 }
             });
@@ -175,7 +157,6 @@
                     value: value
                 },
                 success: function (response) {
-                    console.log(response);
                     if (response == '0') {
                         $('#save-note').addClass('text-red-700').text('Could not save');
                     } else {
@@ -283,7 +264,7 @@
 
     function createNewQuestion(e) {
         let type = $(e).prev().children().find('select').val();
-        if(!type){
+        if (!type) {
             type = 'radio';
         }
         $.ajax({
