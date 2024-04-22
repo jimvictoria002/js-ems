@@ -5,18 +5,10 @@
 <script src='../node_modules/@fullCalendar/multimonth/index.global.min.js'></script>
 <script src='../node_modules/@fullCalendar/timegrid/index.global.min.js'></script>
 
-<div class="p-5 ">
-    <div class="bg-white p-4">
-        <h3 class="text-xl font-semibold md:text-3xl my-8 mt-3">Event calendar</h3>
+<div id="calendarContainer" class=" rounded-md w-full" style=" overflow: auto;">
 
-        <div id="calendarContainer" class=" rounded-md w-full" style=" overflow: auto;">
-
-            <div id="calendar" class="min-w-[40rem] border p-6"></div>
-        </div>
-    </div>
-
+    <div id="calendar" class="min-w-[40rem] border p-6"></div>
 </div>
-
 
 
 <?php
@@ -69,7 +61,7 @@ while ($event = $result->fetch_assoc()) {
             },
             eventContent: function (arg) {
                 return {
-                    html: '<span class="event-con w-full"><div class="w-full p-1 flex py-1 justify-between flex-col"><div class="flex"><b class="pr-1 inline-flex items-center ">' + arg.event.extendedProps.stime + '<div class="rounded-full w-1 h-1 inline-block mx-1 bg-yellow-400"></div></b><p class="event-con">' + arg.event.title + '</p></div> <b class="px-1 event-con self-end">' + arg.event.extendedProps.etime + '</b></div>' + arg.event.extendedProps.venue + '</span>'
+                    html: '<span class="event-con p-1  py-1 w-full text-xs"><div class="w-full flex justify-between flex-col"><div class="flex"><b class="pr-1 inline-flex items-center text-xs">' + arg.event.extendedProps.stime + '<div class="rounded-full w-1 h-1 inline-block mx-1 bg-yellow-400"></div></b><p class="event-con text-sm">' + arg.event.title + '</p></div> <b class="px-1 event-con self-end text-xs">' + arg.event.extendedProps.etime + '</b></div>' + arg.event.extendedProps.venue + '</span>'
                 };
             }
         });

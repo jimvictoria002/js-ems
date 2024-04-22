@@ -14,40 +14,55 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #ffecbc;
+  background-color: white;
   border-radius: 20px;
   transition: all ease 0.3s;
 }
 
-.fc-event-main {
-}
-
 .event-con {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    cursor: pointer;
-    white-space: wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+  white-space: wrap;
 }
 
 .fc-daygrid-dot-event {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    box-shadow: 0 0 1px rgba(0,0,0,1);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 1);
 }
-
 
 .fc-header-toolbar button {
-  padding: 4px 5px !important;
+  padding: 4px 10px !important;
   text-transform: capitalize !important;
 }
+.fc-daygrid-block-event{
+  transition: all ease .2s;
+}
+
+.fc-daygrid-block-event:hover{
+  background-color: #4da870 !important;
+}
+
 
 @media (max-width: 750px) {
   .fc-header-toolbar button {
     padding: 5px !important;
   }
+}
+.fc .fc-button-primary {
+  --tw-bg-opacity: 1;
+  background-color: rgb(133, 211, 133);
+  border: none !important;
+}
+
+.fc-button-active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(50, 128, 50) !important;
+  border: none !important;
 }
 
 #top-nav {
@@ -59,7 +74,7 @@
 }
 
 .nav-anchor.active {
-  color: #ffecbc;
+  color: white;
 }
 
 .nav-anchor:hover::after {
@@ -67,7 +82,7 @@
 }
 
 .nav-anchor:hover {
-  color: #ffecbc;
+  color: white;
 }
 
 .rotate {

@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->execute()) {
 
             $referrer = $_SERVER['HTTP_REFERER'];
-            $_SESSION['success'] = 'Updated successfuly';
+            $_SESSION['success'] = 'Update successfuly';
 
             header("Location: $referrer");
         } else {
@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->execute()) {
 
             $referrer = $_SERVER['HTTP_REFERER'];
-            $_SESSION['success'] = 'Updated successfuly';
+            $_SESSION['success'] = 'Update successfuly';
             header("Location: $referrer");
         } else {
             echo "Error updating event event: " . $conn->error;

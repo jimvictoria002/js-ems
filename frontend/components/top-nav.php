@@ -1,4 +1,4 @@
-<nav class="w-full sticky top-0 flex justify-between z-40   text-green-950  backdrop-blur-sm" id="top-nav">
+<nav class="w-full sticky top-0 flex justify-between z-30   text-green-950  backdrop-blur-sm" id="top-nav">
     <div class="flex items-center mx-3">
         <label for="toggle-nav"><i class="fa-solid fa-bars text-3xl md:text-4xl  cursor-pointer transition-default"
                 id="burger"></i></label>

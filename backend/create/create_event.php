@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $v_id = $_POST['venue'];
     $start_datetime = $_POST['start_datetime'];
     $end_datetime = $_POST['end_datetime'];
-    $created_by = 123;
+    $created_by = 1;
     $fileNameToStore = $fileName;
 
 
@@ -60,6 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->affected_rows > 0) {
         $event_id = $conn->insert_id;
+        session_start();
+        $_SESSION['success'] = 'Created successfuly';
         header("Location:../../frontend/edit_event.php?event_id=$event_id");
     } else {
         echo "Error inserting event: " . $conn->error;

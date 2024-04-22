@@ -1,20 +1,22 @@
 <div class="w-full px-3">
     <div class="w-full bg-white rounded-lg p-6 mt-2 mb-64">
 
-        <h1 class="text-lg md:text-3xl font-bold text-green-950">Edit event </h1>
+        <h1 class="text-lg md:text-3xl font-semibold text-green-950">Edit event </h1>
+        <?php if ($event['status'] != 'approved'): ?>
+            <div class="flex justify-start my-7 md:my-10">
+                <div class="flex flex-col">
+                    <p class="text-sm font-semibold ml-1">Event status</p>
+                    <h1
+                        class="p-1 tex-sm md:text-lg rounded-lg mt-1 font-semibold inline-block  <?= $event['status'] == 'approved' ? 'bg-green-700' : 'bg-orange-700' ?>  text-white capitalize px-7">
+                        <?= $event['status'] ?>
+                    </h1>
+                </div>
 
-        <div class="flex justify-start my-7 md:my-10">
-            <div class="flex flex-col">
-                <p class="text-sm font-semibold ml-1">Event status</p>
-                <h1
-                    class="p-1 tex-sm md:text-lg rounded-lg mt-1 font-semibold inline-block  <?= $event['status'] == 'approved' ? 'bg-green-700' : 'bg-orange-700' ?>  text-white capitalize px-7">
-                    <?= $event['status'] ?>
-                </h1>
             </div>
+        <?php endif; ?>
 
-        </div>
 
-        <form action="../backend/update/update_event.php" method="POST" class="mt-2" id="create-event"
+        <form action="../backend/update/update_event.php" class="mt-4" method="POST" class="mt-2" id="create-event"
             enctype="multipart/form-data">
 
             <div class="event-attributes flex items-start gap-y-6 gap-[3%] flex-wrap">
@@ -159,12 +161,52 @@
                 <input type="hidden" name="event_id" value="<?= $event_id ?>">
             </div>
 
-            <div class="w-full flex justify-end my-4 pr-5 mb-5">
-                <button onclick="$('#create-event').submit();" disabled
-                    class="px-8 py-2 self-end md:text-base text-sm bg-green-800 opacity-70 transition-default text-white font-semibold rounded-xl"
-                    id="upt-btn">Update</button>
+            <div class="w-full flex gap-y-10 flex-col-reverse md:flex-row  justify-end my-4 pr-5 mb-5 md:gap-10">
+
+                <?php if ($event['status'] == 'pending'): ?>
+
+                    <button type="button"
+                        onclick="if($('#create-event').valid())if(confirm('Do you really want to approve this event?'))$('#approve-<?= $event_id ?>').submit();"
+                        class="px-8 py-2  self-start md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Approve
+                        <i class="fa-solid fa-check"></i></button>
+                <?php else: ?>
+                    <button type="button"
+                        onclick="if($('#create-event').valid())if(confirm('Do you really want to Unapprove this event?'))$('#approve-<?= $event_id ?>').submit();"
+                        class="px-8 py-2  self-start md:text-base text-sm bg-orange-500 hover:bg-orange-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Remove
+                        approval</button>
+                <?php endif; ?>
+
+                <div class="flex self-end gap-10">
+                    <button onclick="$('#create-event').submit();" disabled
+                        class="px-8 py-2 self-end md:text-base text-sm bg-green-800 cursor-not-allowed opacity-70 transition-default text-white font-semibold rounded-xl"
+                        id="upt-btn">Update</button>
+                    <button type="button"
+                        onclick="if(confirm('Do you really want to delete this event?'))$('#delete-event').submit();"
+                        class="px-8 py-2 self-end md:text-base text-sm bg-red-700 hover:bg-red-600 cursor-pointer  transition-default text-white font-semibold rounded-xl">Delete</button>
+                </div>
+
             </div>
         </form>
+
+
+
+        <?php if ($event['status'] == 'pending'): ?>
+
+            <form action="../backend/update/approve_event.php" method="POST" id="approve-<?= $event_id ?>">
+                <input type="hidden" name="event_id" value="<?= $event_id ?>">
+                <input type="hidden" name="status" value="approved">
+            </form>
+        <?php else: ?>
+            <form action="../backend/update/approve_event.php" method="POST" id="approve-<?= $event_id ?>">
+                <input type="hidden" name="event_id" value="<?= $event_id ?>">
+                <input type="hidden" name="status" value="pending">
+            </form>
+        <?php endif; ?>
+
+        <form action="../backend/delete/delete_event.php" method="post" id="delete-event">
+            <input type="hidden" name="event_id" value="<?= $event_id ?>">
+        </form>
+
 
         <script>
             $(document).ready(function () {
@@ -173,6 +215,8 @@
                     $("#upt-btn").prop('disabled', false)
                     $("#upt-btn").addClass('hover:bg-green-700')
                     $("#upt-btn").removeClass('opacity-70')
+                    $("#upt-btn").removeClass('cursor-not-allowed')
+
                 })
 
                 $.validator.addMethod("greaterThan", function (value, element, params) {
