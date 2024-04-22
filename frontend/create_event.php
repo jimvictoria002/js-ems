@@ -4,7 +4,7 @@ require "../connection.php";
 require "./partials/header.php";
 require "./components/side-nav.php";
 ?>
-<main class="w-full ">
+<main class="w-full h-screen overflow-auto">
 
     <?php
     $active = 'event';

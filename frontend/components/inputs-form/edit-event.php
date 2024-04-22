@@ -1,9 +1,18 @@
 <div class="w-full px-3">
-    <div class="w-full bg-white rounded-lg p-3 mt-2 mb-64">
-        <h1
-            class="my-6 p-3 text-xl rounded-lg md:text-2xl font-bold inline-block  <?= $event['status'] == 'approved' ? 'bg-green-500' : 'bg-orange-500' ?>  text-white capitalize px-10">
-            <?= $event['status'] ?>
-        </h1>
+    <div class="w-full bg-white rounded-lg p-6 mt-2 mb-64">
+
+        <h1 class="text-lg md:text-3xl font-bold text-green-950">Edit event </h1>
+
+        <div class="flex justify-start my-7 md:my-10">
+            <div class="flex flex-col">
+                <p class="text-sm font-semibold ml-1">Event status</p>
+                <h1
+                    class="p-1 tex-sm md:text-lg rounded-lg mt-1 font-semibold inline-block  <?= $event['status'] == 'approved' ? 'bg-green-700' : 'bg-orange-700' ?>  text-white capitalize px-7">
+                    <?= $event['status'] ?>
+                </h1>
+            </div>
+
+        </div>
 
         <form action="../backend/update/update_event.php" method="POST" class="mt-2" id="create-event"
             enctype="multipart/form-data">
@@ -14,8 +23,8 @@
                 <div class="w-full text-sm md:text-base sm:w-[47%] lg:w-[31%] flex flex-col">
                     <label for="" class="font-semibold">Event title<span class="text-red-700">*</span></label>
                     <input type="text" placeholder="Enter title"
-                        class="form-input p-1 border active:border-green-950 rounded-sm w-full" value="<?= $event['title'] ?>"
-                        name="title">
+                        class="form-input p-1 border active:border-green-950 rounded-sm w-full"
+                        value="<?= $event['title'] ?>" name="title">
                 </div>
 
                 <!-- Description -->
@@ -80,12 +89,12 @@
                         <p class="text-green-700 text-xs mt-1">Maximum of 10MB<span class="text-red-700">*</span></p>
                     </div>
 
-                    <div id="image-preview" class="mt-2 hidden">
+                    <div id="image-preview" class="mt-2 ">
                         <img src="<?= '../uploads/event_img/' . $event['event_img'] ?>" alt="event_img"
                             class="max-w-full" id="event-img-preview">
                     </div>
 
-                    <p id="view-note" class="text-sm text-green-700 font-bold mt-2  cursor-pointer">View image</p>
+                    <!-- <p id="view-note" class="text-sm text-green-700 font-bold mt-2  cursor-pointer">View image</p> -->
 
                     <input type="file" id="event_img" name="event_img" accept="image/*"
                         class="form-input p-1 border mt-3 active:border-green-950 rounded-sm w-full text-sm cursor-pointer"
@@ -150,16 +159,17 @@
                 <input type="hidden" name="event_id" value="<?= $event_id ?>">
             </div>
 
-            <div class="w-full flex justify-end my-4 pr-5 mb-5" >
+            <div class="w-full flex justify-end my-4 pr-5 mb-5">
                 <button onclick="$('#create-event').submit();" disabled
-                    class="px-8 py-2 self-end md:text-base text-sm bg-green-800 opacity-70 transition-default text-white font-semibold rounded-xl" id="upt-btn">Update</button>
+                    class="px-8 py-2 self-end md:text-base text-sm bg-green-800 opacity-70 transition-default text-white font-semibold rounded-xl"
+                    id="upt-btn">Update</button>
             </div>
         </form>
 
         <script>
             $(document).ready(function () {
 
-                $('.form-input').on('change', function(){
+                $('.form-input').on('change', function () {
                     $("#upt-btn").prop('disabled', false)
                     $("#upt-btn").addClass('hover:bg-green-700')
                     $("#upt-btn").removeClass('opacity-70')
@@ -233,8 +243,8 @@
 
         <?php require "evaluation-form.php"; ?>
 
-        <?php 
-        if (isset($_SESSION['success'])): 
+        <?php
+        if (isset($_SESSION['success'])):
             require "./components/success-message.php";
             unset($_SESSION['success']);
         endif;

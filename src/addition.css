@@ -1,50 +1,80 @@
 .transition-default {
-    transition: all ease .3s;
+  transition: all ease 0.3s;
 }
 
 .nav-anchor {
-    position: relative;
-    transition: all ease .4s;
+  position: relative;
+  transition: all ease 0.4s;
 }
 
 .nav-anchor::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: #ffecbc;
-    border-radius: 20px;
-    transition: all ease .3s;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffecbc;
+  border-radius: 20px;
+  transition: all ease 0.3s;
 }
 
-#top-nav{
-    transition: all ease .4s;
+.fc-event-main {
+}
+
+.event-con {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    cursor: pointer;
+    white-space: wrap;
+}
+
+.fc-daygrid-dot-event {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    box-shadow: 0 0 1px rgba(0,0,0,1);
+}
+
+
+.fc-header-toolbar button {
+  padding: 4px 5px !important;
+  text-transform: capitalize !important;
+}
+
+@media (max-width: 750px) {
+  .fc-header-toolbar button {
+    padding: 5px !important;
+  }
+}
+
+#top-nav {
+  transition: all ease 0.4s;
 }
 
 .nav-anchor.active::after {
-    width: 100%;
+  width: 100%;
 }
 
 .nav-anchor.active {
-    color: #ffecbc;
-
+  color: #ffecbc;
 }
 
 .nav-anchor:hover::after {
-    width: 100%;
+  width: 100%;
 }
 
 .nav-anchor:hover {
-    color: #ffecbc;
+  color: #ffecbc;
 }
 
 .rotate {
-    rotate: 90deg;
+  rotate: 90deg;
 }
 
 ::selection {
-    background-color: rgb(9, 71, 9);
-    color: white; 
+  background-color: rgb(9, 71, 9);
+  color: white;
 }

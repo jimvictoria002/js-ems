@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html class="">
 
 <head>
   <meta charset="UTF-8">
@@ -15,4 +15,4 @@
   <title><?= $title ?></title>
 </head>
 
-<body class="flex items-start w-full bg-green-50">
+<body class="flex items-start w-full bg-green-50 !overflow-hidden">
