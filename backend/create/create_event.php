@@ -48,15 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $created_by = $_SESSION['user_id'];
     $fileNameToStore = $fileName;
 
+    $status = $_SESSION['access'] == 'admin' ? 'approved' : 'pending';
+
 
     $query = "INSERT INTO `events` 
-    (`title`, `description`, `event_img`, `start_datetime`, `end_datetime`, `v_id`, `created_by`) 
+    (`title`, `description`, `event_img`, `start_datetime`, `end_datetime`, `v_id`, `status`, `created_by`) 
     VALUES 
-    (?, ?, ?, ?, ?, ?, ?)";
+    (?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($query);
 
-    $stmt->bind_param("ssssssi", $title, $description, $fileNameToStore, $start_datetime, $end_datetime, $v_id, $created_by);
+    $stmt->bind_param("sssssssi", $title, $description, $fileNameToStore, $start_datetime, $end_datetime, $v_id, $status, $created_by);
 
     $stmt->execute();
 

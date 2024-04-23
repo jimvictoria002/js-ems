@@ -25,7 +25,14 @@ while ($event = $result->fetch_assoc()) {
         'description' => $event['description'],
         'start' => $event['start_datetime'],
         'end' => $event['end_datetime'],
+        'eventImg' => '../uploads/event_img/' . $event['event_img'],
         'venue' => $event['venue'],
+        'viewDate' => (
+            date("F d, Y", strtotime($event['start_datetime'])) == date("F d, Y", strtotime($event['end_datetime']))
+            ? date("F d, Y", strtotime($event['start_datetime'])) . ' ' . date("g:ia", strtotime($event['start_datetime'])) . ' - ' . date("g:ia", strtotime($event['end_datetime']))
+            : date("F d, Y", strtotime($event['start_datetime'])) . ' ' . date("g:ia", strtotime($event['start_datetime'])) . ' - ' . date("F d, Y", strtotime($event['end_datetime'])) . ' ' . date("g:ia", strtotime($event['end_datetime']))
+        ),
+        'creatorId' => $event['created_by'],
         'stime' => date("g:ia", strtotime($event['start_datetime'])),
         'etime' => date("g:ia", strtotime($event['end_datetime'])),
         'color' => '#2E6B45'
@@ -51,7 +58,59 @@ while ($event = $result->fetch_assoc()) {
             },
             events: events,
             eventClick: function (e) {
-                window.location = "edit_event.php?event_id=" + e.event.id;
+                let event_id = e.event.id;
+                let title = e.event.title;
+                let description = e.event.extendedProps.description;
+                let eventImg = e.event.extendedProps.eventImg;
+                let venue = e.event.extendedProps.venue;
+                let viewDate = e.event.extendedProps.viewDate;
+
+                let creatorId = e.event.extendedProps.creatorId;
+
+
+                $('#view-event-modal').fadeToggle('fast');
+                $('#event-title').text(title);
+
+                if (description != '') {
+                    $('#event-description-parent').show();
+                    $('#event-description').text(description);
+                    $('#event-venue').parent().removeClass('mt-3');
+
+
+                } else {
+                    $('#event-description-parent').hide();
+                    $('#event-description').text(description);
+                    $('#event-venue').parent().addClass('mt-3');
+
+                }
+
+                $('#event-venue').text(venue);
+                $('#view-date').text(viewDate);
+                $('#view-img').prop('src', (eventImg))
+
+                console.log(creatorId)
+                console.log(<?= $_SESSION['user_id'] ?>)
+
+                if ('<?= $_SESSION['access'] ?>' != 'admin') {
+                    if (creatorId != '<?= $_SESSION['user_id'] ?>') {
+                        $('#edit-btn').hide();
+                    } else {
+                        $('#edit-btn').show();
+                        $('#edit-btn').on('click', function () {
+                            window.location = "edit_event.php?event_id=" + event_id;
+                        })
+                    }
+                } else {
+                    $('#edit-btn').on('click', function () {
+                        window.location = "edit_event.php?event_id=" + event_id;
+                    })
+                }
+
+
+
+
+
+                // window.location = "edit_event.php?event_id=" + e.event.id;
             },
             eventTimeFormat: {
                 hour: 'numeric',

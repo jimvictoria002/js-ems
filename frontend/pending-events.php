@@ -2,6 +2,11 @@
 
 session_start();
 
+if(!isset($_SESSION['user_id'])){
+    header('Location: login.php');
+}
+
+
 $title = 'Pending';
 require "../connection.php";
 require "./partials/header.php";
@@ -19,8 +24,7 @@ require "./components/side-nav.php";
 
             <?php
             require "./components/tables/events-pending-table.php";
-            require "./components/success-message.php";
-
+            
             ?>
         </div>
 
@@ -32,7 +36,7 @@ require "./components/side-nav.php";
         unset($_SESSION['success']);
     endif;
     ?>
-
+    
 
 </main>
 

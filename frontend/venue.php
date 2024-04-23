@@ -2,6 +2,11 @@
 
 session_start();
 
+if(!isset($_SESSION['user_id'])){
+    header('Location: login.php');
+}
+
+
 $title = 'Venue';
 require "../connection.php";
 require "./partials/header.php";

@@ -3,9 +3,9 @@
 session_start();
 
 if(!isset($_SESSION['user_id'])){
-    header("HTTP/1.0 404 NOT FOUND");
-    exit;
+    header('Location: login.php');
 }
+
 
 $title = 'Dashboard';
 require "../connection.php";

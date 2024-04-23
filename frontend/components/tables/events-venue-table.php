@@ -76,9 +76,9 @@ $result = $conn->query($query);
         </tr>
 
         <tr>
-            <th class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-lg">Edit
+            <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-lg">Edit
             </th>
-            <th class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-lg">Delete
+            <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-lg">Delete
             </th>
 
         </tr>
