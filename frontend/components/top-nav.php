@@ -4,7 +4,7 @@
                 id="burger"></i></label>
         <input type="checkbox" name="" id="toggle-nav" class="hidden shadow-sm">
         <div class="flex items-center pl-5">
-            <img src="../lu-logo.png" alt="lu-logo" class="w-10 md:w-12 h-10 md:h-12">
+            <img src="../ems-logo.png" alt="lu-logo" class="w-10 md:w-12 h-10 md:h-12">
             <p class="text-lg md:text-2xl font-semibold py-4 px-2 hidden md:block">Event Management</p>
             <p class="text-lg md:text-2xl font-semibold py-4 px-2 md:hidden block">EMS</p>
 
@@ -13,8 +13,8 @@
 
     <div class=" flex items-center md:my-3 mr-4 relative cursor-pointer">
         <div class="profile-toggle flex-col items-end hidden md:flex">
-            <p class="text-lg">J. Victoria</p>
-            <p class="text-sm font-bold">Admin</p>
+            <p class="text-lg"><?= $_SESSION['firstname'][0]. '. '.$_SESSION['lastname'] ?></p>
+            <p class="text-sm font-bold capitalize"><?= $_SESSION['access'] ?></p>
         </div>
         <div>
             <i class="fa-solid fa-user-circle text-4xl md:text-5xl profile-toggle text-green-950 pl-3"></i>
@@ -22,8 +22,8 @@
         <div class="absolute top-full shadow-lg right-0 bg-white hidden" id="profile-drop">
             <div class="flex items-center md:py-3 gap-3 pr-2 relative w-48 py-4 md:w-60 justify-end !cursor-default">
                 <div class=" flex-col items-end flex">
-                    <p class="text-lg">J. Victoria</p>
-                    <p class="text-sm font-bold">Admin</p>
+                    <p class="text-lg"><?= $_SESSION['firstname'][0]. '. '.$_SESSION['lastname'] ?></p>
+                    <p class="text-sm font-bold capitalize"><?= $_SESSION['access'] ?></p>
                 </div>
                 <div>
                     <i class="fa-solid fa-user-circle text-4xl md:text-5xl text-green-950"></i>
@@ -32,7 +32,7 @@
             <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Profile</a>
             <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Change
                 password</a>
-            <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Logout</a>
+            <a href="../backend/auth/logout.php" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Logout</a>
         </div>
     </div>
 

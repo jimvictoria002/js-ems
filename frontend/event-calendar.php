@@ -1,9 +1,10 @@
 <?php
+session_start();
+
 $title = 'Calendar';
 require "../connection.php";
 require "./partials/header.php";
 $active = 'calendar';
-session_start();
 require "./components/side-nav.php";
 ?>
 <main class="w-full overflow-auto  h-screen z-50">

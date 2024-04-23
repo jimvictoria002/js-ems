@@ -163,17 +163,20 @@
 
             <div class="w-full flex gap-y-10 flex-col-reverse md:flex-row  justify-end my-4 pr-5 mb-5 md:gap-10">
 
-                <?php if ($event['status'] == 'pending'): ?>
+                <?php if ($access == 'admin'): ?>
+                    <?php if ($event['status'] == 'pending'): ?>
 
-                    <button type="button"
-                        onclick="if($('#create-event').valid())if(confirm('Do you really want to approve this event?'))$('#approve-<?= $event_id ?>').submit();"
-                        class="px-8 py-2  self-start md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Approve
-                        <i class="fa-solid fa-check"></i></button>
-                <?php else: ?>
-                    <button type="button"
-                        onclick="if($('#create-event').valid())if(confirm('Do you really want to Unapprove this event?'))$('#approve-<?= $event_id ?>').submit();"
-                        class="px-8 py-2  self-start md:text-base text-sm bg-orange-500 hover:bg-orange-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Remove
-                        approval</button>
+                        <button type="button"
+                            onclick="if($('#create-event').valid())if(confirm('Do you really want to approve this event?'))$('#approve-<?= $event_id ?>').submit();"
+                            class="px-8 py-2  self-start md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Approve
+                            <i class="fa-solid fa-check"></i></button>
+                    <?php else: ?>
+                        <button type="button"
+                            onclick="if($('#create-event').valid())if(confirm('Do you really want to Unapprove this event?'))$('#approve-<?= $event_id ?>').submit();"
+                            class="px-8 py-2  self-start md:text-base text-sm bg-orange-500 hover:bg-orange-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Remove
+                            approval</button>
+                    <?php endif; ?>
+
                 <?php endif; ?>
 
                 <div class="flex self-end gap-10">

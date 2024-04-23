@@ -4,6 +4,8 @@ require "../../connection.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    session_start();
+
 
     //File handling
     $uploadDir = '../../uploads/event_img/';
@@ -43,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $v_id = $_POST['venue'];
     $start_datetime = $_POST['start_datetime'];
     $end_datetime = $_POST['end_datetime'];
-    $created_by = 1;
+    $created_by = $_SESSION['user_id'];
     $fileNameToStore = $fileName;
 
 
@@ -60,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->affected_rows > 0) {
         $event_id = $conn->insert_id;
-        session_start();
         $_SESSION['success'] = 'Created successfuly';
         header("Location:../../frontend/edit_event.php?event_id=$event_id");
     } else {

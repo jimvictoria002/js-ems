@@ -36,6 +36,7 @@
             Feedbacks
         </div>
     </div>
+    <?php if($access == 'admin'): ?>
     <div
         class="nav-anchor flex items-start mt-5 gap-2 cursor-pointer transition-default mx-2 px-0 md:px-1 py-2 rounded-lg">
         <div class="icons w-8 h-8 flex justify-center items-center">
@@ -45,6 +46,8 @@
             Users
         </div>
     </div>
+    <?php endif; ?>
+
     <!-- <div
         class="nav-anchor flex items-start mt-5 gap-2 cursor-pointer transition-default mx-2 px-0 md:px-1 py-2 rounded-lg">
         <div class="icons w-8 h-8 flex justify-center items-center">
