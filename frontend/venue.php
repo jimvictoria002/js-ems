@@ -2,10 +2,10 @@
 
 session_start();
 
-$title = 'Pending';
+$title = 'Venue';
 require "../connection.php";
 require "./partials/header.php";
-$active = 'pending';
+$active = 'venue';
 
 require "./components/side-nav.php";
 ?>
@@ -15,10 +15,10 @@ require "./components/side-nav.php";
     ?>
     <div class="p-5 ">
         <div class="bg-white p-4 w-full flex flex-col">
-            <p class="text-xl font-semibold md:text-3xl my-8 mt-3">Pending events</p>
+            <p class="text-xl font-semibold md:text-3xl my-8 mt-3">Venue</p>
 
             <?php
-            require "./components/tables/events-pending-table.php";
+            require "./components/tables/events-venue-table.php";
             ?>
         </div>
 

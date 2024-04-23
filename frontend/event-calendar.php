@@ -1,5 +1,5 @@
 <?php
-$title = 'Create event';
+$title = 'Calendar';
 require "../connection.php";
 require "./partials/header.php";
 $active = 'calendar';
@@ -32,18 +32,18 @@ require "./components/side-nav.php";
 
 
     <div class="w-full px-3 fixed inset-0 z-40 hidden" id="create-event-modal">
-        <div class="w-[80%] mx-auto mt-28 bg-white rounded-lg p-3 mb-64 z-50 px-5">
+        <div class="w-[80%] max-h-[35rem] overflow-auto mx-auto md:mt-28 mt-10 bg-white rounded-lg p-3 mb-64 z-50 px-5">
             <div class="flex items-start w-full justify-between">
-                <h1 class="my-6 text-2xl md:text-3xl font-semibold  text-green-950">Create new event</h1>
+                <h1 class="my-3 md:my-6 text-xl md:text-3xl font-semibold  text-green-950">Create new event</h1>
                 <i
-                    class="fa-solid fa-x text-xl m-3 cursor-pointer hover:text-red-600 transition-default toggle-create"></i>
+                    class="fa-solid fa-x md:text-xl m-3 cursor-pointer hover:text-red-600 transition-default toggle-create"></i>
             </div>
 
 
             <form action="../backend/create/create_event.php" method="POST" class="mt-2" id="create-event"
                 enctype="multipart/form-data">
 
-                <div class="event-attributes flex items-start gap-y-6 gap-[3%] flex-wrap">
+                <div class="event-attributes flex items-start gap-y-3 md:gap-y-6 gap-[3%] flex-wrap">
                     <!-- Title -->
 
                     <div class="w-full text-sm md:text-base sm:w-[47%] lg:w-[31%] flex flex-col">

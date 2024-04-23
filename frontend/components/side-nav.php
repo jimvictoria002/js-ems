@@ -18,7 +18,7 @@
             <ul id="event-drop-down">
                 <li  class="nav-anchor <?= ($active == 'calendar' ? 'active' : '') ?> block text-base my-2 font-semibold whitespace-nowrap"> <a href="./event-calendar.php" class="block">- Event calendar</a> </li>
                 <li  class="nav-anchor <?= ($active == 'pending' ? 'active' : '') ?>  block text-base my-2 font-semibold whitespace-nowrap"> <a href="./pending-events.php" class="block">- Pending events</a> </li>
-                <li  class="nav-anchor  block text-base my-2 font-semibold whitespace-nowrap"> <a href="./event-calendar.php" class="block">- Venue</a> </li>
+                <li  class="nav-anchor <?= ($active == 'venue' ? 'active' : '') ?>  block text-base my-2 font-semibold whitespace-nowrap"> <a href="./venue.php" class="block">- Venue</a> </li>
             </ul>
             <script>
                 $('.toggle-event-drop').on('click', function(){

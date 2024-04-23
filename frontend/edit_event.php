@@ -25,7 +25,7 @@ if($result->num_rows < 1){
 }
 
 
-$title = 'Create event';
+$title = $event['title'];
 require "./partials/header.php";
 require "./components/side-nav.php";
 ?>

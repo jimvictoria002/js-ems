@@ -13,11 +13,25 @@ $result = $conn->query($query);
 <div class="table-container w-full overflow-auto" id="pending-tbl">
     <table class="w-full min-w-[34rem] ">
         <tr>
-            <th class="text-start font-semibold py-4 px-3  text-white bg-main">Title</th>
-            <th class="text-start font-semibold py-4 px-3  text-white bg-main">Date</th>
-            <th class="text-start font-semibold py-4 px-3  text-white bg-main">Venue</th>
-            <th class="text-start font-semibold py-4 px-3  text-white bg-main">Creator</th>
-            <th colspan="3" class="text-center font-semibold py-4 px-3  text-white bg-main">Action</th>
+            <th rowspan="2"
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Title
+            </th>
+            <th rowspan="2"
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Date/Time</th>
+            <th rowspan="2"
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Venue
+            </th>
+            <th rowspan="2"
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Creator
+            </th>
+            <th colspan="3" rowspan=""
+                class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-lg">Action
+            </th>
+        </tr>
+        <tr>
+            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-white bg-main">Approve</th>
+            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-white bg-main">View</th>
+            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-white bg-main">Delete</th>
         </tr>
         <?php while ($event = $result->fetch_assoc()): ?>
             <tr class=" main-tr">
@@ -44,14 +58,16 @@ $result = $conn->query($query);
 
                     </form>
                     <button
-                        onclick="if(confirm('Do you really want to approve this event?'))$('#approve-<?= $event['event_id'] ?>').submit();"
+                        onclick="checkConflict('<?= $event['start_datetime'] ?>', '<?= $event['end_datetime'] ?>', '<?= $event['v_id'] ?>', 'approve-<?= $event['event_id'] ?>')"
                         class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl"
-                        id="upt-btn">Approve <i class="fa-solid fa-check"></i></button>
+                        id="upt-btn"> <i class="fa-solid fa-check"></i></button>
                 </td>
-                <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
+                <td rowspan="2" class="py-5 pzx-3 border text-center text-sm md:text-base whitespace-nowrap">
                     <button onclick="window.location='edit_event.php?event_id=<?= $event['event_id'] ?>'"
                         class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl"
-                        id="upt-btn">View <div class="fa-solid fa-eye"></div></button>
+                        id="upt-btn">
+                        <div class="fa-solid fa-eye"></div>
+                    </button>
                 </td>
                 <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
                     <form action="../backend/delete/delete_event.php" method="POST" id="delete-<?= $event['event_id'] ?>">
@@ -60,7 +76,7 @@ $result = $conn->query($query);
                     <button type="button"
                         onclick="if(confirm('Do you really want to delete this event?'))$('#delete-<?= $event['event_id'] ?>').submit();"
                         class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-red-700 hover:bg-red-600 cursor-pointer  transition-default text-white font-semibold rounded-xl"
-                        id="upt-btn">Delete</button>
+                        id="upt-btn"><i class="fa-solid fa-trash"></i></button>
                 </td>
 
 
@@ -74,6 +90,34 @@ $result = $conn->query($query);
             </tr>
 
         <?php endwhile; ?>
+
+
+        <script>
+            function checkConflict(start_datetime, end_datetime, v_id, to_submit) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "../backend/validator/check_conflict.php",
+                    data: {
+                        start_datetime: start_datetime,
+                        end_datetime: end_datetime,
+                        v_id: v_id
+
+                    },
+                    success: function (response) {
+                        if (response == 'false') {
+                            if (confirm('Do you really want to approve the event?')) {
+                                $('#' + to_submit).submit();
+                            }
+                        } else {
+
+
+                            alert('The venue is not available on that date/time');
+                        }
+                    }
+                });
+            }
+        </script>
 
     </table>
 </div>
