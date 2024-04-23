@@ -11,11 +11,11 @@ require "./partials/header.php";
 $active = 'calendar';
 require "./components/side-nav.php";
 ?>
-<main class="w-full overflow-auto  h-screen z-50">
+<main class="w-full overflow-auto  h-screen z-50 ">
     <?php
     require "./components/top-nav.php";
     ?>
-    <div class="p-5 ">
+    <div class="p-5 mb-40">
         <div class="bg-white p-4 w-full flex flex-col">
             <p class="text-xl font-semibold md:text-3xl my-8 mt-3">Event calendar</p>
             <button onclick=""

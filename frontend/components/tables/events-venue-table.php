@@ -60,7 +60,7 @@ $result = $conn->query($query);
     }
 </script>
 
-<div class="table-container w-full overflow-auto" id="pending-tbl">
+<div class="table-container w-full overflow-auto mb-40" id="pending-tbl">
     <table class="w-full min-w-[34rem] ">
         <tr>
             <th rowspan="2"
@@ -80,7 +80,6 @@ $result = $conn->query($query);
             </th>
             <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-lg">Delete
             </th>
-
         </tr>
         <?php while ($venue = $result->fetch_assoc()): ?>
             <tr class=" main-tr hover:bg-gray-200">
