@@ -1,5 +1,5 @@
 <div class="w-full px-3 fixed inset-0 z-40 hidden" id="create-event-modal">
-        <div class="w-[80%] max-h-[35rem] overflow-auto mx-auto md:mt-28 mt-10 bg-white rounded-lg p-3 mb-64 z-50 px-5">
+        <div class="w-[80%] max-h-[35rem] overflow-auto mx-auto md:mt-28 my-[10vh] bg-white rounded-lg p-3 mb-64 z-50 px-5">
             <div class="flex items-start w-full justify-between">
                 <h1 class="my-3 md:my-6 text-xl md:text-3xl font-semibold  text-green-950">Create new event</h1>
                 <i

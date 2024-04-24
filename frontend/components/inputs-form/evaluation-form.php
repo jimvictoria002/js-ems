@@ -123,7 +123,7 @@ $form_count = $result->num_rows;
                                         </p>
                                     </div>
                                 <?php else: ?>
-                                    <input type="text" placeholder="Answer"
+                                    <input type="text" placeholder="Message"
                                         class="p-1 border-b mb-3 border-gray-400 mt-4 outline-none text-sm rounded-sm w-[80%]"
                                         name="event_title" disabled>
                                 <?php endif; ?>

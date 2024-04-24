@@ -64,21 +64,21 @@ $result = $conn->query($query);
     <table class="w-full min-w-[34rem] ">
         <tr>
             <th rowspan="2"
-                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Venue
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Venue
             </th>
             <th rowspan="2"
-                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Total in
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Total in
                 use</th>
 
             <th colspan="2"
-                class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-lg">
+                class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-base md:text-lg">
                 Action</th>
         </tr>
 
         <tr>
-            <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-lg">Edit
+            <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-sm md:text-base">Edit
             </th>
-            <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-lg">Delete
+            <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-sm md:text-base">Delete
             </th>
         </tr>
         <?php while ($venue = $result->fetch_assoc()): ?>

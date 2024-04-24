@@ -23,28 +23,28 @@ $result = $conn->query($query);
     <table class="w-full min-w-[34rem] ">
         <tr>
             <th rowspan="2"
-                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Title
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Title
             </th>
             <th rowspan="2"
-                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Date/Time
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Date/Time
             </th>
             <th rowspan="2"
-                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Venue
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Venue
             </th>
             <th rowspan="2"
-                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-lg">Creator
+                class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Creator
             </th>
             <th colspan="<?= $access == 'admin' ? '3' : '2' ?>" rowspan=""
-                class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-lg">Action
+                class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
             </th>
         </tr>
         <tr>
             <?php if ($access == 'admin'): ?>
-                <th class="text-center border border-green-800  font-semibold py-1 px-3  text-white bg-main">Approve</th>
+                <th class="text-center border border-green-800  font-semibold py-1 px-3  text-md md:text-base text-white bg-main">Approve</th>
             <?php endif; ?>
 
-            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-white bg-main">View</th>
-            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-white bg-main">Delete</th>
+            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">View</th>
+            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">Delete</th>
         </tr>
         <?php while ($event = $result->fetch_assoc()): ?>
             <tr class=" main-tr">
@@ -79,7 +79,7 @@ $result = $conn->query($query);
                     </td>
                 <?php endif ?>
 
-                <td rowspan="2" class="py-5 pzx-3 border text-center text-sm md:text-base whitespace-nowrap">
+                <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
                     <button onclick="window.location='edit_event.php?event_id=<?= $event['event_id'] ?>'"
                         class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl"
                         id="upt-btn">
