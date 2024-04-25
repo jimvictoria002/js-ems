@@ -68,6 +68,7 @@ session_start();
                 <select name="access" onchange="changeForm(this)" id="access" class="border p-1  w-32 rounded-sm">
                     <option value="admin">Access</option>
                     <option value="teacher">Teacher</option>
+                    <option value="parent">Parent</option>
                     <option value="student">Student</option>
                     <option value="admin">Admin</option>
                     <option value="guest">Guest</option>

@@ -1,97 +1,44 @@
 <?php
-$form_id = $event['f_id'];
 
-if ($form_id) {
-    $query = "SELECT * FROM forms WHERE f_id = $form_id";
+require "../../connection.php";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $f_id = $_POST['f_id'];
+    $event_id = $_POST['event_id'];
+
+
+    $query = "SELECT * FROM forms WHERE f_id = '$f_id'";
     $result = $conn->query($query);
-    $form_count = $result->num_rows;
-} else {
-    $form_count = 0;
-}
+
+    if ($result->num_rows > 0) {
+        $form = $result->fetch_assoc();
+        $f_id = $form['f_id'];
+        $title = $form['title'];
+        $description = $form['description'];
+        $form_creator = $form['event_id'];
+
+
+        $query = "UPDATE events SET f_id = $f_id WHERE event_id = $event_id";
+        $result = $conn->query($query);
+
+        $q_questions = "SELECT * FROM questionnaire WHERE f_id = $f_id";
+        $r_questions = $conn->query($q_questions);
+
+        ob_start();
 ?>
-<div class="w-full flex flex-col items-start" id="evaluation-form">
 
-    <script>
-        function create_form(e) {
-            $(e).prop('disabled', true);
-            $(e).removeClass('hover:bg-green-700');
-            $(e).css({
-                'opacity': '.5',
-                'cursor': 'not-allowed'
-            });
-            $('#creating-note').show();
-            setTimeout(() => {
-                $(e).hide();
-            }, 100);
-
-            $.ajax({
-                type: "POST",
-                url: "../backend/create/create_evaluation_form.php",
-                data: {
-                    event_id: <?= $event_id ?>
-                },
-                success: function(response) {
-                    $('#form-container').html(response);
-                    $('#create-form-link').hide();
-
-                }
-            });
-        }
-
-        function link_form(e) {
-
-            let f_id = $('#link-form').val();
-
-            $.ajax({
-                type: "POST",
-                url: "../backend/update/link_form.php",
-                data: {
-                    f_id: f_id,
-                    event_id: <?= $event_id ?>
-                },
-                success: function(response) {
-                    console.log(response)
-
-                    if (response != 'not_found') {
-                        $('#create-form-link').hide();
-                        $('#form-container').html(response);
-                    } else {
-                        alert('Form not found')
-                    }
-
-                }
-            });
-        }
-    </script>
-
-    <div class="flex items-start flex-col  mt-10 <?= ($form_count != 0 ? 'hidden' : '') ?> " id="create-form-link">
-        <button type="button" class="px-6 py-2 md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl" onclick="create_form(this)" id="create-form-btn">Create evaluation form <i class="fa-solid fa-plus text-yellow-300"></i></button>
-        <div class="flex flex-col mt-6">
-            <label for="link-form" class="font-semibold text-sm">Link form</label>
-            <input type="text" name="f_id" id="link-form" class="border p-1 rounded" placeholder="Enter form id ">
-            <button type="button" class=" md:text-base text-sm bg-green-800 hover:bg-green-700 px-4 m-2 transition-default self-end text-white font-semibold rounded-sm" onclick="link_form(this)">Link</button>
-        </div>
-    </div>
+        <div class="flex flex-col w-full items-start" id="form-container">
 
 
-    <div class="flex flex-col w-full items-start" id="form-container">
-
-
-        <?php if ($form_count == 1) :
-            $row = $result->fetch_assoc();
-            $f_id = $row['f_id'];
-            $description = $row['description'];
-            $form_creator = $row['event_id'];
-            $title = $row['title'];
-            $q_questions = "SELECT * FROM questionnaire WHERE f_id = $f_id";
-            $r_questions = $conn->query($q_questions);
-        ?>
 
             <div class="question-container flex flex-col shadow-lg p-5 rounded-md border mt-10 w-[98%] mx-auto my-2">
 
                 <input type="text" name="title" value="<?= $title ?>" onchange="updateForm(this)" data-form-id="<?= $f_id ?>" placeholder="Enter form title" class="text-xl md:text-2xl font-semibold p-1 border-b border-b-gray-600 w-full outline-none " autocomplete="off">
                 <input type="text" name="description" value="<?= $description ?>" onchange="updateForm(this)" data-form-id="<?= $f_id ?>" placeholder="Description" class="text-sm md:text-base my-3 p-1 border-b border-b-gray-600 w-[90%] outline-none " autocomplete="off">
-                <?php if ($form_creator == $event_id) : ?>
+
+                
+                <?php   if ($form_creator == $event_id) : ?>
                     <button type="button" data-form-id="<?= $f_id ?>" onclick="deleteForm(this)" class="px-3 md:px-4 py-1 text-sm md:text-base md:py-2 self-end bg-red-700 hover:bg-red-600 transition-default text-white font-semibold rounded-md md:rounded-xl mt-7">
                         Delete form
 
@@ -99,13 +46,12 @@ if ($form_id) {
 
                 <?php else : ?>
 
-                    <button type="button" data-event-id="<?= $event_id ?>"  onclick="unLinkForm(this)" class="px-3 md:px-4 py-1 text-sm md:text-base md:py-2 self-end bg-red-700 hover:bg-red-600 transition-default text-white font-semibold rounded-md md:rounded-xl mt-7">
+                    <button type="button" data-event-id="<?= $event_id ?>" onclick="unLinkForm(this)" class="px-3 md:px-4 py-1 text-sm md:text-base md:py-2 self-end bg-red-700 hover:bg-red-600 transition-default text-white font-semibold rounded-md md:rounded-xl mt-7">
                         Unlink form
 
                     </button>
 
                 <?php endif; ?>
-
 
                 <div class="flex items-center gap-2">
                     <p>Form ID: <span id="formId"><?= $f_id ?></span> </p>
@@ -138,7 +84,7 @@ if ($form_id) {
 
             </div>
 
-            <?php require "../src/input-functions.php"; ?>
+            <?php require "../../src/input-functions.php"; ?>
 
             <?php while ($question = $r_questions->fetch_assoc()) : ?>
                 <div class="question-container shadow-lg p-5 rounded-md border w-[98%] mx-auto my-11" id="question-main-container-<?= $question['q_id'] ?>">
@@ -220,9 +166,12 @@ if ($form_id) {
 
                 <i class="fa-solid fa-plus text-yellow-300"></i></button>
 
-        <?php endif; ?>
-    </div>
+        </div>
+<?php
+        $result = ob_get_clean();
 
-
-
-</div>
+        echo $result;
+    } else {
+        echo "not_found";
+    }
+}

@@ -32,8 +32,9 @@ while ($event = $result->fetch_assoc()) {
     $end_time = date("g:ia", strtotime($end_datetime));
 
     $event_id = $event['event_id'];
+    $f_id = $event['f_id'];
 
-    $q_form = "SELECT * FROM forms WHERE event_id = $event_id";
+    $q_form = "SELECT * FROM forms WHERE f_id = '$f_id'";
     $r_form = $conn->query($q_form);
 
     //Check form if exists
@@ -50,7 +51,7 @@ while ($event = $result->fetch_assoc()) {
             $form = $r_form->fetch_assoc();
             $form_id = $form['f_id'];
             $user_id = $_SESSION['user_id'];
-            $q_rf = "SELECT * FROM response_form rf WHERE rf.f_id = $form_id AND response_id = $user_id";
+            $q_rf = "SELECT * FROM response_form rf WHERE rf.event_id = $event_id  AND response_id = $user_id";
             $r_rf = $conn->query($q_rf);
 
             //Check date if already response
@@ -128,9 +129,9 @@ while ($event = $result->fetch_assoc()) {
                 let allow = e.event.extendedProps.feedback.allow;
 
                 let feedbackBtn = $('#feedback-btn');
+                $('#edit-btn').off('click');
                 feedbackBtn.off('click');
                 if (allow) {
-                    let f_id = e.event.extendedProps.feedback.form_id;
                     console.log(allow);
                     feedbackBtn.show();
                     feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white bg-none text-black !cursor-default opacity-40')
@@ -141,7 +142,7 @@ while ($event = $result->fetch_assoc()) {
                             url: '../backend/create/create_response_form.php',
                             type: 'POST',
                             data: {
-                                f_id: f_id
+                                event_id: event_id
                             },
                             success: function(r_f_id) {
 
@@ -220,6 +221,7 @@ while ($event = $result->fetch_assoc()) {
                         })
                     }
                 } else {
+                    $('#edit-btn').show();
                     $('#edit-btn').on('click', function() {
                         window.location = "edit_event.php?event_id=" + event_id;
                     })

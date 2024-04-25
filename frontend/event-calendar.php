@@ -18,9 +18,11 @@ require "./components/side-nav.php";
     <div class="p-5 mb-40">
         <div class="bg-white p-4 w-full flex flex-col">
             <p class="text-xl font-semibold md:text-3xl my-8 mt-3">Event calendar</p>
-            <button onclick=""
-                class="toggle-create  px-6 py-2 self-center mr-5 md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl mb-5">Create
-                new event <i class="fa-solid fa-plus ml-1"></i></button>
+
+            <?php if ($access == 'admin' || $access == 'teacher') : ?>
+                <button onclick="" class="toggle-create  px-6 py-2 self-center mr-5 md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl mb-5">Create
+                    new event <i class="fa-solid fa-plus ml-1"></i></button>
+            <?php endif; ?>
             <?php
             require "./components/render-calendar.php";
             ?>
@@ -29,7 +31,7 @@ require "./components/side-nav.php";
     </div>
 
     <?php
-    if (isset($_SESSION['success'])):
+    if (isset($_SESSION['success'])) :
         require "./components/success-message.php";
         unset($_SESSION['success']);
     endif;

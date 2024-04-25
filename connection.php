@@ -10,6 +10,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+
+// $query = "SELECT * FROM scheduling_system.parent WHERE parent_id= 'vicky123' OR email= 'vicky123'";
+// $result = $conn->query($query);
+// $row = $result->fetch_assoc();
+
+// print_r($row);
+
+
 // $stmt = $conn->prepare("INSERT INTO `users` 
 //                         (`firstname`, `middlename`, `lastname`, `email`, `access`, `is_verify`, `username`, `password`) 
 //                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)");

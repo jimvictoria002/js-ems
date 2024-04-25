@@ -1,7 +1,4 @@
 <script>
-
-
-
     function removeChoice(c_id, e) {
         $.ajax({
             type: "POST",
@@ -9,7 +6,7 @@
             data: {
                 c_id: c_id
             },
-            success: function (response) {
+            success: function(response) {
                 $(e).parent().remove();
 
             }
@@ -27,7 +24,7 @@
                 choice_name: choice_name,
                 c_id: c_id
             },
-            success: function (response) {
+            success: function(response) {
                 console.log(response);
                 if (response == '0') {
                     $('#save-note').addClass('text-red-700').text('Could not save');
@@ -54,7 +51,7 @@
             data: {
                 q_id: q_id
             },
-            success: function (c_id) {
+            success: function(c_id) {
 
                 $this.before(`
                             <div class="flex items-center gap-2 my-3 text-lg w-full">
@@ -86,9 +83,11 @@
                 data: {
                     f_id: f_id
                 },
-                success: function (response) {
+                success: function(response) {
 
-                    $('#form-container').html('<p class="text-sm m-1 font-semibold">For feedback purposes (optional)</p>');
+                    $('#create-form-link').show();
+
+                    $('#form-container').html('');
                     $('#create-form-btn').show();
                     $('#create-form-btn').css({
                         'opacity': '',
@@ -97,6 +96,40 @@
 
                     $('#create-form-btn').prop('disabled', false);
                     $('#create-form-btn').addClass('hover:bg-green-700');
+
+                }
+            });
+        }
+    }
+
+
+    function unLinkForm(e) {
+
+        if (confirm('Do you really want to unlink this form?')) {
+            let event_id = $(e).data('eventId');
+            $.ajax({
+                type: "POST",
+                url: "../backend/update/unlink_form.php",
+                data: {
+                    event_id: event_id
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response == 'unlinked') {
+                        $('#create-form-link').show();
+
+                        $('#form-container').html('');
+                        $('#create-form-btn').show();
+                        $('#create-form-btn').css({
+                            'opacity': '',
+                            'cursor': ''
+                        });
+
+                        $('#create-form-btn').prop('disabled', false);
+                        $('#create-form-btn').addClass('hover:bg-green-700');
+                    }
+
+
 
                 }
             });
@@ -121,7 +154,7 @@
                 f_id: f_id,
                 value: value
             },
-            success: function (response) {
+            success: function(response) {
                 console.log(response);
                 if (response == '0') {
                     $('#save-note').addClass('text-red-700').text('Could not save');
@@ -156,7 +189,7 @@
                     q_id: q_id,
                     value: value
                 },
-                success: function (response) {
+                success: function(response) {
                     if (response == '0') {
                         $('#save-note').addClass('text-red-700').text('Could not save');
                     } else {
@@ -176,7 +209,7 @@
                         data: {
                             q_id: q_id
                         },
-                        success: function (c_id) {
+                        success: function(c_id) {
                             let to_change = $e.data('change');
                             $('#' + to_change).html(messageOption(q_id));
 
@@ -190,7 +223,7 @@
                         data: {
                             q_id: q_id
                         },
-                        success: function (c_id) {
+                        success: function(c_id) {
                             let to_change = $e.data('change');
                             $('#' + to_change).html(multipleChoice(q_id, 1, '', c_id));
                         }
@@ -209,7 +242,7 @@
                     q_id: q_id,
                     value: value
                 },
-                success: function (response) {
+                success: function(response) {
                     console.log(response)
                     if (response == '0') {
                         $('#save-note').addClass('text-red-700').text('Could not save');
@@ -274,7 +307,7 @@
                 f_id: <?= $f_id ?>,
                 type: type
             },
-            success: function (response) {
+            success: function(response) {
 
                 $(e).before(response)
             }
@@ -292,7 +325,7 @@
                 data: {
                     q_id: q_id
                 },
-                success: function (response) {
+                success: function(response) {
 
                     $('#' + toDelete).addClass('transition-default');
                     $('#' + toDelete).css('opacity', '0');
@@ -322,5 +355,4 @@
             $(e).trigger(tabKeyEvent);
         }
     }
-
 </script>

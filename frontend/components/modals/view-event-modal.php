@@ -1,5 +1,5 @@
 <div class="w-full px-3 fixed inset-0 z-40 hidden " id="view-event-modal">
-    <div class="w-[90%] max-h-[80vh]  md:max-h-[75vh]  overflow-auto mx-auto my-[10vh]  pb-12 bg-white rounded-lg p-3 mb-64 z-50 px-5">
+    <div class="w-[90%] max-h-[90vh]  overflow-auto mx-auto my-[5vh]  pb-12 bg-white rounded-lg p-3 mb-64 z-50 px-5">
         <div class="flex items-start w-full justify-between">
             <div class="w-full flex flex-col my-3 md:my-6">
                 <h1 class=" text-2xl md:text-4xl font-semibold  text-green-950">View event
@@ -33,9 +33,11 @@
 
                 </div>
 
-                <div class="flex self-end gap-3 md:flex-row flex-col md:mt-2 mt-5">
-                    <button type="button" class="px-8 py-2  self-start md:text-base text-sm  cursor-pointer transition-default  font-semibold rounded-xl" id="feedback-btn"></button>
-                    <button type="button" id="edit-btn" class="px-8 py-2  self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Edit</button>
+                <div class="flex self-end gap-3 md:flex-row flex-col md:mt-2 mt-5" id="btn-container">
+                    <button type="button" class="px-8 py-2  self-start md:text-base text-sm  cursor-pointer transition-default  font-semibold rounded-xl hidden" id="feedback-btn"></button>
+                    <button type="button" class="hidden px-8 py-2 self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="approve-btn"> <i class="fa-solid fa-check"></i></button>
+                    <button type="button" id="edit-btn" class="hidden px-8 py-2  self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Edit</button>
+                    
 
                 </div>
             </div>

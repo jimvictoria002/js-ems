@@ -3,9 +3,17 @@ session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
+    exit;
 }
 
-$fullname = $_SESSION['firstname'] . ($_SESSION['middlename'] ? ' ' .  $_SESSION['middlename'] : '') . ' ' . $_SESSION['lastname'];
+if ($_SESSION['access'] == 'parent') {
+    $fullname = $_SESSION['fullname'];
+}else if($_SESSION['access'] == 'teacher'){
+    $fullname = $_SESSION['first_name'] . ($_SESSION['middle_name'] ? ' ' .  $_SESSION['middle_name'] : '') . ' ' . $_SESSION['last_name'];
+    
+} else {
+    $fullname = $_SESSION['firstname'] . ($_SESSION['middlename'] ? ' ' .  $_SESSION['middlename'] : '') . ' ' . $_SESSION['lastname'];
+}
 
 if (!isset($_GET['r_f_id']) || !is_numeric($_GET['r_f_id'])) {
     header('HTTP/1.0 404 NOT FOUND');
@@ -18,15 +26,20 @@ require "../connection.php";
 $r_f_id = $_GET['r_f_id'];
 $user_id = $_SESSION['user_id'];
 
-$query = "SELECT * FROM 
-            `response_form` rf 
+$query = "SELECT
+            rf.*,
+            f.*
+         FROM
+            `response_form` rf
+         INNER JOIN events e ON
+            rf.event_id = e.event_id
          INNER JOIN forms f ON 
-            rf.f_id = f.f_id 
+            e.f_id = f.f_id
          WHERE rf.r_f_id = $r_f_id AND rf.response_id = $user_id";
 
 $result = $conn->query($query);
 
-if($result->num_rows < 1){
+if ($result->num_rows < 1) {
     header('HTTP/1.0 404 NOT FOUND');
     exit;
 }
@@ -38,19 +51,32 @@ $f_id = $response_form['f_id'];
 $event_description = $response_form['description'] ? $response_form['description'] : '';
 
 $query = "SELECT
-            r.r_id,
-            r.answer,
             q.q_id,
             q.question,
+            (
+            SELECT
+                answer
+            FROM
+                response r
+            WHERE
+                r.q_id = q.q_id AND r.r_f_id = $r_f_id 
+            ) AS answer,
             q.type,
             q.required
-        FROM 
-            questionnaire q
-        LEFT JOIN `response` r  ON
-            r.q_id = q.q_id
-        WHERE
-            r.r_f_id = $r_f_id
-        ORDER BY q.created_at ";
+        FROM
+            (
+            SELECT
+                q.q_id,
+                q.question,
+                q.type,
+                q.required
+            FROM
+                questionnaire q
+            WHERE
+                q.f_id = $f_id
+        ORDER BY
+                q.created_at
+            ) AS q";
 $result = $conn->query($query);
 
 

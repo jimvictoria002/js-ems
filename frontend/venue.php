@@ -2,6 +2,14 @@
 
 session_start();
 
+$access = $_SESSION['access'];
+
+if (!($access == 'admin' || $access == 'teacher')){
+    header('Location: dashboard.php');
+    exit;
+}
+
+
 if(!isset($_SESSION['user_id'])){
     header('Location: login.php');
 }
