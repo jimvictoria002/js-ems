@@ -41,6 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = "SELECT * FROM guest WHERE guest_id = $guest_id";
         $result = $conn->query($query);
     } else if ($access == 'student') {
+    } else if ($access == 'staff') {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE (username=? OR email=?) AND access = ?");
+        $stmt->bind_param("sss", $username, $username, $access);
+        $stmt->execute();
+        $result = $stmt->get_result();
     } else {
         echo 'invalid';
     }
@@ -60,7 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $_SESSION['access'] = $access;
             echo "correct";
-        } else { //User credentials
+        } else {
+            //User credentials
             $hashedPassword = $row['password'];
 
             if (password_verify($password, $hashedPassword)) {

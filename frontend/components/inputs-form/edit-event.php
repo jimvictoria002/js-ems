@@ -163,7 +163,7 @@
 
             <div class="w-full flex gap-y-10 flex-col-reverse md:flex-row  justify-end my-4 pr-5 mb-5 md:gap-10">
 
-                <?php if ($access == 'admin'): ?>
+                <?php if ($access == 'admin' || $access == 'staff'): ?>
                     <?php if ($event['status'] == 'pending'): ?>
 
                         <button type="button"

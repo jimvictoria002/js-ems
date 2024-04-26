@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $created_by = $_SESSION['user_id'];
     $fileNameToStore = $fileName;
 
-    $status = $_SESSION['access'] == 'admin' ? 'approved' : 'pending';
+    $status = $_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff' ? 'approved' : 'pending';
     $access = $_SESSION['access'];
 
     $query = "INSERT INTO `events` 
@@ -66,12 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($stmt->affected_rows > 0) {
         $event_id = $conn->insert_id;
         $_SESSION['success'] = 'Created successfuly';
-        header("Location:../../frontend/edit_event.php?event_id=$event_id");
+        if ($status == 'approved') {
+            header("Location:../../frontend/event-calendar.php");
+        } else {
+            header("Location:../../frontend/edit_event.php?event_id=$event_id");
+        }
     } else {
         echo "Error inserting event: " . $conn->error;
     }
-
-
-
-
 }

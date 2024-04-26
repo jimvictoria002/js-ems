@@ -54,6 +54,7 @@ function getEventInfo($event)
         'viewDate' => $viewDate,
         'v_id' => $event['v_id'],
         'creatorId' => $event['created_by'],
+        'creatorAccess' => $event['creator_access'],
         'stime' => $start_time,
         'etime' => $end_time,
         'color' => '#2E6B45'
@@ -74,11 +75,11 @@ function getEventInfo($event)
             </th>
             <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Creator
             </th>
-            <th colspan="<?= $access == 'admin' ? '3' : '2' ?>" rowspan="" class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
+            <th colspan="<?= $access == 'admin' || $access == 'staff' ? '3' : '2' ?>" rowspan="" class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
             </th>
         </tr>
         <tr>
-            <?php if ($access == 'admin') : ?>
+            <?php if ($access == 'admin' || $access == 'staff') : ?>
                 <th class="text-center border border-green-800  font-semibold py-1 px-3  text-md md:text-base text-white bg-main">Approve</th>
             <?php endif; ?>
 
@@ -104,21 +105,21 @@ function getEventInfo($event)
 
                     <?php
                     $creator_id = $event['created_by'];
-                    if ($event['creator_access'] == 'admin') {
-                        $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
-                        $r_creator = $conn->query($q_creator);
-                        $creator = $r_creator->fetch_assoc();
-                        echo $creator['firstname'][0] . ' ' . $creator['lastname'];
-                    } else if ($event['creator_access'] == 'teacher') {
+                    if ($event['creator_access'] == 'teacher') {
                         $q_creator = "SELECT * FROM scheduling_system.teacher t WHERE t.id = $creator_id";
                         $r_creator = $conn->query($q_creator);
                         $creator = $r_creator->fetch_assoc();
                         echo $creator['first_name'][0] . ' ' . $creator['last_name'];
+                    } else {
+                        $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
+                        $r_creator = $conn->query($q_creator);
+                        $creator = $r_creator->fetch_assoc();
+                        echo $creator['firstname'][0] . ' ' . $creator['lastname'];
                     }
 
                     ?>
                 </td>
-                <?php if ($access == 'admin') : ?>
+                <?php if ($access == 'admin' || $access == 'staff') : ?>
 
                     <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
                         <form action="../backend/update/approve_event.php" method="POST" id="approve-<?= $event['event_id'] ?>">
@@ -167,8 +168,8 @@ function getEventInfo($event)
                 let start_datetime = event.start;
                 let end_datetime = event.end;
                 let v_id = event.v_id;
-
                 let creatorId = event.creatorId;
+                let creatorAccess = event.creatorAccess;
 
 
                 $('#view-event-modal').fadeToggle('fast');
@@ -194,8 +195,8 @@ function getEventInfo($event)
                 $('#approve-btn').off('click');
                 $('#edit-btn').off('click');
 
-                if ('<?= $_SESSION['access'] ?>' != 'admin') {
-                    if (creatorId != '<?= $_SESSION['user_id'] ?>') {
+                if ('<?= $_SESSION['access'] ?>' != 'admin' && '<?= $access ?>' != 'staff') {
+                    if (creatorId != '<?= $_SESSION['user_id'] ?>' && creatorAccess != '<?= $_SESSION['access'] ?>' ) {
                         $('#edit-btn').hide();
                     } else {
                         $('#edit-btn').show();
@@ -210,7 +211,7 @@ function getEventInfo($event)
                     })
                 }
 
-                if ('<?= $access ?>' == 'admin') {
+                if ('<?= $access ?>' == 'admin' || '<?= $access ?>' == 'staff') {
                     $('#approve-btn').show();
 
                     $('#approve-btn').on('click', function() {

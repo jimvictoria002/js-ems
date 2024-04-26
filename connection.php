@@ -25,14 +25,14 @@ if ($conn->connect_error) {
 // // Bind parameters
 // $stmt->bind_param("ssssssss", $firstname, $middlename, $lastname, $email, $acess, $is_verify, $username, $password);
 
-// $firstname = "Chrisna";
+// $firstname = "Timothy";
 // $middlename = "";
-// $lastname = "Fucio";
-// $email = "chrisna123@gmail.com";
-// $acess = "teacher";
+// $lastname = "Quimpan";
+// $email = "tim123@gmail.com";
+// $acess = "staff";
 // $is_verify = "yes";
-// $username = "chrisna123";
-// $password = password_hash("chrisna123", PASSWORD_DEFAULT);
+// $username = "tim123";
+// $password = password_hash("tim12345678", PASSWORD_DEFAULT);
 
 // if ($stmt->execute()) {
 //     echo "New record inserted successfully";

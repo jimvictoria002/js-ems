@@ -1,6 +1,6 @@
 <?php
 
-$users = ['admin', 'student', 'teacher', 'parent', 'guest'];
+$users = ['admin', 'student', 'teacher', 'parent', 'guest', 'staff'];
 $access = isset($_GET['access']) ? $_GET['access'] : 'admin';
 if (!in_array($access, $users)) {
     header('Location:index.php');

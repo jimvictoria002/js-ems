@@ -4,7 +4,7 @@ session_start();
 
 $access = $_SESSION['access'];
 
-if (!($access == 'admin' || $access == 'teacher')){
+if (!($access == 'admin' || $access == 'teacher' || $access == 'staff')){
     header('Location: dashboard.php');
     exit;
 }

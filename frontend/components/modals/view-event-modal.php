@@ -11,7 +11,7 @@
 
         <div class="flex flex-col md:flex-row w-full gap-7 border p-8">
             <div class="img-container w-full max-w-[30rem] md:max-w-[20rem]">
-                <img src="../uploads/event_img/431075091_420591497141585_8112965689675004794_n.png" alt="event-img" class="w-full block" id="view-img">
+                <img src="" alt="event-img" class="w-full block" id="view-img">
             </div>
             <div class="w-full flex flex-col justify-between">
                 <div class="w-full">

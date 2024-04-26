@@ -4,7 +4,7 @@
         <form action="./user_credentials/check_login.php" method="post" class="w-full shadow-md px-6 flex flex-col py-16 justify-center items-center border rounded-lg bg-white" id="login">
 
 
-            <?php if (isset($_SESSION['change_success']) ) { ?>
+            <?php if (isset($_SESSION['change_success'])) { ?>
                 <p class="text-white py-3 bg-green-400 rounded-md font-semibold px-2 w-full">
                     <?= $_SESSION['change_success'] ?>
                 </p>
@@ -33,9 +33,8 @@
                 </div>
             </div>
             <button type="submit" class=" bg-main hover:bg-green-800 text-white transition-all ease duration-300 w-36 text-base text-s-bg rounded-sm py-1 self-center text-center mt-5" id="login-btn">Login</button>
-            <div class="flex flex-col w-full mt-5">
-                <a href="forgot_password.php" class="hover:underline hover:text-s-head text-sm">Forgot
-                    password?</a>
+            <div class="flex items-start flex-col w-full mt-5">
+                <a href="index.php" class="hover:underline hover:text-s-head text-sm">Back to homepage</a>
             </div>
         </form>
     </div>

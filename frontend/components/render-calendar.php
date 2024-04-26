@@ -23,6 +23,7 @@ while ($event = $result->fetch_assoc()) {
 
     $feedback = [];
 
+
     $start_datetime = $event['start_datetime'];
     $end_datetime = $event['end_datetime'];
 
@@ -82,6 +83,21 @@ while ($event = $result->fetch_assoc()) {
         $viewDate = $start_date . ' ' . $start_time  . ' - ' . $end_date . ' ' . $end_time;
     }
 
+    $q_ea = "SELECT * FROM event_access WHERE event_id = $event_id";
+    $r_eq = $conn->query($q_ea);
+    $hasAccess = (($event['created_by'] == $_SESSION['user_id'] && $event['creator_access'] == $access) || ($_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff'));
+
+    if (!$hasAccess) {
+        while ($event_acess = $r_eq->fetch_assoc()) {
+            $hasAccess = ($event_acess['user_id'] == $_SESSION['user_id'] && $event_acess['access'] == $_SESSION['access']);
+            if ($hasAccess) {
+                break;
+            }
+        }
+    }
+
+
+
     $events[] = [
         'id' => $event_id,
         'title' => $event['title'],
@@ -93,6 +109,7 @@ while ($event = $result->fetch_assoc()) {
         'feedback' => $feedback,
         'viewDate' => $viewDate,
         'creatorId' => $event['created_by'],
+        'hasAccess' => $hasAccess,
         'stime' => $start_time,
         'etime' => $end_time,
         'color' => '#2E6B45'
@@ -125,6 +142,7 @@ while ($event = $result->fetch_assoc()) {
                 let eventImg = e.event.extendedProps.eventImg;
                 let venue = e.event.extendedProps.venue;
                 let viewDate = e.event.extendedProps.viewDate;
+                let hasAccess = e.event.extendedProps.hasAccess;
 
                 let creatorId = e.event.extendedProps.creatorId;
                 let allow = e.event.extendedProps.feedback.allow;
@@ -164,8 +182,7 @@ while ($event = $result->fetch_assoc()) {
                         feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white')
                         feedbackBtn.addClass('bg-none text-black !cursor-default opacity-40')
                         feedbackBtn.html('Feedback sent');
-                        feedbackBtn.click(function() {
-                        })
+                        feedbackBtn.click(function() {})
 
                     } else if (status == 'not_done') {
                         let r_f_id = e.event.extendedProps.feedback.r_f_id;
@@ -212,20 +229,14 @@ while ($event = $result->fetch_assoc()) {
                 $('#view-img').prop('src', (eventImg))
 
 
-                if ('<?= $_SESSION['access'] ?>' != 'admin') {
-                    if (creatorId != '<?= $_SESSION['user_id'] ?>') {
-                        $('#edit-btn').hide();
-                    } else {
-                        $('#edit-btn').show();
-                        $('#edit-btn').on('click', function() {
-                            window.location = "edit_event.php?event_id=" + event_id;
-                        })
-                    }
-                } else {
+                if (hasAccess) {
                     $('#edit-btn').show();
                     $('#edit-btn').on('click', function() {
                         window.location = "edit_event.php?event_id=" + event_id;
                     })
+
+                } else {
+                    $('#edit-btn').hide();
                 }
 
 

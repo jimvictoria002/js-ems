@@ -42,7 +42,7 @@
                     <i class="fa-solid fa-user-circle text-4xl md:text-5xl text-green-950"></i>
                 </div>
             </div>
-            <?php if ($_SESSION['access'] == 'admin') : ?>
+            <?php if ($_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff') : ?>
                 <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Profile</a>
                 <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Change
                     password</a>

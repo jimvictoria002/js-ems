@@ -11,7 +11,7 @@
             <?php unset($_SESSION['change_success']);
             } ?>
             <div class="flex mb-3 py-2 lg:py-3 self-start">
-                <p class="text-3xl text-s-head font-semibold">Guest Sign in</p>
+                <p class="text-3xl text-s-head font-semibold">Guest sign in</p>
             </div>
             <div class="flex flex-col w-full mb-7">
                 <label for="firstname" class=" mb-2 font-semibold text-sm">Firstname <span class="text-red-700">*</span></label>
@@ -48,7 +48,10 @@
 
 
             <button type="submit" class=" bg-main hover:bg-green-800 text-white transition-all ease duration-300 w-36 text-base text-s-bg rounded-sm py-1 self-center text-center mt-5" id="login-btn">Sign in</button>
+            <div class="flex flex-col items-start self-start mt-5">
+            <a href="index.php" class="hover:underline hover:text-s-head text-sm">Back to homepage</a>
 
+            </div>
         </form>
     </div>
 </div>

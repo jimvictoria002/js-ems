@@ -23,7 +23,7 @@
             cursor: pointer;
             position: relative;
             z-index: 0;
-            
+
         }
 
         .bn5:before {
@@ -93,6 +93,16 @@
             background: royalblue;
         }
 
+        
+
+        .bn5.admin:hover:after {
+            background: gray;
+        }
+
+        .bn5.staff:hover:after {
+            background: #229494;
+        }
+
         .bn5:after {
             z-index: -1;
             content: "";
@@ -101,7 +111,7 @@
             height: 100%;
             left: 0;
             top: 0;
-            
+
             transition: all ease .4s;
         }
     </style>
@@ -119,12 +129,21 @@
                 <p class="text-5xl lg:text-6xl font-sans font-semibold md:text-start text-center text-green">Event Management System</p>
                 <div class="text-base font-semibold mt-5 md:text-start text-center">Login as...</div>
             </div>
-            <div class="btns-container mt-2 w-full flex gap-5 flex-wrap md:justify-start justify-center">
-                <a href="./login.php?access=teacher" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm teacher py-1.5  font-semibold bn5 bg-[#218838]">Teacher</a>
-                <a href="./login.php?access=parent" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm parent py-1.5  font-semibold bn5 bg-[#17a2b8]">Parent</a>
-                <a href="./login.php?access=student" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm student py-1.5  font-semibold bn5 bg-[#dc3545]">Student</a>
-                <a href="./login.php?access=guest" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm guest py-1.5  font-semibold bn5 bg-[royalblue]">Guest</a>
+            <div class="flex flex-col gap-y-6 mt-5 ">
+                <div class="btns-container w-full flex gap-5 flex-wrap md:justify-start justify-center">
+                    <a href="./login.php?access=teacher" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm teacher py-1.5  font-semibold bn5 bg-[#218838]">Teacher</a>
+                    <a href="./login.php?access=student" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm student py-1.5  font-semibold bn5 bg-[#dc3545]">Student</a>
+                    <a href="./login.php?access=parent" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm parent py-1.5  font-semibold bn5 bg-[#17a2b8]">Parent</a>
+                </div>
+
+                <div class="btns-container  w-full flex gap-5 flex-wrap md:justify-start justify-center">
+                    <a href="./login.php?access=admin" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm admin py-1.5  font-semibold bn5 bg-[gray]">Administrator</a>
+                    <a href="./login.php?access=staff" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm staff py-1.5  font-semibold bn5 bg-[#229494]">Staff</a>
+                    <a href="./login.php?access=guest" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm guest py-1.5  font-semibold bn5 bg-[royalblue]">Guest</a>
+                </div>
+
             </div>
+
         </div>
     </div>
 
