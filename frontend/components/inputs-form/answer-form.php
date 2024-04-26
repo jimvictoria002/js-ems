@@ -6,7 +6,7 @@
         </p>
         <div class="flex flex-col mt-5">
             <p class="text-xs font-semibold ">Your response will be recorded as</p>
-            <p class=" text-base "><?= $_SESSION['user_id'] . ' | ' . $fullname  ?></p>
+            <p class=" text-base "><?=  $fullname .  ' | '. $_SESSION['email']   ?></p>
 
         </div>
     </div>
@@ -83,6 +83,13 @@
             success: function(label, element) {
                 $('#parent-' + $(element).prop('name')).removeClass('border-2 border-red-600');
                 console.log($(element).prop('name'))
+            },
+            submitHandler: function(form){
+
+                if(confirm("You're about to submit the form \n\nOnce submitted you can't edit this form again.")){
+                    form.submit();
+                }
+
             }
         });
     </script>

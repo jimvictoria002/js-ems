@@ -92,7 +92,7 @@ if ($form_id) {
                 <input type="text" name="title" value="<?= $title ?>" onchange="updateForm(this)" data-form-id="<?= $f_id ?>" placeholder="Enter form title" class="text-xl md:text-2xl font-semibold p-1 border-b border-b-gray-600 w-full outline-none " autocomplete="off">
                 <input type="text" name="description" value="<?= $description ?>" onchange="updateForm(this)" data-form-id="<?= $f_id ?>" placeholder="Description" class="text-sm md:text-base my-3 p-1 border-b border-b-gray-600 w-[90%] outline-none " autocomplete="off">
                 <?php if ($form_creator == $event_id) : ?>
-                    <button type="button" data-form-id="<?= $f_id ?>" onclick="deleteForm(this)" class="px-3 md:px-4 py-1 text-sm md:text-base md:py-2 self-end bg-red-700 hover:bg-red-600 transition-default text-white font-semibold rounded-md md:rounded-xl mt-7">
+                    <button type="button" data-form-id="<?= $f_id ?>"  data-event-id="<?= $event_id ?>" onclick="deleteForm(this)" class="px-3 md:px-4 py-1 text-sm md:text-base md:py-2 self-end bg-red-700 hover:bg-red-600 transition-default text-white font-semibold rounded-md md:rounded-xl mt-7">
                         Delete form
 
                     </button>

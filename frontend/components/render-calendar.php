@@ -51,16 +51,17 @@ while ($event = $result->fetch_assoc()) {
             $form = $r_form->fetch_assoc();
             $form_id = $form['f_id'];
             $user_id = $_SESSION['user_id'];
-            $q_rf = "SELECT * FROM response_form rf WHERE rf.event_id = $event_id  AND response_id = $user_id";
+            $access = $_SESSION['access'];
+            $q_rf = "SELECT * FROM response_form rf WHERE rf.event_id = $event_id  AND response_id = $user_id AND respondent = '$access'";
             $r_rf = $conn->query($q_rf);
 
-            //Check date if already response
+            //Check user if already response
             if ($r_rf->num_rows > 0) {
                 $rf = $r_rf->fetch_assoc();
                 $status = $rf['is_done'];
                 $feedback['r_f_id'] = $rf['r_f_id'];
 
-                //Check date if done
+                //Check user if done
                 if ($status == 'yes') {
                     $feedback['status'] = 'done';
                 } else {

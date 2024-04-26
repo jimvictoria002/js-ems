@@ -42,9 +42,11 @@
                     <i class="fa-solid fa-user-circle text-4xl md:text-5xl text-green-950"></i>
                 </div>
             </div>
-            <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Profile</a>
-            <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Change
-                password</a>
+            <?php if ($_SESSION['access'] == 'admin') : ?>
+                <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Profile</a>
+                <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Change
+                    password</a>
+            <?php endif; ?>
             <a href="../backend/auth/logout.php" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Logout</a>
         </div>
     </div>

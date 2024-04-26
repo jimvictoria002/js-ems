@@ -1,13 +1,3 @@
-<?php
-
-$users = ['admin', 'student', 'teacher', 'parent', 'guest'];
-$access = isset($_GET['access']) ? $_GET['access'] : 'admin';
-if (!in_array($access, $users)) {
-    header('Location:index.php');
-    exit;
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +23,7 @@ if (!in_array($access, $users)) {
             cursor: pointer;
             position: relative;
             z-index: 0;
-
+            
         }
 
         .bn5:before {
@@ -111,7 +101,7 @@ if (!in_array($access, $users)) {
             height: 100%;
             left: 0;
             top: 0;
-
+            
             transition: all ease .4s;
         }
     </style>
@@ -120,19 +110,23 @@ if (!in_array($access, $users)) {
 <body class="flex justify-center items-center h-screen bg-green-50">
 
     <div class="flex items-center w-[80%] gap-2">
-        <div class="w-[100%] hidden lg:flex justify-center opacity-90">
+        <div class="w-[60%] hidden md:flex justify-center opacity-90">
             <img src="../ems-logo.png" alt="ems-logo" class="w-[70%]">
         </div>
         <div class="flex flex-col w-full">
-            <?php
-
-            require "./components/login/$access-login.php";
-
-
-            ?>
+            <div class="welcome-container flex flex-col gap-y-2">
+                <p class="text-lg md:text-xl lg:text-2xl md:text-start text-center">Welcome to</p>
+                <p class="text-5xl lg:text-6xl font-sans font-semibold md:text-start text-center text-green">Event Management System</p>
+                <div class="text-base font-semibold mt-5 md:text-start text-center">Login as...</div>
+            </div>
+            <div class="btns-container mt-2 w-full flex gap-5 flex-wrap md:justify-start justify-center">
+                <a href="./login.php?access=teacher" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm teacher py-1.5  font-semibold bn5 bg-[#218838]">Teacher</a>
+                <a href="./login.php?access=parent" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm parent py-1.5  font-semibold bn5 bg-[#17a2b8]">Parent</a>
+                <a href="./login.php?access=student" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm student py-1.5  font-semibold bn5 bg-[#dc3545]">Student</a>
+                <a href="./login.php?access=guest" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm guest py-1.5  font-semibold bn5 bg-[royalblue]">Guest</a>
+            </div>
         </div>
     </div>
-
 
 </body>
 

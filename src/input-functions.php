@@ -77,11 +77,15 @@
 
         if (confirm('Do you really want to delete this form?')) {
             let f_id = $(e).data('formId');
+            let event_id = $(e).data('eventId');
+            console.log(f_id)
+            console.log(event_id)
             $.ajax({
                 type: "POST",
                 url: "../backend/delete/delete_form.php",
                 data: {
-                    f_id: f_id
+                    f_id: f_id,
+                    event_id: event_id
                 },
                 success: function(response) {
 

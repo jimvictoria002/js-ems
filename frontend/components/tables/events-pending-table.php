@@ -126,7 +126,7 @@ function getEventInfo($event)
                             <input type="hidden" name="status" value="approved">
 
                         </form>
-                        <button onclick="checkConflict('<?= $event['start_datetime'] ?>', '<?= $event['end_datetime'] ?>', '<?= $event['v_id'] ?>', 'approve-<?= $event['event_id'] ?>', '<?= $event['title'] ?>')" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn"> <i class="fa-solid fa-check"></i></button>
+                        <button onclick="checkConflict('<?= $event['start_datetime'] ?>', '<?= $event['end_datetime'] ?>', '<?= $event['v_id'] ?>', 'approve-<?= $event['event_id'] ?>', '<?= addslashes($event['title']) ?>')" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn"> <i class="fa-solid fa-check"></i></button>
                     </td>
                 <?php endif ?>
 
@@ -210,12 +210,15 @@ function getEventInfo($event)
                     })
                 }
 
+                if ('<?= $access ?>' == 'admin') {
+                    $('#approve-btn').show();
 
-                $('#approve-btn').show();
+                    $('#approve-btn').on('click', function() {
+                        checkConflict(start_datetime, end_datetime, v_id, `approve-${event_id}`, title)
+                    });
 
-                $('#approve-btn').on('click', function() {
-                    checkConflict(start_datetime, end_datetime, v_id, `approve-${event_id}`, title)
-                });
+                }
+
 
 
 
