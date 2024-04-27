@@ -47,7 +47,7 @@
                 <i class="fa-solid fa-users text-xl md:text-2xl"></i>
             </div>
             <div class="to-hide mr-6 md:mr-10 font-semibold ">
-                Users
+                Staffs
             </div>
         </a>
     <?php endif; ?>

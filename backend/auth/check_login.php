@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $access = $_POST['access'];
 
     if ($access == 'parent') {
-        $stmt = $conn->prepare("SELECT * FROM scheduling_system.parent WHERE parent_id=? OR email=?");
+        $stmt = $conn->prepare("SELECT * FROM sis.parent WHERE parent_id=? OR email=?");
         $stmt->bind_param("ss", $username, $username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -41,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = "SELECT * FROM guest WHERE guest_id = $guest_id";
         $result = $conn->query($query);
     } else if ($access == 'student') {
+
+        //Student
+
     } else if ($access == 'staff') {
         $stmt = $conn->prepare("SELECT * FROM users WHERE (username=? OR email=?) AND access = ?");
         $stmt->bind_param("sss", $username, $username, $access);

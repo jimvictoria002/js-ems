@@ -93,7 +93,7 @@
             background: royalblue;
         }
 
-        
+
 
         .bn5.admin:hover:after {
             background: gray;
@@ -114,29 +114,76 @@
 
             transition: all ease .4s;
         }
+
+        /* #img-container {
+            animation: fromLeft 1.3s ease-in-out forwards;
+        }
+
+        @keyframes fromLeft {
+            from {
+                left: -400px;
+                transform: rotate(-100deg);
+            }
+
+            to {
+                left: 0;
+                transform: rotate(0);
+            }
+        }
+
+
+        #welcome-container {
+            animation: fromRight 1.3s ease-in-out forwards;
+
+        }
+
+        @keyframes fromRight {
+            from {
+                right: -400px;
+            }
+
+            to {
+                right: 0;
+            }
+        }
+
+        .btns-container {
+            animation: fromBottom 1.3s ease-in-out forwards;
+
+        }
+
+        @keyframes fromBottom {
+            from {
+                bottom: -200px;
+            }
+
+            to {
+                bottom: 0;
+            }
+        } */
     </style>
 </head>
 
-<body class="flex justify-center items-center h-screen bg-green-50">
+<body class="flex justify-center items-center h-screen bg-green-50 overflow-hidden">
 
-    <div class="flex items-center w-[80%] gap-2">
-        <div class="w-[60%] hidden md:flex justify-center opacity-90">
+    <div class="flex items-center w-[80%] gap-2 ">
+        <div class="w-[60%] hidden md:flex justify-center opacity-90 relative" id="img-container">
             <img src="../ems-logo.png" alt="ems-logo" class="w-[70%]">
         </div>
         <div class="flex flex-col w-full">
-            <div class="welcome-container flex flex-col gap-y-2">
+            <div class="flex flex-col gap-y-2 relative" id="welcome-container">
                 <p class="text-lg md:text-xl lg:text-2xl md:text-start text-center">Welcome to</p>
                 <p class="text-5xl lg:text-6xl font-sans font-semibold md:text-start text-center text-green">Event Management System</p>
                 <div class="text-base font-semibold mt-5 md:text-start text-center">Login as...</div>
             </div>
-            <div class="flex flex-col gap-y-6 mt-5 ">
-                <div class="btns-container w-full flex gap-5 flex-wrap md:justify-start justify-center">
+            <div class="flex flex-col gap-y-6 mt-5 btns-container relative">
+                <div class=" w-full flex gap-5 flex-wrap md:justify-start justify-center">
                     <a href="./login.php?access=teacher" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm teacher py-1.5  font-semibold bn5 bg-[#218838]">Teacher</a>
                     <a href="./login.php?access=student" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm student py-1.5  font-semibold bn5 bg-[#dc3545]">Student</a>
                     <a href="./login.php?access=parent" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm parent py-1.5  font-semibold bn5 bg-[#17a2b8]">Parent</a>
                 </div>
 
-                <div class="btns-container  w-full flex gap-5 flex-wrap md:justify-start justify-center">
+                <div class="  w-full flex gap-5 flex-wrap md:justify-start justify-center">
                     <a href="./login.php?access=admin" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm admin py-1.5  font-semibold bn5 bg-[gray]">Administrator</a>
                     <a href="./login.php?access=staff" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm staff py-1.5  font-semibold bn5 bg-[#229494]">Staff</a>
                     <a href="./login.php?access=guest" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm guest py-1.5  font-semibold bn5 bg-[royalblue]">Guest</a>
@@ -148,6 +195,21 @@
     </div>
 
 </body>
+
+
+<script>
+    $(document).ready(function() {
+        var visitedBefore = localStorage.getItem('visitedBefore');
+
+        if (!visitedBefore) {
+            $('#img-container').addClass('animate-fromLeft');
+            $('#welcome-container').addClass('animate-fromRight');
+            $('.btns-container').addClass('animate-fromBottom');
+
+            localStorage.setItem('visitedBefore', true);
+        }
+    });
+</script>
 
 
 </html>
