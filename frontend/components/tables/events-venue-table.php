@@ -1,7 +1,6 @@
 <?php
 $query = "SELECT
-v.v_id,
-v.venue,
+v.*,
 COUNT(e.event_id) AS total_in_use
 FROM
 venue v
@@ -17,10 +16,9 @@ $result = $conn->query($query);
 
 ?>
 <script>
-
     function updateVenue(venue, v_id) {
         var new_venue = window.prompt("Update venue \n\n!Note: Updating the venue will affect events that use it.", venue);
-        if(!new_venue || new_venue == ''){
+        if (!new_venue || new_venue == '') {
             return;
         }
         if (new_venue != venue) {
@@ -31,7 +29,7 @@ $result = $conn->query($query);
                     venue: new_venue,
                     v_id: v_id
                 },
-                success: function (response) {
+                success: function(response) {
                     if (response == '1') {
                         $('#to-change-td-' + v_id).html(new_venue);
                     }
@@ -42,8 +40,8 @@ $result = $conn->query($query);
     }
 
     function deleteVenue(v_id, e) {
-        
-      
+
+
         if (confirm('Do you really want to delete the venue?')) {
             $.ajax({
                 type: "POST",
@@ -51,7 +49,7 @@ $result = $conn->query($query);
                 data: {
                     v_id: v_id
                 },
-                success: function (response) {
+                success: function(response) {
                     $(e).parent().parent().remove();
                 }
             });
@@ -63,15 +61,12 @@ $result = $conn->query($query);
 <div class="table-container w-full overflow-auto mb-40" id="pending-tbl">
     <table class="w-full min-w-[34rem] ">
         <tr>
-            <th rowspan="2"
-                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Venue
+            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Venue
             </th>
-            <th rowspan="2"
-                class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Total in
+            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Total in
                 use</th>
 
-            <th colspan="2"
-                class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-base md:text-lg">
+            <th colspan="2" class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-base md:text-lg">
                 Action</th>
         </tr>
 
@@ -81,7 +76,7 @@ $result = $conn->query($query);
             <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-sm md:text-base">Delete
             </th>
         </tr>
-        <?php while ($venue = $result->fetch_assoc()): ?>
+        <?php while ($venue = $result->fetch_assoc()) : ?>
             <tr class=" main-tr hover:bg-gray-200">
 
                 <td class="py-5 px-3 border text-start text-sm md:text-base" id="to-change-td-<?= $venue['v_id'] ?>">
@@ -94,24 +89,32 @@ $result = $conn->query($query);
 
 
                 <td class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                    <button onclick="updateVenue($('#to-change-td-<?= $venue['v_id'] ?>').text().trim(),<?= $venue['v_id'] ?>)"
-                        class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl"
-                        id="upt-btn">
-                        <div class="fa-solid text-lg fa-pen-to-square"></div>
-                    </button>
+
+                    <?php if ($access == 'admin' || $access == 'staff') : ?>
+                        <button onclick="updateVenue($('#to-change-td-<?= $venue['v_id'] ?>').text().trim(),<?= $venue['v_id'] ?>)" class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                            <div class="fa-solid text-lg fa-pen-to-square"></div>
+                        </button>
+                    <?php elseif ($access == $venue['creator_access'] && $_SESSION['user_id'] == $venue['created_by']) : ?>
+                        <button onclick="updateVenue($('#to-change-td-<?= $venue['v_id'] ?>').text().trim(),<?= $venue['v_id'] ?>)" class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                            <div class="fa-solid text-lg fa-pen-to-square"></div>
+                        </button>
+                    <?php else : ?>
+                        <button class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 opacity-40  transition-default cursor-default text-white font-semibold rounded-xl" id="upt-btn">
+                            <div class="fa-solid text-lg fa-pen-to-square"></div>
+                        </button>
+                    <?php endif; ?>
                 </td>
                 <td class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
 
-                    <?php if($venue['total_in_use'] > 0 ): ?>
-                    <button type="button"
-                        disabled
-                        class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl"
-                        id="upt-btn"><i class="fa-solid fa-trash"></i></button>
-                    <?php else: ?>
-                        <button type="button"
-                        onclick="deleteVenue(<?= $venue['v_id'] ?>, this)"
-                        class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl"
-                        id="upt-btn"><i class="fa-solid fa-trash"></i></button>
+                    <?php if ($venue['total_in_use'] > 0) : ?>
+                        <button type="button" disabled class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
+                    <?php elseif ($access == 'admin' || $access == 'staff') : ?>
+                        <button type="button" onclick="deleteVenue(<?= $venue['v_id'] ?>, this)" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
+                    <?php elseif ($venue['creator_access'] != $access && $venue['created_by'] != $_SESSION['user_id']) : ?>
+                        <button type="button" disabled class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
+
+                    <?php else : ?>
+                        <button type="button" onclick="deleteVenue(<?= $venue['v_id'] ?>, this)" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
                     <?php endif; ?>
 
                 </td>
@@ -133,7 +136,7 @@ $result = $conn->query($query);
                         v_id: v_id
 
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response == 'false') {
                             if (confirm('Do you really want to approve the event?')) {
                                 $('#' + to_submit).submit();

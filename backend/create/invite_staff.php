@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mail->isHTML(true);
 
         if ($mail->send()) {
-            $_SESSION['success'] = "$email Invited successfully";
+            $_SESSION['success'] = "Invitation sent to $email";
             header('Location: ../../frontend/users.php');
         } else {
             echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;

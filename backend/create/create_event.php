@@ -31,9 +31,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Venue verify
     if (isset($_POST['venue-type'])) {
+        $user_id = $_SESSION['user_id'];
+        $access = $_SESSION['access'];
         $venue = $_POST['input-venue'];
-        $query = "INSERT INTO venue (venue) VALUES ('$venue');";
-        $conn->query($query);
+
+        $query = "INSERT INTO venue (venue, created_by, creator_access) VALUES (?, ?, ?)";
+
+        $stmt = $conn->prepare($query);
+
+        $stmt->bind_param("sis", $venue, $user_id, $access);
+
+        $stmt->execute();
         $_POST['venue'] = $conn->insert_id;
     }
 

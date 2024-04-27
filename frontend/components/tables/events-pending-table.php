@@ -109,7 +109,12 @@ function getEventInfo($event)
                         $q_creator = "SELECT * FROM scheduling_system.teacher t WHERE t.id = $creator_id";
                         $r_creator = $conn->query($q_creator);
                         $creator = $r_creator->fetch_assoc();
-                        echo $creator['first_name'][0] . ' ' . $creator['last_name'];
+                        echo $creator['first_name'][0] . ' ' . $creator['last_name']  .  ' - ' . ucfirst($event['creator_access']);
+                    }else if ($event['creator_access'] == 'teacher') {
+                        $q_creator = "SELECT * FROM sis.student s WHERE s.std_id = $creator_id";
+                        $r_creator = $conn->query($q_creator);
+                        $creator = $r_creator->fetch_assoc();
+                        echo $creator['first_name'][0] . ' ' . $creator['last_name'] .  ' - ' . ucfirst($event['creator_access']);
                     } else {
                         $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
                         $r_creator = $conn->query($q_creator);

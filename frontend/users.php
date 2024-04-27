@@ -33,56 +33,58 @@ $r_users = $conn->query($query);
             <button onclick="" class="toggle-create-staff  px-6 py-2 self-center mr-5 md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl mb-5">Add staff<i class="fa-solid fa-plus ml-1"></i></button>
             <?php
             ?>
-            
-            <?php  if($r_invited->num_rows > 0): ?>
-            <!-- Invited container -->
-            <div class="table-container w-full overflow-auto mb-20 p-7 border rounded-md" id="pending-tbl">
-                <p class="text-xl font-semibold md:text-3xl my-4">Invited staff</p>
-                <table class="w-full min-w-[34rem] ">
-                    <tr>
-                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Link</th>
-                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Sent to</th>
 
-                        <th colspan="1" class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-base md:text-lg">
-                            Action</th>
-                    </tr>
+            <?php if ($r_invited->num_rows > 0) : ?>
+                <!-- Invited container -->
+                <div class="table-container w-full overflow-auto mb-20 px-5 border rounded-md" id="pending-tbl">
+                    <p class="text-xl font-semibold md:text-2xl my-4">Invited staff</p>
+                    <table class="w-full min-w-[34rem] ">
+                        <tr>
+                            <th class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Link</th>
+                            <th class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Sent to</th>
 
-                    <?php while ($user = $r_invited->fetch_assoc()) : ?>
-                        <tr class=" main-tr hover:bg-gray-200">
-
-                            <td class="py-5 px-3 border text-start text-sm md:text-base">
-
-                                <a href="http://localhost:8080/ems2/frontend/staff-registration.php?verification_token=<?= $user['token'] ?>" target="_blank" class="underline">View registration link</a>
-                            </td>
-
-                            <td class="py-5 px-3 border text-start text-sm md:text-base ">
-                                <?= $user['email'] ?>
-                            </td>
-
-                            <td class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-
-                                <button type="button" onclick="deleteVenue(<?= $user['token'] ?>, this)" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Cancel invitation <i class="fa-solid fa-ban"></i></button>
-
-                            </td>
-
+                            <th class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-base md:text-lg">
+                                Action</th>
                         </tr>
 
-                    <?php endwhile; ?>
+                        <?php while ($user = $r_invited->fetch_assoc()) : ?>
+                            <tr class=" main-tr hover:bg-gray-200">
+
+                                <td class="py-5 px-3 border text-start text-sm md:text-base">
+
+                                    <a href="http://localhost:8080/ems2/frontend/staff-registration.php?verification_token=<?= $user['token'] ?>" target="_blank" class="underline">View registration link</a>
+                                </td>
+
+                                <td class="py-5 px-3 border text-start text-sm md:text-base ">
+                                    <?= $user['email'] ?>
+                                </td>
+
+                                <td class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
+
+                                    <form action="../backend/delete/delete_invitation.php" method="post" id="<?= $user['token'] ?>"><input type="hidden" name="token" value="<?= $user['token'] ?>"></form>
+
+                                    <button type="button" onclick="if(confirm('Do you really want to cancel the invitation?')) $('#<?= $user['token'] ?>').submit();" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Cancel invitation <i class="fa-solid fa-ban"></i></button>
+
+                                </td>
+
+                            </tr>
+
+                        <?php endwhile; ?>
 
 
-                </table>
-            </div>
-            <?php endif;?>
+                    </table>
+                </div>
+            <?php endif; ?>
 
             <!-- Staffs container -->
-            <div class="table-container w-full overflow-auto mb-20 p-7 border rounded-md" id="pending-tbl">
-                <p class="text-xl font-semibold md:text-3xl my-4">Staffs</p>
-                <table class="w-full min-w-[34rem] ">
+            <div class="table-container w-full overflow-auto mb-20 px-5 border rounded-md" id="pending-tbl">
+                <p class="text-xl font-semibold md:text-2xl my-4">Staffs</p>
+                <table class="w-full min-w-[34rem] mb-10">
                     <tr>
-                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Firstname</th>
-                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Middlename</th>
-                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Lastname</th>
-                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Email</th>
+                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Firstname</th>
+                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Middlename</th>
+                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Lastname</th>
+                        <th rowspan="1" class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Email</th>
                         <th colspan="1" class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-base md:text-lg">
                             Action</th>
                     </tr>
@@ -109,8 +111,9 @@ $r_users = $conn->query($query);
 
 
                             <td class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
+                                <form action="../backend/delete/delete_user.php" method="post" id="user<?= $user['user_id'] ?>"><input type="hidden" name="user_id" value="<?= $user['user_id'] ?>"></form>
 
-                                <button type="button" onclick="deleteVenue(<?= $user['user_id'] ?>, this)" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete<i class="fa-solid fa-trast"></i></button>
+                                <button type="button" onclick="if(confirm('Do you really want to delete the staff?')) $('#user<?= $user['user_id'] ?>').submit();" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete<i class="fa-solid fa-trast"></i></button>
 
                             </td>
 
