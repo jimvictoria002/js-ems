@@ -19,7 +19,7 @@
                     <li class="nav-anchor <?= ($active == 'pending' ? 'active' : '') ?>  block text-base my-2 font-semibold whitespace-nowrap"> <a href="./pending-events.php" class="block">Pending events</a> </li>
                 <?php endif; ?>
 
-                <?php if ($access == 'admin' || $access == 'teacher' || $access == 'staff') : ?>
+                <?php if ($access == 'admin'  || $access == 'staff') : ?>
                 <li class="nav-anchor <?= ($active == 'venue' ? 'active' : '') ?>  block text-base my-2 font-semibold whitespace-nowrap"> <a href="./venue.php" class="block">Venue</a> </li>
                 <?php endif; ?>
             </ul>

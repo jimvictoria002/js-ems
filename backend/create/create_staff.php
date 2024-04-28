@@ -2,6 +2,8 @@
 require "../../connection.php";
 require "../mailer.php";
 
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     session_start();
@@ -28,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
         $is_verify = 'yes';
         $access = 'staff';
-        $user_img = 'default-img';
+        $user_img = 'default-img.png';
 
         $query = "INSERT INTO `users`(`firstname`, `middlename`, `lastname`, `email`, `user_img`, `access`, `is_verify`, `username`, `password`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);

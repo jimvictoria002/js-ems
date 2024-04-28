@@ -5,6 +5,12 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: index.php');
 }
 
+if ($_SESSION['access'] != 'admin' ){
+    header('Location: dashboard.php');
+    exit;
+}
+
+
 $title = 'Users';
 require "../connection.php";
 require "./partials/header.php";
@@ -81,6 +87,7 @@ $r_users = $conn->query($query);
                 <p class="text-xl font-semibold md:text-2xl my-4">Staffs</p>
                 <table class="w-full min-w-[34rem] mb-10">
                     <tr>
+                        <th rowspan="1" class="text-center border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Image</th>
                         <th rowspan="1" class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Firstname</th>
                         <th rowspan="1" class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Middlename</th>
                         <th rowspan="1" class="text-start border border-green-800 font-semibold py-3 px-3  text-white bg-main text-base md:text-lg">Lastname</th>
@@ -92,7 +99,11 @@ $r_users = $conn->query($query);
 
                     <?php while ($user = $r_users->fetch_assoc()) : ?>
                         <tr class=" main-tr hover:bg-gray-200">
+                            <td class="py-5 px-3 border text-sm md:text-base">
+                                <img src="../uploads/user_img/<?= $user['user_img'] ?>" alt="staff-img" class="min-w-16 min-h-16 w-16 h-16 m-auto rounded-full">
 
+
+                            </td>
                             <td class="py-5 px-3 border text-start text-sm md:text-base">
                                 <?= $user['firstname'] ?>
                             </td>

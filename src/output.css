@@ -664,6 +664,10 @@ video {
   margin: 0.75rem;
 }
 
+.m-auto {
+  margin: auto;
+}
+
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
@@ -739,6 +743,11 @@ video {
   margin-bottom: 10vh;
 }
 
+.my-\[2rem\] {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .my-\[5rem\] {
   margin-top: 5rem;
   margin-bottom: 5rem;
@@ -795,6 +804,10 @@ video {
 
 .ml-1 {
   margin-left: 0.25rem;
+}
+
+.ml-3 {
+  margin-left: 0.75rem;
 }
 
 .ml-4 {
@@ -861,6 +874,10 @@ video {
   margin-top: 1.75rem;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
 .block {
   display: block;
 }
@@ -893,6 +910,18 @@ video {
   height: 2.5rem;
 }
 
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-16 {
+  height: 4rem;
+}
+
+.h-32 {
+  height: 8rem;
+}
+
 .h-8 {
   height: 2rem;
 }
@@ -909,6 +938,10 @@ video {
   max-height: 90vh;
 }
 
+.min-h-16 {
+  min-height: 4rem;
+}
+
 .w-1 {
   width: 0.25rem;
 }
@@ -917,12 +950,24 @@ video {
   width: 2.5rem;
 }
 
+.w-14 {
+  width: 3.5rem;
+}
+
+.w-16 {
+  width: 4rem;
+}
+
 .w-32 {
   width: 8rem;
 }
 
 .w-36 {
   width: 9rem;
+}
+
+.w-44 {
+  width: 11rem;
 }
 
 .w-48 {
@@ -963,6 +1008,14 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-60 {
+  width: 15rem;
+}
+
+.min-w-16 {
+  min-width: 4rem;
 }
 
 .min-w-\[25rem\] {
@@ -1088,6 +1141,10 @@ video {
 
 .gap-y-3 {
   row-gap: 0.75rem;
+}
+
+.gap-y-5 {
+  row-gap: 1.25rem;
 }
 
 .gap-y-6 {
@@ -1299,6 +1356,10 @@ video {
   padding: 0.25rem;
 }
 
+.p-10 {
+  padding: 2.5rem;
+}
+
 .p-2 {
   padding: 0.5rem;
 }
@@ -1317,10 +1378,6 @@ video {
 
 .p-6 {
   padding: 1.5rem;
-}
-
-.p-7 {
-  padding: 1.75rem;
 }
 
 .p-8 {
@@ -1575,6 +1632,11 @@ video {
   color: rgb(254 252 232 / var(--tw-text-opacity));
 }
 
+.text-green-800 {
+  --tw-text-opacity: 1;
+  color: rgb(22 101 52 / var(--tw-text-opacity));
+}
+
 .underline {
   text-decoration-line: underline;
 }
@@ -1806,6 +1868,10 @@ video {
     width: 70%;
   }
 
+  .md\:w-\[80\%\] {
+    width: 80%;
+  }
+
   .md\:w-\[90\%\] {
     width: 90%;
   }
@@ -1916,6 +1982,14 @@ video {
 
   .lg\:w-\[31\%\] {
     width: 31%;
+  }
+
+  .lg\:w-\[50\%\] {
+    width: 50%;
+  }
+
+  .lg\:w-\[40\%\] {
+    width: 40%;
   }
 
   .lg\:py-0 {

@@ -13,7 +13,7 @@
 
 <?php
 
-$query = "SELECT * FROM events e LEFT JOIN venue v ON e.v_id = v.v_id WHERE e.status = 'approved'";
+$query = "SELECT v.venue, e.* FROM events e LEFT JOIN venue v ON e.v_id = v.v_id WHERE e.status = 'approved'";
 $result = $conn->query($query);
 
 $events = [];

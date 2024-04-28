@@ -22,8 +22,13 @@
             <p class="text-sm font-bold capitalize"><?= $_SESSION['access'] ?></p>
 
         </div>
-        <div>
-            <i class="fa-solid fa-user-circle text-4xl md:text-5xl profile-toggle text-green-950 pl-3"></i>
+        <div class="profile-toggle ">
+            <?php if ($_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff') : ?>
+                <img src="../uploads/user_img/<?= $_SESSION['user_img'] ?>" alt="user-img" class="h-14 w-14 rounded-full ml-3">
+            <?php else : ?>
+                <i class="fa-solid fa-user-circle text-4xl md:text-5xl e text-green-950 pl-3"></i>
+
+            <?php endif; ?>
         </div>
         <div class="absolute top-full shadow-lg right-0 bg-white hidden" id="profile-drop">
             <div class="flex items-center md:py-3 gap-3 pr-2 relative w-48 py-4 md:w-64 justify-end !cursor-default">
@@ -39,13 +44,18 @@
                 </div>
 
                 <div>
-                    <i class="fa-solid fa-user-circle text-4xl md:text-5xl text-green-950"></i>
+                    <?php if ($_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff') : ?>
+                        <img src="../uploads/user_img/<?= $_SESSION['user_img'] ?>" alt="user-img" class="h-14 w-14 rounded-full ml-3">
+                    <?php else : ?>
+                        <i class="fa-solid fa-user-circle text-4xl md:text-5xl e text-green-950 pl-3"></i>
+
+                    <?php endif; ?>
                 </div>
             </div>
             <?php if ($_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff') : ?>
-                <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Profile</a>
-                <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Change
-                    password</a>
+                <a href="profile.php" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Profile</a>
+                <!-- <a href="#" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Change
+                    password</a> -->
             <?php endif; ?>
             <a href="../backend/auth/logout.php" class="block text-end py-3 md:py-4 pr-4 text-sm md:text-base hover:bg-gray-200">Logout</a>
         </div>

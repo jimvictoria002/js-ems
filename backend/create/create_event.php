@@ -1,6 +1,20 @@
 <?php
 
 require "../../connection.php";
+require "../mailer.php";
+
+
+function is_connected()
+{
+    $url = 'https://www.google.com'; // Use a reliable website
+    $headers = @get_headers($url);
+
+    if ($headers && strpos($headers[0], '200')) {
+        return true; // Connected to the internet
+    } else {
+        return false; // Not connected to the internet
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -72,7 +86,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
+
         $event_id = $conn->insert_id;
+
+        if (!($access == 'admin' || $access == 'staff')) {
+            if (is_connected()) {
+                if ($_SESSION['access'] == 'teacher') {
+                    $requested_by = $_SESSION['first_name'] .  ' ' . $_SESSION['last_name'] . ' - ' . ucfirst($_SESSION['access']);
+                } else {
+                    $requested_by = $_SESSION['firstname'] .  ' ' . $_SESSION['lastname'] . ' - ' . ucfirst($_SESSION['access']);
+                }
+
+
+                $query = "SELECT venue from venue WHERE v_id = $v_id";
+                $r_venue = $conn->query($query);
+                $venue = $r_venue->fetch_assoc()['venue'];
+
+                $query = "SELECT email from users WHERE access = 'admin'";
+                $r_email = $conn->query($query);
+                $email = $r_email->fetch_assoc()['email'];
+
+
+                $mail->addAddress("$email");
+                $mail->Subject = "$requested_by | Request an Event";
+                ob_start();
+                require "../email-format/request-body.php";
+                $mail->Body = ob_get_clean();
+
+                $mail->isHTML(true);
+
+                if ($mail->send()) {
+                    $_SESSION['success'] = "Invitation sent to $email";
+                    header('Location: ../../frontend/users.php');
+                } else {
+                    echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+                }
+            }
+        }
+
+
+
+
         $_SESSION['success'] = 'Created successfuly';
         if ($status == 'approved') {
             header("Location:../../frontend/event-calendar.php");

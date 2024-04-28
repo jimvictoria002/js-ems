@@ -42,8 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $conn->query($query);
     } else if ($access == 'student') {
 
-        //Student
-
+        $stmt = $conn->prepare("SELECT * FROM sis.student_account sa INNER JOIN sis.students s  ON sa.username = s.std_id WHERE s.std_id = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
     } else if ($access == 'staff') {
         $stmt = $conn->prepare("SELECT * FROM users WHERE (username=? OR email=?) AND access = ?");
         $stmt->bind_param("sss", $username, $username, $access);
@@ -74,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (password_verify($password, $hashedPassword)) {
                 foreach ($row as $key => $value) {
-                    if ($key == 'id') {
+                    if ($key == 'id' || $key == 'std_id') {
                         $key = 'user_id';
                     }
                     $_SESSION[$key] = $value;

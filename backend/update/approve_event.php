@@ -24,13 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: ../../frontend/pending-events.php");
         } else {
             $status = 'approve';
-            $referrer = $_SERVER['HTTP_REFERER'];
-            $_SESSION['success'] = "Event $status successfuly";
 
-            header("Location: ../../frontend/event-calendar.php");
+            if (isset($_POST['from'])) {
+                header("Location: ../email-format/approve-message.html");
+            } else {
+                $_SESSION['success'] = "Event $status successfuly";
+                header("Location: ../../frontend/event-calendar.php");
+            }
         }
-
     }
-
 }
-

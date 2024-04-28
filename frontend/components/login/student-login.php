@@ -97,7 +97,7 @@
     });
 
 
-    function togglePasswordVisibility() {
+    function showPassword() {
         var passwordField = document.getElementById("passwordField");
         var eyeIcon = document.getElementById("eye");
 
