@@ -19,7 +19,7 @@ require "./components/side-nav.php";
         <div class="bg-white p-4 w-full flex flex-col">
             <p class="text-xl font-semibold md:text-3xl my-8 mt-3">Event calendar</p>
 
-            <?php if ($access == 'admin' || $access == 'teacher' || $access == 'staff') : ?>
+            <?php if ($access == 'admin' || $access == 'teacher' || $access == 'staff'|| $access == 'student' ) : ?>
                 <button onclick="" class="toggle-create  px-6 py-2 self-center mr-5 md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl mb-5">Create
                     new event <i class="fa-solid fa-plus ml-1"></i></button>
             <?php endif; ?>

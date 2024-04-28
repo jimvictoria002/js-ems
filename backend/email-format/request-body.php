@@ -7,5 +7,5 @@
     <input type="hidden" name="event_id" value="<?= $event_id ?>">
     <input type="hidden" name="status" value="approved">
     <input type="hidden" name="from" value="gmail">
-    <button  style="display: block;  font-family: Arial, Helvetica, sans-serif; text-align:center;  font-size: 1.2rem; background-color: #2E6B45; width: 8rem; padding: 4px 30px; border:none; outline:none; border-radius: 6px; white-space: nowrap; color: white; text-decoration: none; text-align: center; cursor: pointer;">Approve </button>
+    <button  style="display: block;  font-family: Arial, Helvetica, sans-serif; text-align:center;  font-size: 1rem; background-color: #2E6B45; width: 8rem; padding: 6px 30px; border:none; outline:none; border-radius: 6px; white-space: nowrap; color: white; text-decoration: none; text-align: center; cursor: pointer !important;">Approve </button>
 </form>

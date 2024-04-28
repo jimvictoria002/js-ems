@@ -7,12 +7,17 @@ $add_condition = $access != 'admin' ? "" : '';
 
 
 if ($access == 'teacher') {
-    $query = "SELECT * FROM events e 
+    $query = "SELECT v.venue, e.* FROM events e 
     LEFT JOIN venue v ON e.v_id = v.v_id 
-    WHERE e.status = 'pending' AND e.created_by = $user_id
+    WHERE e.status = 'pending' AND e.created_by = $user_id AND e.creator_access = '$access'
+    ORDER BY e.created_at DESC;";
+}else if ($access == 'student') {
+    $query = "SELECT v.venue, e.* FROM events e 
+    LEFT JOIN venue v ON e.v_id = v.v_id 
+    WHERE e.status = 'pending' AND e.created_by = $user_id AND e.creator_access = '$access'
     ORDER BY e.created_at DESC;";
 } else {
-    $query = "SELECT * FROM events e 
+    $query = "SELECT  v.venue, e.* FROM events e 
     LEFT JOIN venue v ON e.v_id = v.v_id 
     WHERE e.status = 'pending' 
     ORDER BY e.created_at DESC;";
@@ -109,17 +114,17 @@ function getEventInfo($event)
                         $q_creator = "SELECT * FROM scheduling_system.teacher t WHERE t.id = $creator_id";
                         $r_creator = $conn->query($q_creator);
                         $creator = $r_creator->fetch_assoc();
-                        echo $creator['first_name'][0] . ' ' . $creator['last_name']  .  ' - ' . ucfirst($event['creator_access']);
-                    }else if ($event['creator_access'] == 'teacher') {
-                        $q_creator = "SELECT * FROM sis.student s WHERE s.std_id = $creator_id";
+                        echo $creator['first_name'][0] . '. ' . $creator['last_name']  .  ' - ' . ucfirst($event['creator_access']);
+                    }else if ($event['creator_access'] == 'student') {
+                        $q_creator = "SELECT * FROM sis.students s WHERE s.std_id = $creator_id";
                         $r_creator = $conn->query($q_creator);
                         $creator = $r_creator->fetch_assoc();
-                        echo $creator['first_name'][0] . ' ' . $creator['last_name'] .  ' - ' . ucfirst($event['creator_access']);
+                        echo $creator['firstname'][0] . '. ' . $creator['lastname'] .  ' - ' . ucfirst($event['creator_access']);
                     } else {
                         $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
                         $r_creator = $conn->query($q_creator);
                         $creator = $r_creator->fetch_assoc();
-                        echo $creator['firstname'][0] . ' ' . $creator['lastname'];
+                        echo $creator['firstname'][0] . '. ' . $creator['lastname'];
                     }
 
                     ?>

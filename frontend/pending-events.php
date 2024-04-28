@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $access = $_SESSION['access'];
 
-if (!($access == 'admin' || $access == 'teacher' || $access == 'staff')) {
+if (!($access == 'admin' || $access == 'teacher' || $access == 'staff' || $access == 'student')) {
     header('Location: dashboard.php');
     exit;
 }

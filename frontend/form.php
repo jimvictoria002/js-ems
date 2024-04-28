@@ -11,6 +11,9 @@ if ($_SESSION['access'] == 'parent') {
 }else if($_SESSION['access'] == 'teacher'){
     $fullname = $_SESSION['first_name'] . ($_SESSION['middle_name'] ? ' ' .  $_SESSION['middle_name'] : '') . ' ' . $_SESSION['last_name'];
     
+}else if($_SESSION['access'] == 'student'){
+    $fullname = $_SESSION['firstname'] . ' '. $_SESSION['lastname'] . ' | '. $_SESSION['department']. ' - '. $_SESSION['program'] . ($_SESSION['major'] ? ' ' .  ' - '. $_SESSION['major'] : '') . ' - '. ($_SESSION['year_level'] ? ' ' .  $_SESSION['year_level'] : '') . ' '. ($_SESSION['block'] ? ' ' .  $_SESSION['block'] : '') ;
+    
 } else {
     $fullname = $_SESSION['firstname'] . ($_SESSION['middlename'] ? ' ' .  $_SESSION['middlename'] : '') . ' ' . $_SESSION['lastname'];
 }

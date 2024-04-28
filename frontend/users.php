@@ -14,7 +14,7 @@ if ($_SESSION['access'] != 'admin' ){
 $title = 'Users';
 require "../connection.php";
 require "./partials/header.php";
-$active = 'users';
+$active = 'staff';
 require "./components/side-nav.php";
 
 $query = "SELECT 

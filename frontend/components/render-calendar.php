@@ -155,7 +155,7 @@ while ($event = $result->fetch_assoc()) {
                     feedbackBtn.show();
                     feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white bg-none text-black !cursor-default opacity-40')
                     feedbackBtn.addClass('bg-main hover:bg-green-700 text-white')
-                    feedbackBtn.html('Send feedback to this event');
+                    feedbackBtn.html('Send feedback');
                     feedbackBtn.click(function() {
                         $.ajax({
                             url: '../backend/create/create_response_form.php',

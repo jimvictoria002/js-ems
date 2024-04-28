@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $conn->query($query);
     } else if ($access == 'student') {
 
-        $stmt = $conn->prepare("SELECT * FROM sis.student_account sa INNER JOIN sis.students s  ON sa.username = s.std_id WHERE s.std_id = ?");
+        $stmt = $conn->prepare("SELECT * FROM sis.student_account sa INNER JOIN sis.student_data s  ON sa.username = s.std_id WHERE s.std_id = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();

@@ -2,7 +2,9 @@
   transition: all ease 0.3s;
 }
 
-
+.dt-column-title {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
 
 .nav-anchor {
   position: relative;
