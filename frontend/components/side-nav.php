@@ -15,13 +15,18 @@
             <p class="whitespace-nowrap toggle-event-drop cursor-pointer">Event <i class="fa-solid fa-caret-down ml-4"></i></p>
             <ul id="event-drop-down">
                 <li class="nav-anchor <?= ($active == 'calendar' ? 'active' : '') ?> block text-base my-2 font-semibold whitespace-nowrap"> <a href="./event-calendar.php" class="block">Event calendar</a> </li>
+
                 <?php if ($access == 'admin' || $access == 'teacher' || $access == 'staff' || $access == 'student') : ?>
+                    <li class="nav-anchor <?= ($active == 'myevents' ? 'active' : '') ?>  block text-base my-2 font-semibold whitespace-nowrap"> <a href="./my-events.php" class="block">My events</a> </li>
+                <?php endif; ?>
+                <?php if ($access == 'admin' || $access == 'staff' ) : ?>
                     <li class="nav-anchor <?= ($active == 'pending' ? 'active' : '') ?>  block text-base my-2 font-semibold whitespace-nowrap"> <a href="./pending-events.php" class="block">Pending events</a> </li>
                 <?php endif; ?>
 
                 <?php if ($access == 'admin'  || $access == 'staff') : ?>
                     <li class="nav-anchor <?= ($active == 'venue' ? 'active' : '') ?>  block text-base my-2 font-semibold whitespace-nowrap"> <a href="./venue.php" class="block">Venue</a> </li>
                 <?php endif; ?>
+                
             </ul>
             <script>
                 $('.toggle-event-drop').on('click', function() {

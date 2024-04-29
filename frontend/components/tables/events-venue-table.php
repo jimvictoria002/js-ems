@@ -58,7 +58,7 @@ $result = $conn->query($query);
     }
 </script>
 
-<div class="table-container w-full overflow-auto mb-40" id="pending-tbl">
+<div class="table-container w-full overflow-auto mb-40 p-8 border" id="pending-tbl">
     <table class="w-full min-w-[34rem] ">
         <tr>
             <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Venue

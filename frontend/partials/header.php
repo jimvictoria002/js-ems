@@ -11,6 +11,8 @@
   <script src="../node_modules/jquery/dist/jquery.min.js"></script>
   <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
   <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
+  <script src="../node_modules/chart.js/dist/chart.umd.js"></script>
+  <script src="../node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js"></script>
   <script src="../node_modules/datatables.net/js/dataTables.min.js"></script>
   <script src="../node_modules/jquery-validation/dist/additional-methods.min.js"></script>
   <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">

@@ -6,12 +6,35 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: index.php');
 }
 
+$user_id = $_SESSION['user_id'];
+
 $access = $_SESSION['access'];
 
 if (!($access == 'admin' || $access == 'teacher' || $access == 'staff' || $access == 'student')) {
     header('Location: dashboard.php');
     exit;
 }
+
+require "../connection.php";
+
+if($access == 'admin' || $access == 'staff'){
+    $query = "SELECT * FROM feedbacks f ORDER BY f.end_datetime DESC";
+
+}else{
+    $query = "SELECT * FROM feedbacks f WHERE created_by = '$user_id' AND creator_access = '$access' ORDER BY f.end_datetime DESC";
+
+}
+
+$result = $conn->query($query);
+
+$total_data = $result->num_rows;
+
+$data = [];
+
+while ($feedback = $result->fetch_assoc()) {
+    $data[] = $feedback;
+}
+
 
 
 $title = 'Feedbacks';
@@ -29,78 +52,73 @@ require "./components/side-nav.php";
         <div class="bg-white p-4 w-full flex flex-col">
             <p class="text-xl font-semibold md:text-3xl my-8 mt-3">Feedbacks</p>
             <div class="w-full overflow-auto  p-6 border ">
-
+                <?php if($total_data): ?>
                 <table class="w-full border border-gray-400" id="example">
                     <thead>
                         <tr>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" style="font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;">Title</th>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" style="font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;">Decription</th>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" style="font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;">Venue</th>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" style="font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;">Total feedbacks</th>
-                            <th class="text-center border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" style="font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;">Action</th>
+                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Title</th>
+                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Decription</th>
+                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Form title</th>
+                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Total feedbacks</th>
+                            <th class="text-center border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Action</th>
                         </tr>
                     </thead>
                     <tbody>
-
                     </tbody>
                 </table>
+                <?php else: ?>
+                    <p>You don't have any feedbacks</p>
+                <?php endif ?>
 
             </div>
 
             <script>
-                var feedbacks; // Declare the variable outside the scope
+                var feedbacks = <?= json_encode($data) ?>
 
-                $.get("../backend/fetcher/fetch_feedbacks.php", function(data) {
-                    feedbacks = JSON.parse(data);
-
-                    $('#example').DataTable({
-                        data: feedbacks,
-                        ordering: false,
-                        paging: true,
-                        pageLength: 10,
-                        info: true,
-                        columns: [{
-                                data: 'title',
-                                className: 'border whitespace-nowrap !py-5 !px-2 !text-start'
-                            },
-                            {
-                                data: 'description',
-                                className: 'border  !py-5 !px-2 !text-start'
-                            },
-                            {
-                                data: 'venue',
-                                className: 'border whitespace-nowrap !py-5 !px-2 !text-start',
-                                searchable: false
-                            },
-                            {
-                                data: 'feedback_count',
-                                className: 'border whitespace-nowrap !py-5 !px-2 !text-start',
-                                searchable: false
-                            },
-                            { // Action button column
-                                data: 'event_id',
-                                className: 'border whitespace-nowrap !py-5 !px-2 !text-center',
-                                render: function(data, type, row) {
-                                    return `
-                                    <button onclick="viewEvent(${data})" class="px-4 py-2  self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
-                                        <div class="fa-solid fa-eye"></div>
-                                    </button>
-                                    <button onclick="editEvent(${data})" class="px-4 py-2 ml-6 self-end md:text-base text-sm bg-red-700 hover:bg-red-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="edit-btn">
-                        <div class="fa-solid fa-trash"></div>
-                    </button>
+                $('#example').DataTable({
+                    data: feedbacks,
+                    ordering: false,
+                    paging: true,
+                    pageLength: 10,
+                    info: true,
+                    columns: [{
+                            data: 'title',
+                            className: 'border whitespace-nowrap !py-5 !px-2 !text-start'
+                        },
+                        {
+                            data: 'description',
+                            className: 'border  !py-5 !px-2 !text-start'
+                        },
+                        {
+                            data: 'form_title',
+                            className: 'border whitespace-nowrap !py-5 !px-2 !text-start',
+                            searchable: false
+                        },
+                        {
+                            data: 'feedback_count',
+                            className: 'border whitespace-nowrap !py-5 !px-2 !text-start',
+                            searchable: false
+                        },
+                        {
+                            data: 'event_id',
+                            className: 'border whitespace-nowrap !py-5 !px-2 !text-center',
+                            render: function(data, type, row) {
+                                return `
+                                    <a href="view-feedback.php?event_id=${data}" class="px-4 py-2  self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                                        View
+                                    </a>
                                     `;
-                                }
                             }
-                        ],
-
-                        rowCallback: function(row, data, index) {
-                            if (index % 2 === 0) {
-                                $(row).addClass('bg-gray-50');
-                            }
-                            $(row).addClass('hover:bg-gray-100');
-
                         }
-                    });
+                    ],
+
+                    rowCallback: function(row, data, index) {
+                        if (index % 2 === 0) {
+                            $(row).addClass('bg-gray-50');
+                        }
+                        $(row).addClass('hover:bg-gray-100');
+
+                    }
                 });
 
                 function viewEvent(id) {

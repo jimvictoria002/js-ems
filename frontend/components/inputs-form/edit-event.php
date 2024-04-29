@@ -260,7 +260,7 @@
                 $('#create-event').validate({
                     errorPlacement: function (error, element) {
                         if (element.is(":input")) {
-                            error.addClass("text-red-700 text-sm ");
+                            error.addClass("text-red-700 text-sm font-semibold");
                             error.appendTo(element.parent());
                         } else {
                             error.insertAfter(element);

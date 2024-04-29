@@ -11,7 +11,7 @@ if ($access == 'teacher') {
     LEFT JOIN venue v ON e.v_id = v.v_id 
     WHERE e.status = 'pending' AND e.created_by = $user_id AND e.creator_access = '$access'
     ORDER BY e.created_at DESC;";
-}else if ($access == 'student') {
+} else if ($access == 'student') {
     $query = "SELECT v.venue, e.* FROM events e 
     LEFT JOIN venue v ON e.v_id = v.v_id 
     WHERE e.status = 'pending' AND e.created_by = $user_id AND e.creator_access = '$access'
@@ -27,6 +27,8 @@ if ($access == 'teacher') {
 
 
 $result = $conn->query($query);
+
+$total_data = $result->num_rows;
 
 
 function getEventInfo($event)
@@ -69,200 +71,201 @@ function getEventInfo($event)
 
 ?>
 
-<div class="table-container w-full overflow-auto" id="pending-tbl">
-    <table class="w-full min-w-[34rem] ">
-        <tr>
-            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Title
-            </th>
-            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Date/Time
-            </th>
-            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Venue
-            </th>
-            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Creator
-            </th>
-            <th colspan="<?= $access == 'admin' || $access == 'staff' ? '3' : '2' ?>" rowspan="" class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
-            </th>
-        </tr>
-        <tr>
-            <?php if ($access == 'admin' || $access == 'staff') : ?>
-                <th class="text-center border border-green-800  font-semibold py-1 px-3  text-md md:text-base text-white bg-main">Approve</th>
-            <?php endif; ?>
-
-            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">View</th>
-            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">Delete</th>
-        </tr>
-        <?php while ($event = $result->fetch_assoc()) : ?>
-            <tr class=" main-tr">
-
-                <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base ">
-                    <?= $event['title'] ?>
-                </td>
-                <td class="py-4 px-3 border text-start text-sm md:text-base  whitespace-nowrap">
-                    <?= date('M d, Y g:ia', strtotime($event['start_datetime'])) ?>
-                </td>
+<div class="table-container w-full overflow-auto p-7 border" id="pending-tbl">
 
 
-                <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base ">
-                    <?= $event['venue'] ?>
-                </td>
-
-                <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base whitespace-nowrap">
-
-                    <?php
-                    $creator_id = $event['created_by'];
-                    if ($event['creator_access'] == 'teacher') {
-                        $q_creator = "SELECT * FROM scheduling_system.teacher t WHERE t.id = $creator_id";
-                        $r_creator = $conn->query($q_creator);
-                        $creator = $r_creator->fetch_assoc();
-                        echo $creator['first_name'][0] . '. ' . $creator['last_name']  .  ' - ' . ucfirst($event['creator_access']);
-                    }else if ($event['creator_access'] == 'student') {
-                        $q_creator = "SELECT * FROM sis.students s WHERE s.std_id = $creator_id";
-                        $r_creator = $conn->query($q_creator);
-                        $creator = $r_creator->fetch_assoc();
-                        echo $creator['firstname'][0] . '. ' . $creator['lastname'] .  ' - ' . ucfirst($event['creator_access']);
-                    } else {
-                        $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
-                        $r_creator = $conn->query($q_creator);
-                        $creator = $r_creator->fetch_assoc();
-                        echo $creator['firstname'][0] . '. ' . $creator['lastname'];
-                    }
-
-                    ?>
-                </td>
+    <?php if ($total_data  > 0) : ?>
+        <table class="w-full min-w-[34rem] ">
+            <tr>
+                <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Title
+                </th>
+                <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Date/Time
+                </th>
+                <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Venue
+                </th>
+                <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Creator
+                </th>
+                <th colspan="<?= $access == 'admin' || $access == 'staff' ? '3' : '2' ?>" rowspan="" class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
+                </th>
+            </tr>
+            <tr>
                 <?php if ($access == 'admin' || $access == 'staff') : ?>
+                    <th class="text-center border border-green-800  font-semibold py-1 px-3  text-md md:text-base text-white bg-main">Approve</th>
+                <?php endif; ?>
+
+                <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">View</th>
+                <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">Delete</th>
+            </tr>
+            <?php while ($event = $result->fetch_assoc()) : ?>
+                <tr class=" main-tr">
+
+                    <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base ">
+                        <?= $event['title'] ?>
+                    </td>
+                    <td class="py-4 px-3 border text-start text-sm md:text-base  whitespace-nowrap">
+                        <?= date('M d, Y g:ia', strtotime($event['start_datetime'])) ?>
+                    </td>
+
+
+                    <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base ">
+                        <?= $event['venue'] ?>
+                    </td>
+
+                    <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base whitespace-nowrap">
+
+                        <?php
+                        $creator_id = $event['created_by'];
+                        if ($event['creator_access'] == 'teacher') {
+                            $q_creator = "SELECT * FROM scheduling_system.teacher t WHERE t.id = $creator_id";
+                            $r_creator = $conn->query($q_creator);
+                            $creator = $r_creator->fetch_assoc();
+                            echo $creator['first_name'][0] . '. ' . $creator['last_name']  .  ' - ' . ucfirst($event['creator_access']);
+                        } else if ($event['creator_access'] == 'student') {
+                            $q_creator = "SELECT * FROM sis.students s WHERE s.std_id = $creator_id";
+                            $r_creator = $conn->query($q_creator);
+                            $creator = $r_creator->fetch_assoc();
+                            echo $creator['firstname'][0] . '. ' . $creator['lastname'] .  ' - ' . ucfirst($event['creator_access']);
+                        } else {
+                            $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
+                            $r_creator = $conn->query($q_creator);
+                            $creator = $r_creator->fetch_assoc();
+                            echo $creator['firstname'][0] . '. ' . $creator['lastname'];
+                        }
+
+                        ?>
+                    </td>
+                    <?php if ($access == 'admin' || $access == 'staff') : ?>
+
+                        <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
+                            <form action="../backend/update/approve_event.php" method="POST" id="approve-<?= $event['event_id'] ?>">
+                                <input type="hidden" name="event_id" value="<?= $event['event_id'] ?>">
+                                <input type="hidden" name="status" value="approved">
+
+                            </form>
+                            <button onclick="checkConflict('<?= $event['start_datetime'] ?>', '<?= $event['end_datetime'] ?>', '<?= $event['v_id'] ?>', 'approve-<?= $event['event_id'] ?>', '<?= addslashes($event['title']) ?>')" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn"> <i class="fa-solid fa-check"></i></button>
+                        </td>
+                    <?php endif ?>
 
                     <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                        <form action="../backend/update/approve_event.php" method="POST" id="approve-<?= $event['event_id'] ?>">
-                            <input type="hidden" name="event_id" value="<?= $event['event_id'] ?>">
-                            <input type="hidden" name="status" value="approved">
-
-                        </form>
-                        <button onclick="checkConflict('<?= $event['start_datetime'] ?>', '<?= $event['end_datetime'] ?>', '<?= $event['v_id'] ?>', 'approve-<?= $event['event_id'] ?>', '<?= addslashes($event['title']) ?>')" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn"> <i class="fa-solid fa-check"></i></button>
+                        <button onclick="viewEvent(<?= htmlspecialchars(json_encode(getEventInfo($event))) ?>)" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                            <div class="fa-solid fa-eye"></div>
+                        </button>
                     </td>
-                <?php endif ?>
 
-                <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                    <button onclick="viewEvent(<?= htmlspecialchars(json_encode(getEventInfo($event))) ?>)" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
-                        <div class="fa-solid fa-eye"></div>
-                    </button>
-                </td>
-
-                <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                    <form action="../backend/delete/delete_event.php" method="POST" id="delete-<?= $event['event_id'] ?>">
-                        <input type="hidden" name="event_id" value="<?= $event['event_id'] ?>">
-                    </form>
-                    <button type="button" onclick="if(confirm('Do you really want to delete this event?'))$('#delete-<?= $event['event_id'] ?>').submit();" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-red-700 hover:bg-red-600 cursor-pointer  transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
-                </td>
+                    <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
+                        <form action="../backend/delete/delete_event.php" method="POST" id="delete-<?= $event['event_id'] ?>">
+                            <input type="hidden" name="event_id" value="<?= $event['event_id'] ?>">
+                        </form>
+                        <button type="button" onclick="if(confirm('Do you really want to delete this event?'))$('#delete-<?= $event['event_id'] ?>').submit();" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-red-700 hover:bg-red-600 cursor-pointer  transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
+                    </td>
 
 
-            </tr>
+                </tr>
 
-            <tr class="next-tr ">
+                <tr class="next-tr ">
 
-                <td class="py-4 px-3 border text-start text-sm md:text-base  whitespace-nowrap">
-                    <?= date('M d, Y g:ia', strtotime($event['end_datetime'])) ?>
-                </td>
-            </tr>
+                    <td class="py-4 px-3 border text-start text-sm md:text-base  whitespace-nowrap">
+                        <?= date('M d, Y g:ia', strtotime($event['end_datetime'])) ?>
+                    </td>
+                </tr>
 
-        <?php endwhile; ?>
-
-
-        <script>
-            function viewEvent(event) {
-                let event_id = event.id;
-                let title = event.title;
-                let description = event.description;
-                let eventImg = event.eventImg;
-                let venue = event.venue;
-                let viewDate = event.viewDate;
-                let start_datetime = event.start;
-                let end_datetime = event.end;
-                let v_id = event.v_id;
-                let creatorId = event.creatorId;
-                let creatorAccess = event.creatorAccess;
+            <?php endwhile; ?>
 
 
-                $('#view-event-modal').fadeToggle('fast');
-                $('#event-title').text(title);
+            <script>
+                function viewEvent(event) {
+                    let event_id = event.id;
+                    let title = event.title;
+                    let description = event.description;
+                    let eventImg = event.eventImg;
+                    let venue = event.venue;
+                    let viewDate = event.viewDate;
+                    let start_datetime = event.start;
+                    let end_datetime = event.end;
+                    let v_id = event.v_id;
+                    let creatorId = event.creatorId;
+                    let creatorAccess = event.creatorAccess;
 
-                if (description != '') {
-                    $('#event-description-parent').show();
-                    $('#event-description').text(description);
-                    $('#event-venue').parent().removeClass('mt-3');
+
+                    $('#view-event-modal').fadeToggle('fast');
+                    $('#event-title').text(title);
+
+                    if (description != '') {
+                        $('#event-description-parent').show();
+                        $('#event-description').text(description);
+                        $('#event-venue').parent().removeClass('mt-3');
 
 
-                } else {
-                    $('#event-description-parent').hide();
-                    $('#event-description').text(description);
-                    $('#event-venue').parent().addClass('mt-3');
+                    } else {
+                        $('#event-description-parent').hide();
+                        $('#event-description').text(description);
+                        $('#event-venue').parent().addClass('mt-3');
 
-                }
+                    }
 
-                $('#event-venue').text(venue);
-                $('#view-date').text(viewDate);
-                $('#view-img').prop('src', (eventImg))
+                    $('#event-venue').text(venue);
+                    $('#view-date').text(viewDate);
+                    $('#view-img').prop('src', (eventImg))
 
-                $('#approve-btn').off('click');
-                $('#edit-btn').off('click');
+                    $('#approve-btn').off('click');
+                    $('#edit-btn').off('click');
 
-                if ('<?= $_SESSION['access'] ?>' != 'admin' && '<?= $access ?>' != 'staff') {
-                    if (creatorId != '<?= $_SESSION['user_id'] ?>' && creatorAccess != '<?= $_SESSION['access'] ?>' ) {
-                        $('#edit-btn').hide();
+                    if ('<?= $_SESSION['access'] ?>' != 'admin' && '<?= $access ?>' != 'staff') {
+                        if (creatorId != '<?= $_SESSION['user_id'] ?>' && creatorAccess != '<?= $_SESSION['access'] ?>') {
+                            $('#edit-btn').hide();
+                        } else {
+                            $('#edit-btn').show();
+                            $('#edit-btn').on('click', function() {
+                                window.location = "edit_event.php?event_id=" + event_id;
+                            })
+                        }
                     } else {
                         $('#edit-btn').show();
                         $('#edit-btn').on('click', function() {
                             window.location = "edit_event.php?event_id=" + event_id;
                         })
                     }
-                } else {
-                    $('#edit-btn').show();
-                    $('#edit-btn').on('click', function() {
-                        window.location = "edit_event.php?event_id=" + event_id;
-                    })
-                }
 
-                if ('<?= $access ?>' == 'admin' || '<?= $access ?>' == 'staff') {
-                    $('#approve-btn').show();
+                    if ('<?= $access ?>' == 'admin' || '<?= $access ?>' == 'staff') {
+                        $('#approve-btn').show();
 
-                    $('#approve-btn').on('click', function() {
-                        checkConflict(start_datetime, end_datetime, v_id, `approve-${event_id}`, title)
-                    });
+                        $('#approve-btn').on('click', function() {
+                            checkConflict(start_datetime, end_datetime, v_id, `approve-${event_id}`, title)
+                        });
 
-                }
-
-
-
-
-
-
-
-            }
-
-            function checkConflict(start_datetime, end_datetime, v_id, to_submit, title) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "../backend/validator/check_conflict.php",
-                    data: {
-                        start_datetime: start_datetime,
-                        end_datetime: end_datetime,
-                        v_id: v_id
-
-                    },
-                    success: function(response) {
-                        if (response == 'false') {
-                            if (confirm(`Do you really want to approve the ${title}?`)) {
-                                $('#' + to_submit).submit();
-                            }
-                        } else {
-
-
-                            alert('The venue is not available on that date/time');
-                        }
                     }
-                });
-            }
-        </script>
 
-    </table>
+
+                }
+
+                function checkConflict(start_datetime, end_datetime, v_id, to_submit, title) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "../backend/validator/check_conflict.php",
+                        data: {
+                            start_datetime: start_datetime,
+                            end_datetime: end_datetime,
+                            v_id: v_id
+
+                        },
+                        success: function(response) {
+                            if (response == 'false') {
+                                if (confirm(`Do you really want to approve the ${title}?`)) {
+                                    $('#' + to_submit).submit();
+                                }
+                            } else {
+
+
+                                alert('The venue is not available on that date/time');
+                            }
+                        }
+                    });
+                }
+            </script>
+
+        </table>
+    <?php else : ?>
+        <p>No pending events</p>
+    <?php endif; ?>
 </div>
