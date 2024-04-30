@@ -6,17 +6,6 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-if ($_SESSION['access'] == 'parent') {
-    $fullname = $_SESSION['fullname'];
-}else if($_SESSION['access'] == 'teacher'){
-    $fullname = $_SESSION['first_name'] . ($_SESSION['middle_name'] ? ' ' .  $_SESSION['middle_name'] : '') . ' ' . $_SESSION['last_name'];
-    
-}else if($_SESSION['access'] == 'student'){
-    $fullname = $_SESSION['firstname'] . ' '. $_SESSION['lastname'] . ' | '. $_SESSION['department']. ' - '. $_SESSION['program'] . ($_SESSION['major'] ? ' ' .  ' - '. $_SESSION['major'] : '') . ' - '. ($_SESSION['year_level'] ? ' ' .  $_SESSION['year_level'] : '') . ' '. ($_SESSION['block'] ? ' ' .  $_SESSION['block'] : '') ;
-    
-} else {
-    $fullname = $_SESSION['firstname'] . ($_SESSION['middlename'] ? ' ' .  $_SESSION['middlename'] : '') . ' ' . $_SESSION['lastname'];
-}
 
 if (!isset($_GET['r_f_id']) || !is_numeric($_GET['r_f_id'])) {
     header('HTTP/1.0 404 NOT FOUND');
@@ -28,19 +17,22 @@ require "../connection.php";
 
 $r_f_id = $_GET['r_f_id'];
 $user_id = $_SESSION['user_id'];
+$access = $_SESSION['access'];
 
 $query = "SELECT
             rf.*,
-            f.*
+            f.*,
+            e.created_by
          FROM
             `response_form` rf
          INNER JOIN events e ON
             rf.event_id = e.event_id
          INNER JOIN forms f ON 
             e.f_id = f.f_id
-         WHERE rf.r_f_id = $r_f_id AND rf.response_id = $user_id";
+         WHERE rf.r_f_id = $r_f_id";
 
 $result = $conn->query($query);
+
 
 if ($result->num_rows < 1) {
     header('HTTP/1.0 404 NOT FOUND');
@@ -51,7 +43,89 @@ $response_form = $result->fetch_assoc();
 
 $form_title = $response_form['title'] ? $response_form['title'] : 'Untitled form';
 $f_id = $response_form['f_id'];
+$respondent = $response_form['respondent'];
+$response_id = $response_form['response_id'];
+$created_by = $response_form['created_by'];
+
+if (!($access == 'admin' || $access == 'staff')) {
+    if (($created_by != $user_id) && $response_id != $user_id) {
+        header('HTTP/1.0 404 NOT FOUND');
+        exit;
+    } 
+}
 $event_description = $response_form['description'] ? $response_form['description'] : '';
+$is_done = $response_form['is_done']  == 'yes' ? true : false;
+
+
+switch ($respondent) {
+    case 'teacher':
+        $query = "SELECT * FROM scheduling_system.teacher WHERE id = $response_id";
+        $r_user = $conn->query($query);
+        $user = $r_user->fetch_assoc();
+        $firstname = $user['first_name'];
+        $middlename = $user['middle_name'];
+        $lastname = $user['last_name'];
+        $email = $user['email'];
+        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+
+        break;
+    case 'student':
+        $query = "SELECT * FROM sis.students WHERE std_id = $response_id";
+        $r_user = $conn->query($query);
+        $user = $r_user->fetch_assoc();
+        $firstname = $user['firstname'];
+        $middlename = $user['middlename'];
+        $lastname = $user['lastname'];
+        $email = $user['email'];
+        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+
+        break;
+    case 'parent':
+        $query = "SELECT * FROM sis.parent WHERE id = $response_id";
+        $r_user = $conn->query($query);
+        $user = $r_user->fetch_assoc();
+        $email = $user['email'];
+        $fullname = $user['fullname'];
+
+        break;
+    case 'staff':
+        $query = "SELECT * FROM users WHERE user_id = $response_id";
+        $r_user = $conn->query($query);
+        $user = $r_user->fetch_assoc();
+        $firstname = $user['firstname'];
+        $middlename = $user['middlename'];
+        $lastname = $user['lastname'];
+        $email = $user['email'];
+        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+
+        break;
+    case 'admin':
+        $query = "SELECT * FROM users WHERE user_id = $response_id";
+        $r_user = $conn->query($query);
+        $user = $r_user->fetch_assoc();
+        $firstname = $user['firstname'];
+        $middlename = $user['middlename'];
+        $lastname = $user['lastname'];
+        $email = $user['email'];
+        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+
+        break;
+    case 'guest':
+        $query = "SELECT * FROM guest WHERE guest_id = $response_id";
+        $r_user = $conn->query($query);
+        $user = $r_user->fetch_assoc();
+        $firstname = $user['firstname'];
+        $middlename = $user['middlename'];
+        $lastname = $user['lastname'];
+        $email = $user['email'];
+        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+
+        break;
+
+    default:
+        return "Invalid";
+        break;
+}
 
 $query = "SELECT
             q.q_id,

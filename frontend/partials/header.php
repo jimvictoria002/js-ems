@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
   <script src="../node_modules/chart.js/dist/chart.umd.js"></script>
   <script src="../node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js"></script>
+  <script src="../node_modules/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script> -->
   <script src="../node_modules/datatables.net/js/dataTables.min.js"></script>
   <script src="../node_modules/jquery-validation/dist/additional-methods.min.js"></script>
   <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">

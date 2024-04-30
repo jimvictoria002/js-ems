@@ -87,14 +87,14 @@ while ($event = $result->fetch_assoc()) {
     $r_eq = $conn->query($q_ea);
     $hasAccess = (($event['created_by'] == $_SESSION['user_id'] && $event['creator_access'] == $access) || ($_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff'));
 
-    if (!$hasAccess) {
-        while ($event_acess = $r_eq->fetch_assoc()) {
-            $hasAccess = ($event_acess['user_id'] == $_SESSION['user_id'] && $event_acess['access'] == $_SESSION['access']);
-            if ($hasAccess) {
-                break;
-            }
-        }
-    }
+    // if (!$hasAccess) {
+    //     while ($event_acess = $r_eq->fetch_assoc()) {
+    //         $hasAccess = ($event_acess['user_id'] == $_SESSION['user_id'] && $event_acess['access'] == $_SESSION['access']);
+    //         if ($hasAccess) {
+    //             break;
+    //         }
+    //     }
+    // }
 
 
 
@@ -153,7 +153,7 @@ while ($event = $result->fetch_assoc()) {
                 if (allow) {
                     console.log(allow);
                     feedbackBtn.show();
-                    feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white bg-none text-black !cursor-default opacity-40')
+                    feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white bg-green-700 hover:bg-green-600 transition-default text-white ')
                     feedbackBtn.addClass('bg-main hover:bg-green-700 text-white')
                     feedbackBtn.html('Send feedback');
                     feedbackBtn.click(function() {
@@ -176,20 +176,23 @@ while ($event = $result->fetch_assoc()) {
                 } else {
                     let status = e.event.extendedProps.feedback.status;
                     if (status == 'done') {
+                        let r_f_id = e.event.extendedProps.feedback.r_f_id;
                         console.log('done')
                         feedbackBtn.show();
                         feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white')
                         feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white')
-                        feedbackBtn.addClass('bg-none text-black !cursor-default opacity-40')
-                        feedbackBtn.html('Feedback sent');
-                        feedbackBtn.click(function() {})
+                        feedbackBtn.addClass('bg-green-700 hover:bg-green-600 transition-default text-white ')
+                        feedbackBtn.html('View feedback');
+                        feedbackBtn.click(function() {
+                            window.location = "form.php?r_f_id=" + r_f_id;
+                        })
 
                     } else if (status == 'not_done') {
                         let r_f_id = e.event.extendedProps.feedback.r_f_id;
                         console.log('not_done')
                         feedbackBtn.show();
 
-                        feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white bg-none text-black !cursor-default opacity-40')
+                        feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white bg-green-700 hover:bg-green-600 transition-default text-white ')
                         feedbackBtn.addClass('bg-orange-500 hover:bg-orange-400 text-white')
                         feedbackBtn.html('Resume evaluation');
 

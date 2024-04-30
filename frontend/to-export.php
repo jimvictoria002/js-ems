@@ -87,7 +87,7 @@ if (isset($_GET['event_id'])) {
 
                 break;
             case 'guest':
-                $query = "SELECT * FROM guest WHERE user_id = $response_id";
+                $query = "SELECT * FROM guest WHERE guest_id = $response_id";
                 $r_user = $conn->query($query);
                 $user = $r_user->fetch_assoc();
                 $firstname = $user['firstname'];

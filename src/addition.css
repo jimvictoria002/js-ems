@@ -97,3 +97,23 @@
   background-color: rgb(9, 71, 9);
   color: white;
 }
+
+.view-radio:checked ~ .view-label::after{
+  width: 130%;
+
+}
+
+
+.view-label::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: black;
+  border-radius: 20px;
+  transition: all ease 0.3s;
+  transform: translateX(-50%);
+}
+

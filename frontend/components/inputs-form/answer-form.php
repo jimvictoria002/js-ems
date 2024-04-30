@@ -5,8 +5,15 @@
             <?= $event_description  ?>
         </p>
         <div class="flex flex-col mt-5">
-            <p class="text-xs font-semibold ">Your response will be recorded as</p>
-            <p class=" text-base "><?=  $fullname .  ' | '. $_SESSION['email']   ?></p>
+            <?php if ($is_done) : ?>
+                <p class="text-xs font-semibold ">This form recorded as</p>
+
+            <?php else : ?>
+                <p class="text-xs font-semibold ">Your response will be recorded as</p>
+
+
+            <?php endif; ?>
+            <p class=" text-base "><?= $fullname .  ' | ' . $email   ?></p>
 
         </div>
     </div>
@@ -35,20 +42,26 @@
                 <div class="flex flex-col my-3">
                     <?php while ($choice = $r_choices->fetch_assoc()) : ?>
                         <div class="flex my-2">
-                            <input type="radio" class="form-input cursor-pointer" name="<?= $q_id ?>" value="<?= $choice['c_id'] ?>" id="<?= $choice['c_id'] ?>" <?= $choice['c_id'] == $question['answer'] ? 'checked' : '' ?>>
-                            <label for="<?= $choice['c_id'] ?>" class="cursor-pointer pl-1 text-sm md:text-base"><?= $choice['choice_name'] ?></label>
+                            <input type="radio" class="form-input <?= ($is_done ? "" : 'cursor-pointer') ?>" name="<?= $q_id ?>" value="<?= $choice['c_id'] ?>" <?= ($is_done ? "disabled" : '') ?> id="<?= $choice['c_id'] ?>" <?= $choice['c_id'] == $question['answer'] ? 'checked' : '' ?>>
+                            <label for="<?= $choice['c_id'] ?>" class="<?= ($is_done ? "" : 'cursor-pointer') ?> pl-1 text-sm md:text-base"><?= $choice['choice_name'] ?></label>
                         </div>
 
                     <?php endwhile; ?>
                 </div>
 
             <?php else : ?>
-                <textarea name="<?= $q_id ?>" placeholder="Message" class="form-input border p-2 my-2 rounded-md text-sm md:text-base" cols="30" rows="4"><?= $question['answer'] ?></textarea>
+                <textarea name="<?= $q_id ?>" placeholder="Message" <?= ($is_done ? "disabled" : '') ?> class="form-input border p-2 my-2 rounded-md text-sm md:text-base  <?= ($is_done ? "opacity-60" : '') ?>" cols="30" rows="4"><?= $question['answer'] ?></textarea>
             <?php endif; ?>
         </div>
     <?php endwhile; ?>
     <div class="w-full flex justify-end my-4 pr-5 mb-5">
-        <button class="px-6 py-2 self-end md:text-base text-sm  bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl">Submit</button>
+        <?php if ($is_done) : ?>
+
+        <?php else : ?>
+            <button class="px-6 py-2 self-end md:text-base text-sm  bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl">Submit</button>
+
+
+        <?php endif; ?>
     </div>
     <script>
         $('.form-input').on('change', function() {
@@ -84,9 +97,9 @@
                 $('#parent-' + $(element).prop('name')).removeClass('border-2 border-red-600');
                 console.log($(element).prop('name'))
             },
-            submitHandler: function(form){
+            submitHandler: function(form) {
 
-                if(confirm("You're about to submit the form \n\nOnce submitted you can't edit this form again.")){
+                if (confirm("You're about to submit the form \n\nOnce submitted you can't edit this form again.")) {
                     form.submit();
                 }
 

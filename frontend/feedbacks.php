@@ -56,7 +56,7 @@ require "./components/side-nav.php";
                 <table class="w-full border border-gray-400" id="example">
                     <thead>
                         <tr>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Title</th>
+                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Event</th>
                             <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Decription</th>
                             <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Form title</th>
                             <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Total feedbacks</th>
