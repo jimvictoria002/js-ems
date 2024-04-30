@@ -76,8 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (password_verify($password, $hashedPassword)) {
                 foreach ($row as $key => $value) {
-                    if ($key == 'id' || $key == 'std_id') {
-                        $key = 'user_id';
+                    if ($access == 'parent') {
+                        if ($key == 'id') {
+                            $key = 'user_id';
+                        }
+                    }
+                    if ($access == 'student') {
+                        if ($key == 'std_id') {
+                            $key = 'user_id';
+                        }
                     }
                     $_SESSION[$key] = $value;
                 }

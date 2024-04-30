@@ -56,7 +56,7 @@ require "./partials/header.php";
 $active = 'feedback';
 require "./components/side-nav.php";
 
-$query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` rf WHERE rf.event_id = $event_id GROUP BY rf.respondent";
+$query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` rf WHERE rf.event_id = $event_id AND rf.is_done = 'yes' GROUP BY rf.respondent";
 
 
 
@@ -70,7 +70,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
 
         <div class="p-5 mb-40 flex flex-col items-center w-full bg-white md:w-[70%]">
             <div class="flex flex-col shadow-lg p-5 rounded-md border mt-5 w-full my-2 mb-10">
-                <p class="text-2xl font-semibold md:text-3xl "><?= $event['form_title'] ?></p>
+                <p class="text-2xl font-semibold md:text-3xl "><?= $event['form_title'] ? $event['form_title'] : 'Untitled form' ?></p>
                 <p class="text-lg mt-2">
                     <?= $event['form_description']  ?>
                 </p>
@@ -100,15 +100,26 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
             </div>
 
             <script>
-                $('.change-view').on('change', function(){
-                    $('#summarize-container').fadeToggle();
-                    $('#individual-container').fadeToggle();
-                    $('#individual-table').css('width', '100%');
-                })
+                $('.change-view').on('change', function() {
+                    let view = $(this).val();
+
+                    // $('#summarize-container').fadeToggle();
+                    // $('#individual-container').fadeToggle();
+                    // $('#individual-table').css('width', '100%');
+
+                    if (view == 'summarize') {
+                        $('#summarize-container').fadeIn();
+                        $('#individual-container').fadeOut();
+                    } else {
+                        $('#summarize-container').fadeOut();
+                        $('#individual-container').fadeIn();
+
+                    }
+                });
             </script>
 
 
-            <div class="w-full flex flex-col "  id="summarize-container">
+            <div class="w-full flex flex-col " id="summarize-container">
                 <!-- Respondent div -->
 
                 <div class="flex flex-col w-full bg-white my-12  shadow-lg border p-4 md:p-10">
@@ -459,14 +470,16 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
 
             </div>
 
-            <div class="w-full md:w-[120%] overflow-auto" style="display: none;" id="individual-container">
+            <div class="w-full md:w-[130%] overflow-auto" style="display: none;" id="individual-container">
                 <div class=" w-full bg-white my-12  shadow-lg border p-4 overflow-auto">
 
                     <table class="!w-full border border-gray-400 self-start" id="individual-table">
                         <thead>
                             <tr>
                                 <th class="text-start border border-green-800 imp-font-sans font-semibold py-1 px-3  text-base md:text-lg text-white bg-main">Respondent</th>
-                                <th class="text-start border border-green-800 imp-font-sans font-semibold py-1 px-3  text-base md:text-lg text-white bg-main">Name</th>
+                                <th class="text-start border border-green-800 imp-font-sans font-semibold py-1 px-3  text-base md:text-lg text-white bg-main">Firtname</th>
+                                <th class="text-start border border-green-800 imp-font-sans font-semibold py-1 px-3  text-base md:text-lg text-white bg-main">Middlename</th>
+                                <th class="text-start border border-green-800 imp-font-sans font-semibold py-1 px-3  text-base md:text-lg text-white bg-main">Lastname</th>
                                 <th class="text-start border border-green-800 imp-font-sans font-semibold py-1 px-3  text-base md:text-lg text-white bg-main">Email</th>
                                 <th class="text-start border border-green-800 imp-font-sans font-semibold py-1 px-3  text-base md:text-lg text-white bg-main">Response at</th>
                                 <th class="text-center border border-green-800 imp-font-sans font-semibold py-1 px-3  text-base md:text-lg text-white bg-main">Action</th>
@@ -508,7 +521,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                                 $middlename = $user['middle_name'];
                                 $lastname = $user['last_name'];
                                 $email = $user['email'];
-                                $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+                                
 
                                 break;
                             case 'student':
@@ -519,7 +532,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                                 $middlename = $user['middlename'];
                                 $lastname = $user['lastname'];
                                 $email = $user['email'];
-                                $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+                                
 
                                 break;
                             case 'parent':
@@ -538,7 +551,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                                 $middlename = $user['middlename'];
                                 $lastname = $user['lastname'];
                                 $email = $user['email'];
-                                $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+                                
 
                                 break;
                             case 'admin':
@@ -549,7 +562,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                                 $middlename = $user['middlename'];
                                 $lastname = $user['lastname'];
                                 $email = $user['email'];
-                                $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+                                
 
                                 break;
                             case 'guest':
@@ -560,7 +573,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                                 $middlename = $user['middlename'];
                                 $lastname = $user['lastname'];
                                 $email = $user['email'];
-                                $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+                                
 
                                 break;
 
@@ -572,7 +585,9 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
 
                         $data[] = [
                             "type" => ucfirst($respondent),
-                            "fullname" => $fullname,
+                            "firstname" => $firstname,
+                            "middlename" => $middlename,
+                            "lastname" => $lastname,
                             "email" => $email,
                             "response_at" => $response_at,
                             "r_f_id" => $r_f_id
@@ -593,11 +608,23 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                             info: true,
                             columns: [{
                                     data: 'type',
-                                    className: 'border whitespace-nowrap !py-5 !px-4 !text-start'
+                                    className: 'border whitespace-nowrap !py-5 !px-4 !text-start',
+                                    searchable: true
                                 },
                                 {
-                                    data: 'fullname',
-                                    className: 'border  !py-5 !px-4 !text-start whitespace-nowrap'
+                                    data: 'firstname',
+                                    className: 'border  !py-5 !px-4 !text-start whitespace-nowrap',
+                                    searchable: true
+                                },
+                                {
+                                    data: 'middlename',
+                                    className: 'border  !py-5 !px-4 !text-start whitespace-nowrap',
+                                    searchable: true
+                                },
+                                {
+                                    data: 'lastname',
+                                    className: 'border  !py-5 !px-4 !text-start whitespace-nowrap',
+                                    searchable: true
                                 },
                                 {
                                     data: 'email',

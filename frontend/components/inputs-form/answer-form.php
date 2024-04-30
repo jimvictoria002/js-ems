@@ -99,7 +99,7 @@
             },
             submitHandler: function(form) {
 
-                if (confirm("You're about to submit the form \n\nOnce submitted you can't edit this form again.")) {
+                if (confirm("You're about to submit the form \n\nOnce submitted you are unable edit this form again.")) {
                     form.submit();
                 }
 

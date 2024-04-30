@@ -131,15 +131,14 @@ if ($conn->connect_error) {
 //     // $query = "INSERT INTO sis.student_account (username, password) VALUES ($std_id, '$std_password')";
 //     // $conn->query($query);
 
-//     $parent_name = ' Parent ' . $middlename . ' ' .  $lastname;
 //     $parent_password = password_hash('parent123', PASSWORD_DEFAULT);
 
 
 //     $query = "INSERT INTO 
 //                 sis.`parent`
-//                 (`fullname`, `email`, `parent_id`, `password`, `contact_no`, `std_id`, `status`) 
+//                 (`firstname`,`middlename`, `lastname`,  `email`, `parent_id`, `password`, `contact_no`, `std_id`, `status`) 
 //             VALUES 
-//                 ('$parent_name','parent$email','" . str_replace(' ', '', strtolower($lastname)) . "123','$parent_password','1231241232132','$std_id','enable')";
+//                 ('Parent','$middlename','$lastname','parent$email','" . str_replace(' ', '', strtolower($lastname)) . "$std_id','$parent_password','1231241232132','$std_id','enable')";
 //     $conn->query($query);
 // }
 

@@ -79,16 +79,16 @@ $result = $conn->query($query);
         <?php while ($venue = $result->fetch_assoc()) : ?>
             <tr class=" main-tr hover:bg-gray-200">
 
-                <td class="py-5 px-3 border text-start text-sm md:text-base" id="to-change-td-<?= $venue['v_id'] ?>">
+                <td class="py-2 px-3 border text-start text-sm md:text-base" id="to-change-td-<?= $venue['v_id'] ?>">
                     <?= $venue['venue'] ?>
                 </td>
 
-                <td class="py-5 px-3 border text-start text-sm md:text-base ">
+                <td class="py-2 px-3 border text-start text-sm md:text-base ">
                     <?= $venue['total_in_use'] ?>
                 </td>
 
 
-                <td class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
+                <td class="py-2 px-3 border text-center text-sm md:text-base whitespace-nowrap">
 
                     <?php if ($access == 'admin' || $access == 'staff') : ?>
                         <button onclick="updateVenue($('#to-change-td-<?= $venue['v_id'] ?>').text().trim(),<?= $venue['v_id'] ?>)" class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
@@ -104,7 +104,7 @@ $result = $conn->query($query);
                         </button>
                     <?php endif; ?>
                 </td>
-                <td class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
+                <td class="py-2 px-3 border text-center text-sm md:text-base whitespace-nowrap">
 
                     <?php if ($venue['total_in_use'] > 0) : ?>
                         <button type="button" disabled class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>

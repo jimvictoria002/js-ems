@@ -13,7 +13,7 @@
     <div class=" flex items-center md:my-3 mr-4 relative cursor-pointer">
         <div class="profile-toggle flex-col items-end hidden md:flex">
             <?php if ($_SESSION['access'] == 'parent') : ?>
-                <p class="text-lg pl-5 whitespace-nowrap"><?= $_SESSION['fullname'] ?></p>
+                <p class="text-lg"><?= $_SESSION['firstname'][0] . '. ' . $_SESSION['lastname'] ?></p>
             <?php elseif ($_SESSION['access'] == 'teacher') : ?>
                 <p class="text-lg"><?= $_SESSION['first_name'][0] . '. ' . $_SESSION['last_name'] ?></p>
             <?php else : ?>
@@ -34,7 +34,7 @@
             <div class="flex items-center md:py-3 gap-3 pr-2 relative w-48 py-4 md:w-64 justify-end !cursor-default">
                 <div class="flex-col items-end flex">
                     <?php if ($_SESSION['access'] == 'parent') : ?>
-                        <p class="text-lg pl-5 whitespace-nowrap"><?= $_SESSION['fullname'] ?></p>
+                        <p class="text-lg"><?= $_SESSION['firstname'][0] . '. ' . $_SESSION['lastname'] ?></p>
                     <?php elseif ($_SESSION['access'] == 'teacher') : ?>
                         <p class="text-lg"><?= $_SESSION['first_name'][0] . '. ' . $_SESSION['last_name'] ?></p>
                     <?php else : ?>

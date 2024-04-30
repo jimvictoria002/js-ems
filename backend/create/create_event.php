@@ -6,13 +6,13 @@ require "../mailer.php";
 
 function is_connected()
 {
-    $url = 'https://www.google.com'; // Use a reliable website
+    $url = 'https://www.google.com'; 
     $headers = @get_headers($url);
 
     if ($headers && strpos($headers[0], '200')) {
-        return true; // Connected to the internet
+        return true; 
     } else {
-        return false; // Not connected to the internet
+        return false; 
     }
 }
 
@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($status == 'approved') {
             header("Location:../../frontend/event-calendar.php");
         } else {
-            header("Location:../../frontend/edit_event.php?event_id=$event_id");
+            header("Location:../../frontend/my-events.php");
         }
     } else {
         echo "Error inserting event: " . $conn->error;

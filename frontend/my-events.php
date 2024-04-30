@@ -135,9 +135,9 @@ require "./components/side-nav.php";
                                 <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base whitespace-nowrap capitalize">
 
                                     <?php if ($event['status'] == 'pending') : ?>
-                                        <p class="px-5 py-2 bg-orange-700 text-white text-center rounded-md"><?= $event['status'] ?></p>
+                                        <p class="px-5 py-2 bg-orange-700 text-white text-center rounded-md font-semibold"><?= $event['status'] ?> <i class="fa-regular fa-hourglass-half"></i></p>
                                     <?php else : ?>
-                                        <p class="px-5 py-2 bg-green-500 text-white text-center rounded-md"><?= $event['status'] ?></p>
+                                        <p class="px-5 py-2 bg-green-500 text-white text-center rounded-md font-semibold"><?= $event['status'] ?> <i class="fa-solid fa-check-circle"></i></p>
                                     <?php endif; ?>
 
                                 </td>

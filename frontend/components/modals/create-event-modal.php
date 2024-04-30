@@ -137,7 +137,13 @@
 
 
             </div>
+            <div class="w-full flex justify-end pr-5 my-14 mb-10">
+                <button class="px-6 py-2 self-end md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl" id="create-event-btn">Create</button>
+            </div>
+
         </form>
+
+
 
         <script>
             $(document).ready(function() {
@@ -152,10 +158,10 @@
                     var start_datetime = $('[name="' + params[0] + '"]').val();
                     var end_datetime = $('[name="' + params[1] + '"]').val();
                     if (start_datetime == '' || end_datetime == '') {
-                        return true; // If start or end datetime is empty, no conflict check needed
+                        return true;
                     }
 
-                    var isValid = false; // Initialize isValid flag
+                    var isValid = false;
 
                     $.ajax({
                         type: "POST",
@@ -165,13 +171,13 @@
                             end_datetime: end_datetime,
                             v_id: value
                         },
-                        async: false, // Set async to false to wait for the response
+                        async: false,
                         success: function(response) {
-                            isValid = (response === 'false'); // Update isValid based on response
+                            isValid = (response === 'false');
                         }
                     });
 
-                    return isValid; // Return isValid flag
+                    return isValid;
                 }, "The venue is not available on that date/time");
 
 
@@ -200,8 +206,7 @@
                             greaterThan: ['start_datetime']
                         }
                     },
-                    messages: {},
-                    submitHanlder:function(form){
+                    submitHandler: function(form) {
                         $('#create-event-btn').prop('disabled', true);
                         form.submit();
                     }
@@ -209,9 +214,6 @@
             });
         </script>
 
-        <div class="w-full flex justify-end pr-5 my-14 mb-10">
-            <button onclick="$('#create-event').submit();" class="px-6 py-2 self-end md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl" id="create-event-btn">Create</button>
-        </div>
 
     </div>
     <div class="toggle-create bg-gray-700 opacity-40 fixed inset-0 -z-50"></div>

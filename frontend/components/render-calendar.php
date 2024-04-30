@@ -153,7 +153,7 @@ while ($event = $result->fetch_assoc()) {
                 if (allow) {
                     console.log(allow);
                     feedbackBtn.show();
-                    feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white bg-green-700 hover:bg-green-600 transition-default text-white ')
+                    feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
                     feedbackBtn.addClass('bg-main hover:bg-green-700 text-white')
                     feedbackBtn.html('Send feedback');
                     feedbackBtn.click(function() {
@@ -181,7 +181,7 @@ while ($event = $result->fetch_assoc()) {
                         feedbackBtn.show();
                         feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white')
                         feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white')
-                        feedbackBtn.addClass('bg-green-700 hover:bg-green-600 transition-default text-white ')
+                        feedbackBtn.addClass('bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
                         feedbackBtn.html('View feedback');
                         feedbackBtn.click(function() {
                             window.location = "form.php?r_f_id=" + r_f_id;
@@ -192,7 +192,7 @@ while ($event = $result->fetch_assoc()) {
                         console.log('not_done')
                         feedbackBtn.show();
 
-                        feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white bg-green-700 hover:bg-green-600 transition-default text-white ')
+                        feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
                         feedbackBtn.addClass('bg-orange-500 hover:bg-orange-400 text-white')
                         feedbackBtn.html('Resume evaluation');
 
@@ -257,10 +257,13 @@ while ($event = $result->fetch_assoc()) {
                 return {
                     html: '<span class="event-con p-1  py-1 w-full text-xs"><div class="w-full flex justify-between flex-col"><div class="flex"><b class="pr-1 inline-flex items-center text-xs">' + arg.event.extendedProps.stime + '<div class="rounded-full w-1 h-1 inline-block mx-1 bg-yellow-400"></div></b><p class="event-con text-sm">' + arg.event.title + '</p></div> <b class="px-1 event-con self-end text-xs">' + arg.event.extendedProps.etime + '</b></div>' + arg.event.extendedProps.venue + '</span>'
                 };
-            }
+            },
+            eventBackgroundColor: '#2E6B45'
         });
         calendar.render();
     });
 </script>
+
+<div class="bg-yellow-400 hover:bg-yellow-300"></div>
 
 <!-- html: '<div class="w-full p-1 flex py-1 justify-between event-con"><div><b class="pr-1 inline-flex items-center ">' + arg.event.extendedProps.stime+ '<div class="rounded-full w-1 h-1 inline-block mx-1 bg-yellow-400"></div></b>' + arg.event.title+ '</div> <b class="px-1">' + arg.event.extendedProps.etime+ '</b></div>'+ arg.event.extendedProps.venue -->

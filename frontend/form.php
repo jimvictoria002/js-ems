@@ -56,7 +56,6 @@ if (!($access == 'admin' || $access == 'staff')) {
 $event_description = $response_form['description'] ? $response_form['description'] : '';
 $is_done = $response_form['is_done']  == 'yes' ? true : false;
 
-
 switch ($respondent) {
     case 'teacher':
         $query = "SELECT * FROM scheduling_system.teacher WHERE id = $response_id";
@@ -85,7 +84,12 @@ switch ($respondent) {
         $r_user = $conn->query($query);
         $user = $r_user->fetch_assoc();
         $email = $user['email'];
-        $fullname = $user['fullname'];
+        $firstname = $user['firstname'];
+        $middlename = $user['middlename'];
+        $lastname = $user['lastname'];
+
+        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+
 
         break;
     case 'staff':
