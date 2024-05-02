@@ -22,13 +22,16 @@ $access = $_SESSION['access'];
 $query = "SELECT
             rf.*,
             f.*,
-            e.created_by
+            e.created_by,
+            rd.*
          FROM
             `response_form` rf
          INNER JOIN events e ON
             rf.event_id = e.event_id
          INNER JOIN forms f ON 
             e.f_id = f.f_id
+         INNER JOIN respondent_data rd ON
+            rf.r_f_id = rd.r_f_id
          WHERE rf.r_f_id = $r_f_id";
 
 $result = $conn->query($query);
@@ -46,6 +49,13 @@ $f_id = $response_form['f_id'];
 $respondent = $response_form['respondent'];
 $response_id = $response_form['response_id'];
 $created_by = $response_form['created_by'];
+$firstname = $response_form['firstname'];
+$lastname = $response_form['lastname'];
+$middlename = $response_form['middlename'];
+$email = $response_form['email'];
+
+$fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
+
 
 if (!($access == 'admin' || $access == 'staff')) {
     if (($created_by != $user_id) && $response_id != $user_id) {
@@ -56,80 +66,6 @@ if (!($access == 'admin' || $access == 'staff')) {
 $event_description = $response_form['description'] ? $response_form['description'] : '';
 $is_done = $response_form['is_done']  == 'yes' ? true : false;
 
-switch ($respondent) {
-    case 'teacher':
-        $query = "SELECT * FROM scheduling_system.teacher WHERE id = $response_id";
-        $r_user = $conn->query($query);
-        $user = $r_user->fetch_assoc();
-        $firstname = $user['first_name'];
-        $middlename = $user['middle_name'];
-        $lastname = $user['last_name'];
-        $email = $user['email'];
-        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
-
-        break;
-    case 'student':
-        $query = "SELECT * FROM sis.students WHERE std_id = $response_id";
-        $r_user = $conn->query($query);
-        $user = $r_user->fetch_assoc();
-        $firstname = $user['firstname'];
-        $middlename = $user['middlename'];
-        $lastname = $user['lastname'];
-        $email = $user['email'];
-        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
-
-        break;
-    case 'parent':
-        $query = "SELECT * FROM sis.parent WHERE id = $response_id";
-        $r_user = $conn->query($query);
-        $user = $r_user->fetch_assoc();
-        $email = $user['email'];
-        $firstname = $user['firstname'];
-        $middlename = $user['middlename'];
-        $lastname = $user['lastname'];
-
-        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
-
-
-        break;
-    case 'staff':
-        $query = "SELECT * FROM users WHERE user_id = $response_id";
-        $r_user = $conn->query($query);
-        $user = $r_user->fetch_assoc();
-        $firstname = $user['firstname'];
-        $middlename = $user['middlename'];
-        $lastname = $user['lastname'];
-        $email = $user['email'];
-        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
-
-        break;
-    case 'admin':
-        $query = "SELECT * FROM users WHERE user_id = $response_id";
-        $r_user = $conn->query($query);
-        $user = $r_user->fetch_assoc();
-        $firstname = $user['firstname'];
-        $middlename = $user['middlename'];
-        $lastname = $user['lastname'];
-        $email = $user['email'];
-        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
-
-        break;
-    case 'guest':
-        $query = "SELECT * FROM guest WHERE guest_id = $response_id";
-        $r_user = $conn->query($query);
-        $user = $r_user->fetch_assoc();
-        $firstname = $user['firstname'];
-        $middlename = $user['middlename'];
-        $lastname = $user['lastname'];
-        $email = $user['email'];
-        $fullname = $firstname .  ($middlename ? ' ' . $middlename : '') . ' ' . $lastname;
-
-        break;
-
-    default:
-        return "Invalid";
-        break;
-}
 
 $query = "SELECT
             q.q_id,

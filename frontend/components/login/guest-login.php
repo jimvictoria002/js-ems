@@ -1,7 +1,7 @@
-<div class="flex items-center justify-center md:flex-row flex-col w-[100%] lg:py-0 my-[5rem] ">
-    <div class="flex justify-center w-full md:w-[70%] min-w-[25rem] rounded-lg  overflow-hidden shadow-lg">
+<div class="flex items-center justify-center md:flex-row flex-col w-[100%] lg:py-0 ">
+    <div class="flex justify-center w-full md:w-[70%]  rounded-lg  overflow-hidden shadow-lg">
 
-        <form action="./user_credentials/check_login.php" method="post" class=" w-full shadow-md px-6 flex flex-col py-16 justify-center items-center border rounded-lg bg-white" id="login">
+        <form action="./user_credentials/check_login.php" method="post" class=" w-full shadow-md px-6 flex flex-col py-4 justify-center items-center border rounded-lg bg-white" id="login">
 
 
             <?php if (isset($_SESSION['change_success'])) { ?>
@@ -37,6 +37,8 @@
                 </div>
             </div>
 
+            
+
             <div class="flex flex-col w-full mb-7">
                 <label for="email" class=" mb-2 font-semibold text-sm capitalize">email <span class="text-red-700">*</span></label>
                 <div class="relative">
@@ -45,11 +47,19 @@
                 </div>
             </div>
 
+            <!-- <div class="flex flex-col w-full mb-7">
+                <label for="kind" class=" mb-2 font-semibold text-sm capitalize">Kind of guest <span class="text-red-700">*</span></label>
+                <div class="relative">
+                    <input type="text" name="kind" id="kind" class="w-full  px-2 py-2 border rounded-md focus:outline-none " placeholder="Please specify guest kind">
+
+                </div>
+            </div> -->
+
 
 
             <button type="submit" class=" bg-main hover:bg-green-800 text-white transition-all ease duration-300 w-36 text-base text-s-bg rounded-sm py-1 self-center text-center mt-5" id="login-btn">Sign in</button>
             <div class="flex flex-col items-start self-start mt-5">
-            <a href="index.php" class="hover:underline hover:text-s-head text-sm">Back to homepage</a>
+                <a href="index.php" class="hover:underline hover:text-s-head text-sm">Back to homepage</a>
 
             </div>
         </form>
@@ -62,6 +72,11 @@
             firstname: 'required',
             lastname: 'required',
             email: 'required',
+            kind: 'required',
+            email: {
+                required: true,
+                email: true 
+            }
 
         },
         errorPlacement: function(error, element) {
@@ -73,7 +88,8 @@
         },
         messages: {
             username: 'Username is required',
-            password: 'Password is required'
+            password: 'Password is required',
+            kind: 'Please specify guest kind'
         },
         submitHandler: function(form) {
 

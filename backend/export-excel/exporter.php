@@ -48,7 +48,7 @@ if (isset($_GET['event_id'])) {
     $headerRange = 'A1:' . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col_count - 1) . '1';
     $sheet->getStyle($headerRange)->applyFromArray($headerStyle);
 
-    $row = 2; 
+    $row = 2;
     foreach ($data['data'] as $rowData) {
         $col_count = 1;
         foreach ($columns as $key => $value) {
@@ -67,18 +67,17 @@ if (isset($_GET['event_id'])) {
         $row++;
     }
 
-    foreach(range('A',$sheet->getHighestDataColumn()) as $columnID) {
+    foreach (range('A', $sheet->getHighestDataColumn()) as $columnID) {
         $sheet->getColumnDimension($columnID)->setAutoSize(true);
     }
     $dataRange = 'A2:' . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col_count - 1) . ($row - 1);
     $sheet->getStyle($dataRange)->applyFromArray($dataStyle);
 
-    $query = "SELECT title FROM events WHERE event_id = $event_id";
+    // Save the spreadsheet
+    $query = "SELECT f.title  FROM events e INNER JOIN forms f ON e.f_id = f.f_id WHERE e.event_id = $event_id";
     $r_event = $conn->query($query);
     $title = $r_event->fetch_assoc()['title'];
-
-    $fileName = $title. ' responses.xlsx';
-
+    $fileName = $title . ' responses.xlsx';
     $writer = new Xlsx($spreadsheet);
     $writer->save($fileName);
 
@@ -111,7 +110,7 @@ function get_data($event_id)
         "columns" => $columns
     ];
 
-    $query = "SELECT * FROM response_form WHERE event_id = $event_id AND is_done = 'yes' ";
+    $query = "SELECT * FROM response_form rf INNER JOIN respondent_data rd ON rf.r_f_id = rd.r_f_id WHERE event_id = $event_id AND is_done = 'yes' ";
 
     $result = $conn->query($query);
 
@@ -119,78 +118,12 @@ function get_data($event_id)
         $respondent = $response['respondent'];
         $r_f_id = $response['r_f_id'];
         $response_id = $response['response_id'];
+        $firstname = $response['firstname'];
+        $middlename = $response['middlename'];
+        $lastname = $response['lastname'];
+        $email = $response['email'];
         $my_responses = [];
-
-        switch ($respondent) {
-            case 'teacher':
-                $query = "SELECT * FROM scheduling_system.teacher WHERE id = $response_id";
-                $r_user = $conn->query($query);
-                $user = $r_user->fetch_assoc();
-                $firstname = $user['first_name'];
-                $middlename = $user['middle_name'];
-                $lastname = $user['last_name'];
-                $email = $user['email'];
-                
-
-                break;
-            case 'student':
-                $query = "SELECT * FROM sis.students WHERE std_id = $response_id";
-                $r_user = $conn->query($query);
-                $user = $r_user->fetch_assoc();
-                $firstname = $user['firstname'];
-                $middlename = $user['middlename'];
-                $lastname = $user['lastname'];
-                $email = $user['email'];
-                
-
-                break;
-            case 'parent':
-                $query = "SELECT * FROM sis.parent WHERE id = $response_id";
-                $r_user = $conn->query($query);
-                $user = $r_user->fetch_assoc();
-                $email = $user['email'];
-                
-
-                break;
-            case 'staff':
-                $query = "SELECT * FROM users WHERE user_id = $response_id";
-                $r_user = $conn->query($query);
-                $user = $r_user->fetch_assoc();
-                $firstname = $user['firstname'];
-                $middlename = $user['middlename'];
-                $lastname = $user['lastname'];
-                $email = $user['email'];
-                
-
-                break;
-            case 'admin':
-                $query = "SELECT * FROM users WHERE user_id = $response_id";
-                $r_user = $conn->query($query);
-                $user = $r_user->fetch_assoc();
-                $firstname = $user['firstname'];
-                $middlename = $user['middlename'];
-                $lastname = $user['lastname'];
-                $email = $user['email'];
-                
-
-                break;
-            case 'guest':
-                $query = "SELECT * FROM guest WHERE guest_id = $response_id";
-                $r_user = $conn->query($query);
-                $user = $r_user->fetch_assoc();
-                $firstname = $user['firstname'];
-                $middlename = $user['middlename'];
-                $lastname = $user['lastname'];
-                $email = $user['email'];
-                
-
-                break;
-
-            default:
-                return "Invalid";
-                break;
-        }
-
+        
         $query = "SELECT
                     q.q_id,
                     q.question,
@@ -230,9 +163,9 @@ function get_data($event_id)
                 $query = "SELECT choice_name FROM choices WHERE c_id = $answer";
                 $r_choice = $conn->query($query);
                 $choice = $r_choice->fetch_assoc();
-                if(isset($choice['choice_name'])){
+                if (isset($choice['choice_name'])) {
                     $selected = $choice['choice_name'];
-                }else{
+                } else {
                     $selected = '';
                 }
                 $my_responses[$question] = $selected;

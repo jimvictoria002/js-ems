@@ -27,19 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $stmt->get_result();
     } else if ($access == 'guest') {
 
-        $firstname = $_POST['firstname'];
-        $middlename = !empty($_POST['middlename']) ? $_POST['middlename'] : null;
-        $lastname = $_POST['lastname'];
-        $email = $_POST['email'];
 
-        $stmt = $conn->prepare("INSERT INTO `guest`( `firstname`, `middlename`, `lastname`, `email`) VALUES (?,?,?,?)");
-        $stmt->bind_param("ssss", $firstname, $middlename, $lastname, $email);
-        $stmt->execute();
+        $_SESSION = $_POST;
+        
 
-        $guest_id = $conn->insert_id;
-
-        $query = "SELECT * FROM guest WHERE guest_id = $guest_id";
+        $query = "SELECT response_id FROM response_form WHERE respondent = 'guest' ORDER BY response_id DESC LIMIT 1";
         $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+        $guest_id = (isset($row['response_id']) ? $row['response_id']  : 0);
+        $_SESSION['user_id'] = $guest_id + 1;
+        // print_r($_SESSION);
+
+        echo "correct";
+
+        return;
+        exit;
     } else if ($access == 'student') {
 
         $stmt = $conn->prepare("SELECT * FROM sis.student_account sa INNER JOIN sis.student_data s  ON sa.username = s.std_id WHERE s.std_id = ?");
@@ -76,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (password_verify($password, $hashedPassword)) {
                 foreach ($row as $key => $value) {
-                    if ($access == 'parent') {
+                    if ($access == 'teacher' || $access == 'parent') {
                         if ($key == 'id') {
                             $key = 'user_id';
                         }

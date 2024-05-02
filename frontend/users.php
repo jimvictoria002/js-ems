@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: index.php');
 }
 
-if ($_SESSION['access'] != 'admin' ){
+if ($_SESSION['access'] != 'admin') {
     header('Location: dashboard.php');
     exit;
 }
@@ -227,6 +227,8 @@ $r_users = $conn->query($query);
             }
         });
         $("#invite-form").validate({
+            onkeyup: false,
+            onfocusout: false,
             errorPlacement: function(error, element) {
                 error.addClass("text-red-700 text-sm font-semibold");
                 error.insertAfter(element);
@@ -261,6 +263,8 @@ $r_users = $conn->query($query);
         });
 
         $('#create-form').validate({
+            onkeyup: false,
+            onfocusout: false,
             errorPlacement: function(error, element) {
                 error.addClass("text-red-700 text-sm font-semibold");
                 error.insertAfter(element);

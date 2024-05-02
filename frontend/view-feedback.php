@@ -470,7 +470,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
 
             </div>
 
-            <div class="w-full md:w-[130%] overflow-auto" style="display: none;" id="individual-container">
+            <div class="w-full md:w-[140%] overflow-auto" style="display: none;" id="individual-container">
                 <div class=" w-full bg-white my-12  shadow-lg border p-4 overflow-auto">
 
                     <table class="!w-full border border-gray-400 self-start" id="individual-table">
@@ -491,7 +491,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                     <!-- <p>You don't have any feedbacks</p> -->
 
                     <?php
-                    $query = "SELECT * FROM response_form WHERE event_id = $event_id AND is_done = 'yes'";
+                    $query = "SELECT * FROM response_form rf INNER JOIN respondent_data rd ON rf.r_f_id = rd.r_f_id WHERE rf.event_id = $event_id AND rf.is_done = 'yes'";
 
                     $result = $conn->query($query);
 
@@ -499,6 +499,10 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
 
                     while ($response = $result->fetch_assoc()) {
                         $respondent = $response['respondent'];
+                        $firstname = $response['firstname'];
+                        $middlename = $response['middlename'];
+                        $lastname = $response['lastname'];
+                        $email = $response['email'];
                         $r_f_id = $response['r_f_id'];
                         $response_id = $response['response_id'];
                         $created_at = $response['created_at'];
@@ -511,76 +515,6 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                         $formatted_time = date('g:iA', $timestamp);
 
                         $response_at = $formatted_date . ' ' . $formatted_time;
-
-                        switch ($respondent) {
-                            case 'teacher':
-                                $query = "SELECT * FROM scheduling_system.teacher WHERE id = $response_id";
-                                $r_user = $conn->query($query);
-                                $user = $r_user->fetch_assoc();
-                                $firstname = $user['first_name'];
-                                $middlename = $user['middle_name'];
-                                $lastname = $user['last_name'];
-                                $email = $user['email'];
-                                
-
-                                break;
-                            case 'student':
-                                $query = "SELECT * FROM sis.students WHERE std_id = $response_id";
-                                $r_user = $conn->query($query);
-                                $user = $r_user->fetch_assoc();
-                                $firstname = $user['firstname'];
-                                $middlename = $user['middlename'];
-                                $lastname = $user['lastname'];
-                                $email = $user['email'];
-                                
-
-                                break;
-                            case 'parent':
-                                $query = "SELECT * FROM sis.parent WHERE id = $response_id";
-                                $r_user = $conn->query($query);
-                                $user = $r_user->fetch_assoc();
-                                $email = $user['email'];
-                                $fullname = $user['fullname'];
-
-                                break;
-                            case 'staff':
-                                $query = "SELECT * FROM users WHERE user_id = $response_id";
-                                $r_user = $conn->query($query);
-                                $user = $r_user->fetch_assoc();
-                                $firstname = $user['firstname'];
-                                $middlename = $user['middlename'];
-                                $lastname = $user['lastname'];
-                                $email = $user['email'];
-                                
-
-                                break;
-                            case 'admin':
-                                $query = "SELECT * FROM users WHERE user_id = $response_id";
-                                $r_user = $conn->query($query);
-                                $user = $r_user->fetch_assoc();
-                                $firstname = $user['firstname'];
-                                $middlename = $user['middlename'];
-                                $lastname = $user['lastname'];
-                                $email = $user['email'];
-                                
-
-                                break;
-                            case 'guest':
-                                $query = "SELECT * FROM guest WHERE guest_id = $response_id";
-                                $r_user = $conn->query($query);
-                                $user = $r_user->fetch_assoc();
-                                $firstname = $user['firstname'];
-                                $middlename = $user['middlename'];
-                                $lastname = $user['lastname'];
-                                $email = $user['email'];
-                                
-
-                                break;
-
-                            default:
-                                return "Invalid";
-                                break;
-                        }
 
 
                         $data[] = [
@@ -641,10 +575,10 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                                     className: 'border whitespace-nowrap !py-5 !px-6 !text-center',
                                     render: function(data, type, row) {
                                         return `
-                    <a href="form.php?r_f_id=${data}" class="px-4 py-2  self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
-                        View
-                    </a>
-                    `;
+                                            <a href="form.php?r_f_id=${data}" target="_blank" class="px-4 py-2  self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                                                View
+                                            </a>
+                                            `;
                                     }
                                 }
                             ],

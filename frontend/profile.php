@@ -150,7 +150,7 @@ require "./components/side-nav.php";
 
         <script>
             $('#update-profile').validate({
-                onkeyup: false, // Disable keyup event validation
+                onkeyup: false,
                 onfocusout: false,
                 errorPlacement: function(error, element) {
                     error.addClass("text-red-700 text-sm font-semibold");

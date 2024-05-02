@@ -132,7 +132,7 @@ while ($event = $result->fetch_assoc()) {
             headerToolbar: {
                 left: 'prevYear,prev,next,nextYear today',
                 center: 'title',
-                right: 'dayGridMonth,dayGridWeek,dayGridDay,list'
+                right: 'dayGridMonth,dayGridWeek,dayGridDay'
             },
             events: events,
             eventClick: function(e) {
