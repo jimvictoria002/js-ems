@@ -31,6 +31,7 @@ $result = $conn->query($query);
 $total_data = $result->num_rows;
 
 
+
 function getEventInfo($event)
 {
 
@@ -68,112 +69,134 @@ function getEventInfo($event)
     ];
 }
 
+$pending_events = [];
+
 
 ?>
 
-<div class="table-container w-full overflow-auto p-7 border" id="pending-tbl">
+<div class="table-container w-full overflow-auto p-7 border">
 
 
     <?php if ($total_data  > 0) : ?>
-        <table class="w-full min-w-[34rem] ">
-            <tr>
-                <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Title
-                </th>
-                <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Date/Time
-                </th>
-                <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Venue
-                </th>
-                <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Creator
-                </th>
-                <th colspan="<?= $access == 'admin' || $access == 'staff' ? '3' : '2' ?>" rowspan="" class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
-                </th>
-            </tr>
-            <tr>
-                <?php if ($access == 'admin' || $access == 'staff') : ?>
-                    <th class="text-center border border-green-800  font-semibold py-1 px-3  text-md md:text-base text-white bg-main">Approve</th>
-                <?php endif; ?>
+        <table class="w-full min-w-[34rem] " id="pending-tbl">
+            <thead>
 
-                <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">View</th>
-                <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">Delete</th>
-            </tr>
-            <?php while ($event = $result->fetch_assoc()) : ?>
-                <tr class=" main-tr">
-
-                    <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base ">
-                        <?= $event['title'] ?>
-                    </td>
-                    <td class="py-4 px-3 border text-start text-sm md:text-base  whitespace-nowrap">
-                        <?= date('M d, Y g:ia', strtotime($event['start_datetime'])) ?>
-                    </td>
-
-
-                    <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base ">
-                        <?= $event['venue'] ?>
-                    </td>
-
-                    <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base whitespace-nowrap">
-
-                        <?php
-                        $creator_id = $event['created_by'];
-                        if ($event['creator_access'] == 'teacher') {
-                            $q_creator = "SELECT * FROM scheduling_system.teacher t WHERE t.id = $creator_id";
-                            $r_creator = $conn->query($q_creator);
-                            $creator = $r_creator->fetch_assoc();
-                            echo $creator['first_name'][0] . '. ' . $creator['last_name']  .  ' - ' . ucfirst($event['creator_access']);
-                        } else if ($event['creator_access'] == 'student') {
-                            $q_creator = "SELECT * FROM sis.students s WHERE s.std_id = $creator_id";
-                            $r_creator = $conn->query($q_creator);
-                            $creator = $r_creator->fetch_assoc();
-                            echo $creator['firstname'][0] . '. ' . $creator['lastname'] .  ' - ' . ucfirst($event['creator_access']);
-                        } else {
-                            $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
-                            $r_creator = $conn->query($q_creator);
-                            $creator = $r_creator->fetch_assoc();
-                            echo $creator['firstname'][0] . '. ' . $creator['lastname'];
-                        }
-
-                        ?>
-                    </td>
-                    <?php if ($access == 'admin' || $access == 'staff') : ?>
-
-                        <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                            <form action="../backend/update/approve_event.php" method="POST" id="approve-<?= $event['event_id'] ?>">
-                                <input type="hidden" name="event_id" value="<?= $event['event_id'] ?>">
-                                <input type="hidden" name="status" value="approved">
-
-                            </form>
-                            <button onclick="checkConflict('<?= $event['start_datetime'] ?>', '<?= $event['end_datetime'] ?>', '<?= $event['v_id'] ?>', 'approve-<?= $event['event_id'] ?>', '<?= addslashes($event['title']) ?>')" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn"> <i class="fa-solid fa-check"></i></button>
-                        </td>
-                    <?php endif ?>
-
-                    <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                        <button onclick="viewEvent(<?= htmlspecialchars(json_encode(getEventInfo($event))) ?>)" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
-                            <div class="fa-solid fa-eye"></div>
-                        </button>
-                    </td>
-
-                    <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                        <form action="../backend/delete/delete_event.php" method="POST" id="delete-<?= $event['event_id'] ?>">
-                            <input type="hidden" name="event_id" value="<?= $event['event_id'] ?>">
-                        </form>
-                        <button type="button" onclick="if(confirm('Do you really want to delete this event?'))$('#delete-<?= $event['event_id'] ?>').submit();" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-red-700 hover:bg-red-600 cursor-pointer  transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-
-
+                <tr>
+                    <th class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Title
+                    </th>
+                    <th class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Venue
+                    </th>
+                    <th class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Creator
+                    </th>
+                    <th class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
+                    </th>
                 </tr>
+            </thead>
 
-                <tr class="next-tr ">
+            <?php while ($p_event = $result->fetch_assoc()) :
 
-                    <td class="py-4 px-3 border text-start text-sm md:text-base  whitespace-nowrap">
-                        <?= date('M d, Y g:ia', strtotime($event['end_datetime'])) ?>
-                    </td>
-                </tr>
+                $creator_id = $p_event['created_by'];
+                $sub_pending = getEventInfo($p_event);
+                if ($p_event['creator_access'] == 'teacher') {
+                    $q_creator = "SELECT * FROM scheduling_system.teacher t WHERE t.id = $creator_id";
+                    $r_creator = $conn->query($q_creator);
+                    $creator = $r_creator->fetch_assoc();
+                    $creator_name =  $creator['first_name'][0] . '. ' . $creator['last_name']  .  ' - ' . ucfirst($p_event['creator_access']);
+                } else if ($p_event['creator_access'] == 'student') {
+                    $q_creator = "SELECT * FROM sis.students s WHERE s.std_id = $creator_id";
+                    $r_creator = $conn->query($q_creator);
+                    $creator = $r_creator->fetch_assoc();
+                    $creator_name =  $creator['firstname'][0] . '. ' . $creator['lastname'] .  ' - ' . ucfirst($p_event['creator_access']);
+                } else {
+                    $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
+                    $r_creator = $conn->query($q_creator);
+                    $creator = $r_creator->fetch_assoc();
+                    $creator_name =  $creator['firstname'][0] . '. ' . $creator['lastname'];
+                }
+
+
+                $sub_pending['creator_name'] = $creator_name;
+
+                $pending_events[] = $sub_pending;
+            ?>
 
             <?php endwhile; ?>
 
 
             <script>
+                let pendingEvents = <?= json_encode($pending_events) ?>;
+                $('#pending-tbl').DataTable({
+                    data: pendingEvents,
+                    ordering: false,
+                    paging: true,
+                    pageLength: 10,
+                    info: true,
+                    columns: [{
+                            data: 'title',
+                            className: 'py-2 px-3 border text-start text-sm md:text-base'
+                        },
+                        {
+                            data: 'venue',
+                            className: 'py-2 px-3 border !text-start text-sm md:text-base'
+                        },
+                        {
+                            data: 'creator_name',
+                            className: 'py-2 px-3 border !text-start text-sm md:text-base'
+                        },
+                        {
+                            data: null,
+                            className: 'border whitespace-nowrap !py-5 !px-2 !text-center',
+                            render: function(data, type, row) {
+
+                                let buttons = '';
+
+                                let v_id = data.v_id;
+                                let venue = data.venue;
+                                let created_by = data.created_by;
+                                let creator_access = data.creator_access;
+                                let total_in_use = data.total_in_use;
+
+
+
+                                // console.log(v_id)
+                                // console.log(created_by)
+                                // console.log(creator_access)
+
+                                buttons += `
+                                <button onclick="approveEvent('${data.start}', '${data.end}', '${data.v_id}', '${data.title}', '${data.id}')" class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white mr- font-semibold rounded-xl" id="upt-btn"> Approve</button>
+                        
+                                    <button onclick='viewEvent(` + JSON.stringify(data) + `)' class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 6 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                                        View
+                                    </button>
+                                `;
+
+                                if (total_in_use > 0) {
+                                    buttons += `<button type="button" disabled class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete</button>`;
+                                } else {
+                                    buttons += ` <button type="button" onclick="deleteVenue(${v_id})" class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete</button>`;
+                                }
+
+
+                                return `${buttons}
+                                    `;
+                            }
+                        },
+                    ],
+
+                    rowCallback: function(row, data, index) {
+                        if (index % 2 === 0) {
+                            $(row).addClass('bg-gray-50');
+                        }
+                        $(row).addClass('hover:bg-gray-100');
+
+                    }
+                });
+
                 function viewEvent(event) {
+
+
+
+
                     let event_id = event.id;
                     let title = event.title;
                     let description = event.description;
@@ -230,7 +253,7 @@ function getEventInfo($event)
                         $('#approve-btn').show();
 
                         $('#approve-btn').on('click', function() {
-                            checkConflict(start_datetime, end_datetime, v_id, `approve-${event_id}`, title)
+                            approveEvent(start_datetime, end_datetime, v_id, title, event_id);
                         });
 
                     }
@@ -238,28 +261,62 @@ function getEventInfo($event)
 
                 }
 
-                function checkConflict(start_datetime, end_datetime, v_id, to_submit, title) {
+                function approveEvent(start_datetime, end_datetime, v_id, title, event_id) {
+                    // console.log(start_datetime)
+                    // console.log(end_datetime)
+                    // console.log(v_id)
+                    // console.log(title)
 
-                    $.ajax({
-                        type: "POST",
-                        url: "../backend/validator/check_conflict.php",
-                        data: {
-                            start_datetime: start_datetime,
-                            end_datetime: end_datetime,
-                            v_id: v_id
+                    let conflict;
 
-                        },
-                        success: function(response) {
-                            if (response == 'false') {
-                                if (confirm(`Do you really want to approve the ${title}?`)) {
-                                    $('#' + to_submit).submit();
+                    checkConflict(start_datetime, end_datetime, v_id)
+                        .then(function(result) {
+                            conflict = result;
+                            if (conflict) {
+                                if (confirm(`Do you really want to approve ${title}`)) {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "../backend/update/approve_event.php",
+                                        data: {
+                                            status: 'approved',
+                                            reqajx: 'reqajx',
+                                            event_id: event_id,
+                                        },
+                                        success: function(response) {
+                                            window.location = '';
+                                        },
+                                        error: function(xhr, status, error) {
+                                        }
+                                    });
                                 }
                             } else {
-
-
-                                alert('The venue is not available on that date/time');
+                                alert('The venue is not available in that date/time \n\nPlease change the date/time to approve this event');
                             }
-                        }
+                        })
+                        .catch(function(error) {
+                            alert('Something wrong' + error);
+                        });
+
+
+                }
+
+                function checkConflict(start_datetime, end_datetime, v_id) {
+                    return new Promise(function(resolve, reject) {
+                        $.ajax({
+                            type: "POST",
+                            url: "../backend/validator/check_conflict.php",
+                            data: {
+                                start_datetime: start_datetime,
+                                end_datetime: end_datetime,
+                                v_id: v_id
+                            },
+                            success: function(response) {
+                                resolve(response == 'false');
+                            },
+                            error: function(xhr, status, error) {
+                                reject(error);
+                            }
+                        });
                     });
                 }
             </script>

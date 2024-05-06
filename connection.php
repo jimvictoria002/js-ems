@@ -1,10 +1,13 @@
 <?php
+
+date_default_timezone_set('Asia/Manila');
+
+
 $servername = "localhost";
 $username = "root";
 $password = "12345678";
 $database = "ems2";
 
-date_default_timezone_set('Asia/Manila');
 
 $conn = new mysqli($servername, $username, $password, $database);
 

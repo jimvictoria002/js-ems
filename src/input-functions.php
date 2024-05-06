@@ -265,30 +265,30 @@
 
     function multipleChoice(q_id, count, value, c_id) {
         return `
-                            <div class="flex flex-col w-[80%] my-2 items-start">
-                                <div class="flex items-center gap-2 my-3 text-lg w-full">
-                                    <input type="radio" id="" disabled>
-                                    <div class="flex flex-col w-full">
-                                        <input type="text" name="question-choice-${q_id}[]"
-                                            class="question-choice p-1 border-b outline-none border-gray-400 text-sm rounded-sm w-full"
-                                            placeholder="Choice ${count}" onkeyup="checkIfEnter(this)" data-choice-count="${count}"
-                                            value="${value}" id="${c_id}"
-                                            data-choice-id="${c_id}"
-                                            onchange="saveChoice($(this),$(this).val(),${c_id})">
-                                    </div>
-                                    <i class="fa-solid fa-x text-xs text-gray-400 cursor-pointer"
-                                        onclick="removeChoice(${c_id},this);"></i>
+                <div class="flex flex-col w-[80%] my-2 items-start">
+                    <div class="flex items-center gap-2 my-3 text-lg w-full">
+                        <input type="radio" id="" disabled>
+                        <div class="flex flex-col w-full">
+                            <input type="text" name="question-choice-${q_id}[]"
+                                class="question-choice p-1 border-b outline-none border-gray-400 text-sm rounded-sm w-full"
+                                placeholder="Choice ${count}" onkeyup="checkIfEnter(this)" data-choice-count="${count}"
+                                value="${value}" id="${c_id}"
+                                data-choice-id="${c_id}"
+                                onchange="saveChoice($(this),$(this).val(),${c_id})">
+                        </div>
+                        <i class="fa-solid fa-x text-xs text-gray-400 cursor-pointer"
+                            onclick="removeChoice(${c_id},this);"></i>
 
-                                </div>
+                    </div>
 
 
-                                <p class="add-choice font-semibold cursor-pointer my-2 text-xs md:text-sm text-gray-600"
-                                    data-question-id="${q_id}" onclick="addChoice($(this))">Add
-                                    choice
-                                    <i class="fa-solid fa-plus"></i>
-                                </p>
-                            </div>
-                                `;
+                    <p class="add-choice font-semibold cursor-pointer my-2 text-xs md:text-sm text-gray-600"
+                        data-question-id="${q_id}" onclick="addChoice($(this))">Add
+                        choice
+                        <i class="fa-solid fa-plus"></i>
+                    </p>
+                </div>
+                `;
     }
 
     function messageOption(q_id) {

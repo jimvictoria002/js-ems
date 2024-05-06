@@ -17,12 +17,10 @@ if (!($access == 'admin' || $access == 'teacher' || $access == 'staff' || $acces
 
 require "../connection.php";
 
-if($access == 'admin' || $access == 'staff'){
+if ($access == 'admin' || $access == 'staff') {
     $query = "SELECT * FROM feedbacks f ORDER BY f.end_datetime DESC";
-
-}else{
+} else {
     $query = "SELECT * FROM feedbacks f WHERE created_by = '$user_id' AND creator_access = '$access' ORDER BY f.end_datetime DESC";
-
 }
 
 $result = $conn->query($query);
@@ -50,23 +48,29 @@ require "./components/side-nav.php";
     ?>
     <div class="p-5 mb-40">
         <div class="bg-white p-4 w-full flex flex-col">
-            <p class="text-xl font-semibold md:text-3xl my-8 mt-3">Feedbacks</p>
+            <?php if ($access == 'admin' || $access == 'staff') : ?>
+                <p class="text-xl font-semibold md:text-3xl my-8 mt-3">Feedbacks</p>
+
+            <?php else : ?>
+                <p class="text-xl font-semibold md:text-3xl my-8 mt-3">My events feedback</p>
+
+            <?php endif; ?>
             <div class="w-full overflow-auto  p-6 border ">
-                <?php if($total_data): ?>
-                <table class="w-full border border-gray-400" id="example">
-                    <thead>
-                        <tr>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Event</th>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Decription</th>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Form title</th>
-                            <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Total feedbacks</th>
-                            <th class="text-center border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main" >Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <?php else: ?>
+                <?php if ($total_data) : ?>
+                    <table class="w-full border border-gray-400" id="example">
+                        <thead>
+                            <tr>
+                                <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main">Event</th>
+                                <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main">Decription</th>
+                                <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main">Form title</th>
+                                <th class="text-start border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main">Total feedbacks</th>
+                                <th class="text-center border border-green-800 imp-font-sans font-semibold py-4 px-3  text-base md:text-lg text-white bg-main">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                <?php else : ?>
                     <p>You don't have any feedbacks</p>
                 <?php endif ?>
 

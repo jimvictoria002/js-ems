@@ -169,7 +169,7 @@
                         <button type="button"
                             onclick="if($('#create-event').valid())if(confirm('Do you really want to approve this event?'))$('#approve-<?= $event_id ?>').submit();"
                             class="px-8 py-2  self-start md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Approve
-                            <i class="fa-solid fa-check"></i></button>
+                    </button>
                     <?php else: ?>
                         <button type="button"
                             onclick="if($('#create-event').valid())if(confirm('Do you really want to Unapprove this event?'))$('#approve-<?= $event_id ?>').submit();"

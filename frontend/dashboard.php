@@ -86,7 +86,7 @@ require "./components/side-nav.php";
     </style>
 
     <div class="w-full flex mt-2 flex-col bg-white p-4 mb-40">
-        <p class="text-xl font-semibold md:text-3xl my-2 mt-3">Dashboard</p>
+        <p class="text-2xl font-semibold md:text-3xl my-2 mt-3">Dashboard</p>
 
 
         <!-- Search -->

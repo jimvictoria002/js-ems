@@ -4,6 +4,8 @@ require "../../connection.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    session_start();
+
     $venue = $_POST['venue'];
     $v_id = $_POST['v_id'];
 
@@ -11,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare($query);
     $stmt->bind_param("si", $venue, $v_id);
     $stmt->execute();
+
+    $_SESSION['success'] = 'Venue updated successfuly';
 
 
     if ($stmt->affected_rows > 0) {

@@ -122,7 +122,7 @@ require "./components/side-nav.php";
                                 </div>
 
                                 <div class="w-full text-sm md:text-base  flex flex-col">
-                                    <label for="username" class=" text-sm mb-1">Input your current password to save changes</label>
+                                    <label for="" class=" text-sm mb-1">Input your current password to save changes</label>
                                     <label for="current_password" class="font-semibold capitalize">Current password</label>
                                     <input type="password" placeholder="Enter current password" id="current_password" class="p-1 border active:border-green-950 rounded-sm w-full" name="confirmPassword">
                                 </div>

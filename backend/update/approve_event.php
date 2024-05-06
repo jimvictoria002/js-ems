@@ -29,7 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header("Location: ../email-format/approve-message.html");
             } else {
                 $_SESSION['success'] = "Event $status successfuly";
-                header("Location: ../../frontend/event-calendar.php");
+
+                if (!isset($_POST['reqajx'])) {
+                    header("Location: ../../frontend/event-calendar.php");
+                }
             }
         }
     }

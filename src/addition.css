@@ -3,7 +3,8 @@
 }
 
 .dt-column-title {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
 
 .nav-anchor {
@@ -38,7 +39,7 @@
   align-items: start;
   box-shadow: 0 0 1px rgba(0, 0, 0, 1);
   background-color: rgb(253, 253, 204);
-  transition: all ease .3s;
+  transition: all ease 0.3s;
 }
 
 .fc-daygrid-dot-event:hover {
@@ -49,14 +50,13 @@
   padding: 4px 10px !important;
   text-transform: capitalize !important;
 }
-.fc-daygrid-block-event{
-  transition: all ease .3s;
+.fc-daygrid-block-event {
+  transition: all ease 0.3s;
 }
 
-.fc-daygrid-block-event:hover{
+.fc-daygrid-block-event:hover {
   background-color: #4da870 !important;
 }
-
 
 @media (max-width: 750px) {
   .fc-header-toolbar button {
@@ -65,30 +65,26 @@
 }
 .fc .fc-button-primary {
   --tw-bg-opacity: 1;
-  background-color: #2E6B45;
+  background-color: #2e6b45;
   border: none !important;
 }
 
-.fc-button{
-  transition: all ease .3s;  
+.fc-button {
+  transition: all ease 0.3s;
 }
 
-.fc-button:hover{
+.fc-button:hover {
   background-color: #91c9a6 !important;
-  
 }
-
 
 .fc-button-primary:focus {
   outline: none !important; /* Remove focus outline */
   box-shadow: none !important;
-
 }
 
 .fc-button-primary:active {
   border: none !important; /* Remove border when button is active (clicked) */
   box-shadow: none !important;
-
 }
 
 .fc-button-active {
@@ -126,11 +122,9 @@
   color: white;
 }
 
-.view-radio:checked ~ .view-label::after{
+.view-radio:checked ~ .view-label::after {
   width: 130%;
-
 }
-
 
 .view-label::after {
   content: "";
@@ -152,4 +146,19 @@
 .hover\:bg-yellow-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+}
+
+.dt-length {
+  display: none !important;
+}
+.dt-paging-button.current {
+  background-color: #35b667 !important; /* Active background color */
+  color: white !important; /* Active text color */
+}
+
+.dt-paging-button {
+  border-radius: 7px !important; /* Border radius */
+}
+.dt-layout-row:last-child{
+  padding: 0 1rem;
 }

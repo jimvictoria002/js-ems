@@ -12,6 +12,12 @@ ORDER BY total_in_use DESC;
 ";
 $result = $conn->query($query);
 
+$venues_result = [];
+
+while ($venue = $result->fetch_assoc()) {
+    $venues_result[] = $venue;
+}
+
 
 
 ?>
@@ -31,7 +37,7 @@ $result = $conn->query($query);
                 },
                 success: function(response) {
                     if (response == '1') {
-                        $('#to-change-td-' + v_id).html(new_venue);
+                        window.location = '';
                     }
                 }
             });
@@ -39,7 +45,7 @@ $result = $conn->query($query);
 
     }
 
-    function deleteVenue(v_id, e) {
+    function deleteVenue(v_id) {
 
 
         if (confirm('Do you really want to delete the venue?')) {
@@ -50,7 +56,8 @@ $result = $conn->query($query);
                     v_id: v_id
                 },
                 success: function(response) {
-                    $(e).parent().parent().remove();
+                    window.location = '';
+
                 }
             });
         }
@@ -58,98 +65,114 @@ $result = $conn->query($query);
     }
 </script>
 
-<div class="table-container w-full overflow-auto mb-40 p-8 border" id="pending-tbl">
-    <table class="w-full min-w-[34rem] ">
-        <tr>
-            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Venue
-            </th>
-            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Total in
-                use</th>
+<div class="table-container w-full overflow-auto mb-40 p-8 border">
+    <table class="w-full min-w-[34rem] " id="pending-tbl">
+        <thead>
+            <tr>
+                <th class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Venue
+                </th>
+                <th class="text-start border border-green-800 font-semibold py-4 px-3  text-white bg-main text-base md:text-lg">Total in
+                    use</th>
 
-            <th colspan="2" class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-base md:text-lg">
-                Action</th>
-        </tr>
-
-        <tr>
-            <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-sm md:text-base">Edit
-            </th>
-            <th class="text-center border border-green-800 font-semibold py-1 px-3  text-white bg-main text-sm md:text-base">Delete
-            </th>
-        </tr>
-        <?php while ($venue = $result->fetch_assoc()) : ?>
-            <tr class=" main-tr hover:bg-gray-200">
-
-                <td class="py-2 px-3 border text-start text-sm md:text-base" id="to-change-td-<?= $venue['v_id'] ?>">
-                    <?= $venue['venue'] ?>
-                </td>
-
-                <td class="py-2 px-3 border text-start text-sm md:text-base ">
-                    <?= $venue['total_in_use'] ?>
-                </td>
-
-
-                <td class="py-2 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-
-                    <?php if ($access == 'admin' || $access == 'staff') : ?>
-                        <button onclick="updateVenue($('#to-change-td-<?= $venue['v_id'] ?>').text().trim(),<?= $venue['v_id'] ?>)" class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
-                            <div class="fa-solid text-lg fa-pen-to-square"></div>
-                        </button>
-                    <?php elseif ($access == $venue['creator_access'] && $_SESSION['user_id'] == $venue['created_by']) : ?>
-                        <button onclick="updateVenue($('#to-change-td-<?= $venue['v_id'] ?>').text().trim(),<?= $venue['v_id'] ?>)" class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
-                            <div class="fa-solid text-lg fa-pen-to-square"></div>
-                        </button>
-                    <?php else : ?>
-                        <button class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 opacity-40  transition-default cursor-default text-white font-semibold rounded-xl" id="upt-btn">
-                            <div class="fa-solid text-lg fa-pen-to-square"></div>
-                        </button>
-                    <?php endif; ?>
-                </td>
-                <td class="py-2 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-
-                    <?php if ($venue['total_in_use'] > 0) : ?>
-                        <button type="button" disabled class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
-                    <?php elseif ($access == 'admin' || $access == 'staff') : ?>
-                        <button type="button" onclick="deleteVenue(<?= $venue['v_id'] ?>, this)" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
-                    <?php elseif ($venue['creator_access'] != $access && $venue['created_by'] != $_SESSION['user_id']) : ?>
-                        <button type="button" disabled class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
-
-                    <?php else : ?>
-                        <button type="button" onclick="deleteVenue(<?= $venue['v_id'] ?>, this)" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
-                    <?php endif; ?>
-
-                </td>
-
+                <th class="text-center border border-green-800 font-semibold py-2 px-3  text-white bg-main text-base md:text-lg">
+                    Action</th>
             </tr>
+        </thead>
 
-        <?php endwhile; ?>
+        <tbody>
 
-
-        <script>
-            function checkConflict(start_datetime, end_datetime, v_id, to_submit) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "../backend/validator/check_conflict.php",
-                    data: {
-                        start_datetime: start_datetime,
-                        end_datetime: end_datetime,
-                        v_id: v_id
-
-                    },
-                    success: function(response) {
-                        if (response == 'false') {
-                            if (confirm('Do you really want to approve the event?')) {
-                                $('#' + to_submit).submit();
-                            }
-                        } else {
+        </tbody>
 
 
-                            alert('The venue is not available on that date/time');
-                        }
-                    }
-                });
-            }
-        </script>
+
 
     </table>
+    <script>
+        let venueData = <?= json_encode($venues_result) ?>;
+        $('#pending-tbl').DataTable({
+            data: venueData,
+            ordering: false,
+            paging: true,
+            pageLength: 10,
+            info: true,
+            "pagingType": "simple_numbers",
+            columns: [{
+                    data: 'venue',
+                    className: 'py-2 px-3 border text-start text-sm md:text-base'
+                },
+                {
+                    data: 'total_in_use',
+                    className: 'py-2 px-3 border !text-start text-sm md:text-base'
+                },
+                {
+                    data: null,
+                    className: 'border whitespace-nowrap !py-5 !px-2 !text-center',
+                    render: function(data, type, row) {
+                        let buttons = '';
+
+                        let v_id = data.v_id;
+                        let venue = data.venue;
+                        let created_by = data.created_by;
+                        let creator_access = data.creator_access;
+                        let total_in_use = data.total_in_use;
+
+                        console.log(v_id)
+                        console.log(created_by)
+                        console.log(creator_access)
+
+                        buttons += `
+                        <button onclick="updateVenue('${venue}',${v_id})" class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 mr-6 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                            Edit
+                        </button>
+                        `;
+
+                        if (total_in_use > 0) {
+                            buttons += `<button type="button" disabled class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete</button>`;
+                        } else {
+                            buttons += ` <button type="button" onclick="deleteVenue(${v_id})" class="px-6 py-2 mx-auto self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete</button>
+                    `;
+                        }
+
+
+                        return `${buttons}
+                                    `;
+                    }
+                },
+            ],
+
+            rowCallback: function(row, data, index) {
+                if (index % 2 === 0) {
+                    $(row).addClass('bg-gray-50');
+                }
+                $(row).addClass('hover:bg-gray-100');
+
+            }
+        });
+
+
+        function checkConflict(start_datetime, end_datetime, v_id, to_submit) {
+
+            $.ajax({
+                type: "POST",
+                url: "../backend/validator/check_conflict.php",
+                data: {
+                    start_datetime: start_datetime,
+                    end_datetime: end_datetime,
+                    v_id: v_id
+
+                },
+                success: function(response) {
+                    if (response == 'false') {
+                        if (confirm('Do you really want to approve the event?')) {
+                            $('#' + to_submit).submit();
+                        }
+                    } else {
+
+
+                        alert('The venue is not available on that date/time');
+                    }
+                }
+            });
+        }
+    </script>
 </div>

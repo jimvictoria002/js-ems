@@ -24,7 +24,7 @@ require "./components/side-nav.php";
                         new event <i class="fa-solid fa-plus ml-1"></i></button>
                 <?php endif; ?>
                 <!-- Search -->
-                <div class="self-end flex flex-col mb-3 relative" id="seach-container">
+                <div class="self-end flex flex-col my-3 relative md:mt-3 mt-7" id="seach-container">
                     <?php
 
                     $query = "SELECT event_id, title FROM events WHERE status = 'approved' ORDER BY end_datetime DESC";
@@ -46,7 +46,7 @@ require "./components/side-nav.php";
                     <script src="../node_modules/jquery-ui/jquery-ui.min.js"></script>
                     <link rel="stylesheet" href="../node_modules/jquery-ui/jquery-ui.css">
 
-                    <input type="text" id="autocomplete-input" placeholder="Search event.." autocomplete="off" class="p-1 text-lg border">
+                    <input type="text" id="autocomplete-input" placeholder="Search event.." autocomplete="off" class="p-1 md:text-lg border">
 
                     <script>
                         var data_to_search = <?= json_encode($data_to_search) ?>;

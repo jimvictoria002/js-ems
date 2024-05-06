@@ -35,7 +35,7 @@
 
                 <div class="flex self-end gap-3 md:flex-row flex-col md:mt-2 mt-5" id="btn-container">
                     <button type="button" class="px-8 py-2  self-start md:text-base text-sm  cursor-pointer transition-default  font-semibold rounded-xl hidden" id="feedback-btn"></button>
-                    <button type="button" class="hidden px-8 py-2 self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="approve-btn"> <i class="fa-solid fa-check"></i></button>
+                    <button type="button" class="hidden px-8 py-2 self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white font-semibold rounded-xl" id="approve-btn">Approve</button>
                     <button type="button" id="edit-btn" class="hidden px-8 py-2  self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400  cursor-pointer transition-default text-white font-semibold rounded-xl">Edit</button>
                     
 
