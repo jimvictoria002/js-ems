@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $r_f_id = $row['r_f_id'];
 
     if ($access == 'teacher') {
-        $firstname = $_SESSION['first_name'];
-        $lastname = $_SESSION['last_name'];
-        $middlename = $_SESSION['middle_name'];
+        $firstname = $_SESSION['firstname'];
+        $lastname = $_SESSION['lastname'];
+        $middlename = $_SESSION['middlename'];
         $email = $_SESSION['email'];
     } else {
         $firstname = $_SESSION['firstname'];

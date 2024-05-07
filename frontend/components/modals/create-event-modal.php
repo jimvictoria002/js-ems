@@ -126,13 +126,13 @@
                 <!-- End time -->
                 <div class="w-full text-sm md:text-base sm:w-[47%] lg:w-[31%] flex flex-col">
                     <label for="" class="font-semibold">Start date/time<span class="text-red-700">*</span></label>
-                    <input type="datetime-local" class="p-1 border active:border-green-950 rounded-sm w-full" name="start_datetime">
+                    <input type="datetime-local" id="date-time-start" class="p-1 border active:border-green-950 rounded-sm w-full" name="start_datetime">
                 </div>
 
                 <!-- Start time -->
                 <div class="w-full text-sm md:text-base  sm:w-[47%] lg:w-[31%] flex flex-col">
                     <label for="" class="font-semibold">End date/time<span class="text-red-700">*</span></label>
-                    <input type="datetime-local" class="p-1 border active:border-green-950 rounded-sm w-full" name="end_datetime">
+                    <input type="datetime-local" id="date-time-end" class="p-1 border active:border-green-950 rounded-sm w-full" name="end_datetime">
                 </div>
 
 
@@ -173,6 +173,7 @@
                         },
                         async: false,
                         success: function(response) {
+                            // console.log(response)
                             isValid = (response === 'false');
                         }
                     });
@@ -211,6 +212,11 @@
                         form.submit();
                     }
                 });
+
+                $('#create-event-btn').on('click', function() {
+                    console.log($('#date-time-start').val());
+                    console.log($('#date-time-end').val());
+                })
             });
         </script>
 

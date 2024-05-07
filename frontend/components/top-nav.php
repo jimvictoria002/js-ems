@@ -15,7 +15,7 @@
             <?php if ($_SESSION['access'] == 'parent') : ?>
                 <p class="text-lg"><?= $_SESSION['firstname'][0] . '. ' . $_SESSION['lastname'] ?></p>
             <?php elseif ($_SESSION['access'] == 'teacher') : ?>
-                <p class="text-lg"><?= $_SESSION['first_name'][0] . '. ' . $_SESSION['last_name'] ?></p>
+                <p class="text-lg"><?= $_SESSION['firstname'][0] . '. ' . $_SESSION['lastname'] ?></p>
             <?php else : ?>
                 <p class="text-lg"><?= $_SESSION['firstname'][0] . '. ' . $_SESSION['lastname'] ?></p>
             <?php endif; ?>
@@ -36,7 +36,7 @@
                     <?php if ($_SESSION['access'] == 'parent') : ?>
                         <p class="text-lg"><?= $_SESSION['firstname'][0] . '. ' . $_SESSION['lastname'] ?></p>
                     <?php elseif ($_SESSION['access'] == 'teacher') : ?>
-                        <p class="text-lg"><?= $_SESSION['first_name'][0] . '. ' . $_SESSION['last_name'] ?></p>
+                        <p class="text-lg"><?= $_SESSION['firstname'][0] . '. ' . $_SESSION['lastname'] ?></p>
                     <?php else : ?>
                         <p class="text-lg"><?= $_SESSION['firstname'][0] . '. ' . $_SESSION['lastname'] ?></p>
                     <?php endif; ?>

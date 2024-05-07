@@ -4,8 +4,8 @@ date_default_timezone_set('Asia/Manila');
 
 
 $servername = "localhost";
-$username = "root";
-$password = "12345678";
+$username = "sd_2a";
+$password = "sd2amabait";
 $database = "ems2";
 
 

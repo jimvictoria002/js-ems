@@ -157,8 +157,14 @@
 }
 
 .dt-paging-button {
-  border-radius: 7px !important; /* Border radius */
+  border-radius: 4px !important; /* Border radius */
+  padding: 0 10px !important;
+  /* font-size: 14px !important; */
 }
 .dt-layout-row:last-child{
   padding: 0 1rem;
+}
+
+.dt-paging{
+  margin-top: .5rem !important;
 }

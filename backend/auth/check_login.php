@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $result = $stmt->get_result();
     } else if ($access == 'teacher') {
-        $stmt = $conn->prepare("SELECT * FROM scheduling_system.teacher WHERE personnel_id=? OR email=?");
-        $stmt->bind_param("ss", $username, $username);
+        $stmt = $conn->prepare("SELECT e.* FROM hrms.employees e LEFT JOIN hrms.position p ON e.position_id = p.id LEFT JOIN departments d ON p.dept_id = d.dept_id WHERE e.email=? AND d.dept_id = 1");
+        $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
     } else if ($access == 'admin') {

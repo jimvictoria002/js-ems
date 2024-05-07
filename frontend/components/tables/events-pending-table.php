@@ -98,10 +98,10 @@ $pending_events = [];
                 $creator_id = $p_event['created_by'];
                 $sub_pending = getEventInfo($p_event);
                 if ($p_event['creator_access'] == 'teacher') {
-                    $q_creator = "SELECT * FROM scheduling_system.teacher t WHERE t.id = $creator_id";
+                    $q_creator = "SELECT * FROM hrms.employees t WHERE t.id = $creator_id";
                     $r_creator = $conn->query($q_creator);
                     $creator = $r_creator->fetch_assoc();
-                    $creator_name =  $creator['first_name'][0] . '. ' . $creator['last_name']  .  ' - ' . ucfirst($p_event['creator_access']);
+                    $creator_name =  $creator['firstname'][0] . '. ' . $creator['lastname']  .  ' - ' . ucfirst($p_event['creator_access']);
                 } else if ($p_event['creator_access'] == 'student') {
                     $q_creator = "SELECT * FROM sis.students s WHERE s.std_id = $creator_id";
                     $r_creator = $conn->query($q_creator);
