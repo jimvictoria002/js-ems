@@ -80,6 +80,7 @@ require "./components/side-nav.php";
                     'end' => $end_datetime,
                     'eventImg' => '../uploads/event_img/' . $event['event_img'],
                     'venue' => $event['venue'],
+                    'status' => $event['status'],
                     'viewDate' => $viewDate,
                     'v_id' => $event['v_id'],
                     'creatorId' => $event['created_by'],
@@ -96,80 +97,127 @@ require "./components/side-nav.php";
                 <button onclick="" class="toggle-create  px-6 py-2 self-center mr-5 md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl mb-5">Create
                     new event <i class="fa-solid fa-plus ml-1"></i></button>
             <?php endif; ?>
-            <div class="table-container w-full overflow-auto border p-7 " id="pending-tbl">
-
-                <?php if ($total_data > 0) : ?>
-                    <table class="w-full min-w-[34rem] ">
-                        <tr>
-                            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Title
-                            </th>
-                            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Date/Time
-                            </th>
-                            <th rowspan="2" class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Venue
-                            </th>
-                            <th rowspan="2" class="text-center border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Status
-                            </th>
-                            <th colspan="2" rowspan="" class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
-                            </th>
-                        </tr>
-                        <tr>
-
-                            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">View</th>
-                            <th class="text-center border border-green-800  font-semibold py-1 px-3  text-sm md:text-base text-white bg-main">Delete</th>
-                        </tr>
-                        <?php while ($event = $result->fetch_assoc()) : ?>
-                            <tr class=" main-tr">
-
-                                <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base ">
-                                    <?= $event['title'] ?>
-                                </td>
-                                <td class="py-4 px-3 border text-start text-sm md:text-base  whitespace-nowrap">
-                                    <?= date('M d, Y g:ia', strtotime($event['start_datetime'])) ?>
-                                </td>
+            <div class="table-container w-full overflow-auto p-7 border">
 
 
-                                <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base ">
-                                    <?= $event['venue'] ?>
-                                </td>
+                <?php if ($total_data  > 0) : ?>
+                    <table class="w-full min-w-[34rem] " id="my-events-tbl">
+                        <thead>
 
-                                <td rowspan="2" class="py-5 px-3 border text-start text-sm md:text-base whitespace-nowrap capitalize">
-
-                                    <?php if ($event['status'] == 'pending') : ?>
-                                        <p class="px-5 py-2 bg-orange-700 text-white text-center rounded-md font-semibold"><?= $event['status'] ?> <i class="fa-regular fa-hourglass-half"></i></p>
-                                    <?php else : ?>
-                                        <p class="px-5 py-2 bg-green-500 text-white text-center rounded-md font-semibold"><?= $event['status'] ?> <i class="fa-solid fa-check-circle"></i></p>
-                                    <?php endif; ?>
-
-                                </td>
-
-                                <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                                    <button onclick="viewEvent(<?= htmlspecialchars(json_encode(getEventInfo($event))) ?>)" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
-                                        <div class="fa-solid fa-eye"></div>
-                                    </button>
-                                </td>
-
-                                <td rowspan="2" class="py-5 px-3 border text-center text-sm md:text-base whitespace-nowrap">
-                                    <form action="../backend/delete/delete_event.php" method="POST" id="delete-<?= $event['event_id'] ?>">
-                                        <input type="hidden" name="event_id" value="<?= $event['event_id'] ?>">
-                                    </form>
-                                    <button type="button" onclick="if(confirm('Do you really want to delete this event?'))$('#delete-<?= $event['event_id'] ?>').submit();" class="px-8 py-2 mx-auto self-end md:text-base text-sm bg-red-700 hover:bg-red-600 cursor-pointer  transition-default text-white font-semibold rounded-xl" id="upt-btn"><i class="fa-solid fa-trash"></i></button>
-                                </td>
-
-
+                            <tr>
+                                <th class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Title
+                                </th>
+                                <th class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Venue
+                                </th>
+                                <th class="text-start border border-green-800 font-semibold py-4 px-3  text-base md:text-lg text-white bg-main ">Status
+                                </th>
+                                <th class="text-center border border-green-800 font-semibold py-1 px-3  text-base md:text-lg text-white bg-main ">Action
+                                </th>
                             </tr>
+                        </thead>
 
-                            <tr class="next-tr ">
+                        <?php while ($p_event = $result->fetch_assoc()) :
 
-                                <td class="py-4 px-3 border text-start text-sm md:text-base  whitespace-nowrap">
-                                    <?= date('M d, Y g:ia', strtotime($event['end_datetime'])) ?>
-                                </td>
-                            </tr>
+                            $creator_id = $p_event['created_by'];
+                            $sub_pending = getEventInfo($p_event);
+
+
+                            $pending_events[] = $sub_pending;
+                        ?>
 
                         <?php endwhile; ?>
 
 
                         <script>
+                            let pendingEvents = <?= json_encode($pending_events) ?>;
+                            console.log(pendingEvents)
+                            $('#my-events-tbl').DataTable({
+                                data: pendingEvents,
+                                ordering: false,
+                                paging: true,
+                                pageLength: 10,
+                                info: true,
+                                columns: [{
+                                        data: 'title',
+                                        className: 'py-2 px-3 border text-start text-sm md:text-base'
+                                    },
+                                    {
+                                        data: 'venue',
+                                        className: 'py-2 px-3 border !text-start text-sm md:text-base'
+                                    },
+                                    {
+                                        data: null,
+                                        className: 'py-2 px-3 border !text-center text-sm md:text-base',
+                                        render: function(data, type, row) {
+                                            let buttons = '';
+
+                                            // console.log(data.status)
+
+                                            if(data.status == 'pending'){
+                                                buttons = `
+                                                <p class="w-10 h-10  mx-auto flex justify-center items-center rounded-full  bg-orange-700 text-white text-center  font-semibold"><i class="fa-regular fa-hourglass-half"></i></p>`;
+                                            }else{
+                                                buttons = `
+                                                <p class="w-10 h-10  mx-auto flex justify-center items-center rounded-full  bg-green-500 text-white text-center  font-semibold"> <i class="fa-solid fa-check-circle"></i></p>
+                                               `;
+                                            }
+
+                                            return `${buttons}`;
+                                        }
+                                    },
+                                    {
+                                        data: null,
+                                        className: 'border whitespace-nowrap !py-5 !px-2 !text-center',
+                                        render: function(data, type, row) {
+
+                                            let buttons = '';
+
+                                            let v_id = data.v_id;
+                                            let event_id = data.id;
+                                            let title = data.title;
+                                            let venue = data.venue;
+                                            let created_by = data.created_by;
+                                            let creator_access = data.creator_access;
+                                            let total_in_use = data.total_in_use;
+
+
+
+                                            // console.log(v_id)
+                                            // console.log(created_by)
+                                            // console.log(creator_access)
+
+                                            buttons += `
+                                        
+                                                <button onclick="viewEvent(${JSON.stringify(data).replace(/"/g, '&quot;')})" class="w-28 py-1.5 mx-1 self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                                                    View
+                                                </button>
+                                            `;
+
+
+                                            buttons += ` <button type="button" onclick="deleteEvent('${event_id}')" class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete</button>`;
+
+
+
+                                            return `${buttons}`;
+                                        }
+                                    },
+                                ],
+
+                                rowCallback: function(row, data, index) {
+                                    if (index % 2 === 0) {
+                                        $(row).addClass('bg-gray-50');
+                                    }
+                                    $(row).addClass('hover:bg-gray-100');
+
+                                }
+                            });
+
+
                             function viewEvent(event) {
+
+
+
+
                                 let event_id = event.id;
                                 let title = event.title;
                                 let description = event.description;
@@ -203,7 +251,7 @@ require "./components/side-nav.php";
                                 $('#view-date').text(viewDate);
                                 $('#view-img').prop('src', (eventImg))
 
-                                $('#approve-btn').hide();
+                                $('#approve-btn').off('click');
                                 $('#edit-btn').off('click');
 
                                 if ('<?= $_SESSION['access'] ?>' != 'admin' && '<?= $access ?>' != 'staff') {
@@ -222,41 +270,56 @@ require "./components/side-nav.php";
                                     })
                                 }
 
+                                if ('<?= $access ?>' == 'admin' || '<?= $access ?>' == 'staff') {
+                                    $('#approve-btn').show();
+
+                                    $('#approve-btn').on('click', function() {
+                                        approveEvent(event_id, v_id);
+                                    });
+
+                                }
+
 
                             }
 
-                            function checkConflict(start_datetime, end_datetime, v_id, to_submit, title) {
 
+                            function deleteEvent(event_id) {
                                 $.ajax({
                                     type: "POST",
-                                    url: "../backend/validator/check_conflict.php",
+                                    url: "../backend/fetcher/fetch_get_event.php",
                                     data: {
-                                        start_datetime: start_datetime,
-                                        end_datetime: end_datetime,
-                                        v_id: v_id
-
+                                        event_id: event_id
                                     },
                                     success: function(response) {
-                                        if (response == 'false') {
-                                            if (confirm(`Do you really want to approve the ${title}?`)) {
-                                                $('#' + to_submit).submit();
-                                            }
-                                        } else {
+
+                                        let data = JSON.parse(response);
 
 
-                                            alert('The venue is not available on that date/time');
+                                        let title = data.title;
+
+                                        if (confirm("Do you really want to delete the " + title)) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "../backend/delete/delete_event.php",
+                                                data: {
+                                                    event_id: event_id
+                                                },
+                                                success: function(response) {
+                                                    window.location = "";
+                                                }
+                                            });
                                         }
+
                                     }
                                 });
+
                             }
                         </script>
 
                     </table>
                 <?php else : ?>
-                    <p>You don't have any events</p>
+                    <p>No event created</p>
                 <?php endif; ?>
-
-
             </div>
 
 
@@ -268,6 +331,12 @@ require "./components/side-nav.php";
     if (isset($_SESSION['success'])) :
         require "./components/success-message.php";
         unset($_SESSION['success']);
+    endif;
+    ?>
+    <?php
+    if (isset($_SESSION['failed'])) :
+        require "./components/failed-message.php";
+        unset($_SESSION['failed']);
     endif;
     ?>
 

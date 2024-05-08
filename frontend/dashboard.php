@@ -80,7 +80,7 @@ require "./components/side-nav.php";
     ?>
 
     <style>
-        .dt-start{
+        .dt-start {
             display: none !important;
         }
     </style>
@@ -90,7 +90,7 @@ require "./components/side-nav.php";
 
 
         <!-- Search -->
-        <div class="self-end  flex flex-col  my-3 relative" id="seach-container">
+        <div class="self-center  flex flex-col  my-3 relative" id="seach-container">
             <?php
 
             $query = "SELECT event_id, title, event_img, v.venue, e.end_datetime FROM events e INNER JOIN venue v ON e.v_id = v.v_id WHERE e.status = 'approved' ORDER BY e.end_datetime DESC";
@@ -131,8 +131,11 @@ require "./components/side-nav.php";
             <script src="../node_modules/jquery-ui/jquery-ui.min.js"></script>
             <link rel="stylesheet" href="../node_modules/jquery-ui/jquery-ui.css">
 
-            <input type="text" id="autocomplete-input" placeholder="Search event.." autocomplete="off" class="p-1 border md:text-lg">
+            <div class="flex items-center gap-3">
+                <label for="">Search:</label>
+                <input type="text" id="autocomplete-input" placeholder="Search event.." autocomplete="off" class="p-1 border md:text-lg">
 
+            </div>
             <script>
                 var data_to_search = <?= json_encode($data_to_search) ?>;
                 // console.log(data_to_search);
@@ -382,7 +385,7 @@ require "./components/side-nav.php";
                             </tbody>
                         </table>
                     <?php else : ?>
-                        <p>No incoming events</p>
+                        <p>No past events</p>
                     <?php endif ?>
 
                 </div>

@@ -6,19 +6,21 @@ require "../mailer.php";
 
 function is_connected()
 {
-    $url = 'https://www.google.com'; 
+    $url = 'https://www.google.com';
     $headers = @get_headers($url);
 
     if ($headers && strpos($headers[0], '200')) {
-        return true; 
+        return true;
     } else {
-        return false; 
+        return false;
     }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     session_start();
+
+
 
 
     //File handling
@@ -90,36 +92,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $event_id = $conn->insert_id;
 
         if (!($access == 'admin' || $access == 'staff')) {
-            if (is_connected()) {
-                if ($_SESSION['access'] == 'teacher') {
-                    $requested_by = $_SESSION['first_name'] .  ' ' . $_SESSION['last_name'] . ' - ' . ucfirst($_SESSION['access']);
+            if (isset($_POST['notify'])) {
+
+                if (is_connected()) {
+                    if ($_SESSION['access'] == 'teacher') {
+                        $requested_by = $_SESSION['first_name'] .  ' ' . $_SESSION['last_name'] . ' - ' . ucfirst($_SESSION['access']);
+                    } else {
+                        $requested_by = $_SESSION['firstname'] .  ' ' . $_SESSION['lastname'] . ' - ' . ucfirst($_SESSION['access']);
+                    }
+
+
+                    $query = "SELECT venue from venue WHERE v_id = $v_id";
+                    $r_venue = $conn->query($query);
+                    $venue = $r_venue->fetch_assoc()['venue'];
+
+                    $query = "SELECT email from users WHERE access = 'admin'";
+                    $r_email = $conn->query($query);
+                    $email = $r_email->fetch_assoc()['email'];
+
+
+                    $mail->addAddress("$email");
+                    $mail->Subject = "$requested_by | Request an Event";
+                    ob_start();
+                    require "../email-format/request-body.php";
+                    $mail->Body = ob_get_clean();
+
+                    $mail->isHTML(true);
+
+                    if ($mail->send()) {
+                        $_SESSION['success'] = "Invitation sent to $email";
+                        header('Location: ../../frontend/users.php');
+                    } else {
+                        echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+                    }
                 } else {
-                    $requested_by = $_SESSION['firstname'] .  ' ' . $_SESSION['lastname'] . ' - ' . ucfirst($_SESSION['access']);
-                }
-
-
-                $query = "SELECT venue from venue WHERE v_id = $v_id";
-                $r_venue = $conn->query($query);
-                $venue = $r_venue->fetch_assoc()['venue'];
-
-                $query = "SELECT email from users WHERE access = 'admin'";
-                $r_email = $conn->query($query);
-                $email = $r_email->fetch_assoc()['email'];
-
-
-                $mail->addAddress("$email");
-                $mail->Subject = "$requested_by | Request an Event";
-                ob_start();
-                require "../email-format/request-body.php";
-                $mail->Body = ob_get_clean();
-
-                $mail->isHTML(true);
-
-                if ($mail->send()) {
-                    $_SESSION['success'] = "Invitation sent to $email";
-                    header('Location: ../../frontend/users.php');
-                } else {
-                    echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+                    $_SESSION['failed'] = "Internet Error: Notification didn't sent";
+                    header("Location:" . $_SERVER['HTTP_REFERER']);
+                    exit;
+                    return;
                 }
             }
         }

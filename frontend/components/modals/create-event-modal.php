@@ -6,7 +6,7 @@
         </div>
 
 
-        <form action="../backend/create/create_event.php" method="POST" class="mt-2" id="create-event" enctype="multipart/form-data">
+        <form action="../backend/create/create_event.php" method="POST" class="mt-2 flex flex-col" id="create-event" enctype="multipart/form-data">
 
             <div class="event-attributes flex items-start gap-y-3 md:gap-y-10 gap-[3%] flex-wrap">
                 <!-- Title -->
@@ -131,14 +131,33 @@
 
                 <!-- Start time -->
                 <div class="w-full text-sm md:text-base  sm:w-[47%] lg:w-[31%] flex flex-col">
-                    <label for="" class="font-semibold">End date/time<span class="text-red-700">*</span></label>
-                    <input type="datetime-local" id="date-time-end" class="p-1 border active:border-green-950 rounded-sm w-full" name="end_datetime">
+                    <div class="flex flex-col">
+                        <label for="" class="font-semibold">End date/time<span class="text-red-700">*</span></label>
+                        <input type="datetime-local" id="date-time-end" class="p-1 border active:border-green-950 rounded-sm w-full" name="end_datetime">
+                    </div>
+                    <?php if(!($access == 'admin' || $access == 'staff')):?>
+                    <div class="flex items-start flex-col  my-7">
+                        <p class="text-sm font-semibold">Notification requires internet connection.</p>
+                        <div class="flex">
+                            <input type="checkbox" name="notify" id="notify" class="cursor-pointer">
+                            <label for="notify" class="ml-1 cursor-pointer">
+                                <p>Notify the admin for your event approval</p>
+                            </label>
+                        </div>
+
+                        <span id="internetCheck-error" class="text-orange-700 font-semibold text-sm"></span>
+
+                    </div>
+                    <?php endif;?>
+
                 </div>
 
 
             </div>
-            <div class="w-full flex justify-end pr-5 my-14 mb-10">
-                <button class="px-6 py-2 self-end md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl" id="create-event-btn">Create</button>
+            <div class="self-end flex items-start justify-start pr-5 my-14 mb-10 flex-col">
+
+                <button class="px-6 py-2  md:text-base text-sm bg-green-800 hover:bg-green-700 transition-default text-white font-semibold rounded-xl" id="create-event-btn">Create</button>
+
             </div>
 
         </form>
@@ -208,10 +227,64 @@
                         }
                     },
                     submitHandler: function(form) {
-                        $('#create-event-btn').prop('disabled', true);
-                        form.submit();
+
+                        if ($('#notify').is(':checked')) {
+
+                            var url = 'https://www.google.com/jsapi';
+                            $('#internetCheck-error').removeClass('!text-red-700');
+                            $('#internetCheck-error').text('Checking internet connection....');
+                            $.ajax({
+                                url: url,
+                                type: 'GET',
+                                dataType: 'jsonp',
+                                timeout: 3000,
+                                success: function() {
+                                    $('#internetCheck-error').empty();
+                                    $('#create-event-btn').css('opacity', '.3');
+                                    $('#create-event-btn').prop('disabled', true);
+                                    form.submit();
+                                },
+                                error: function(xhr, textStatus, errorThrown) {
+                                    $('#internetCheck-error').text('Please check your internet connection');
+                                    $('#internetCheck-error').addClass('!text-red-700');
+                                    
+                                }
+                            });
+
+                        } else {
+                            $('#create-event-btn').prop('disabled', true);
+                            form.submit();
+                        }
+
                     }
                 });
+
+                $('#notify').on('change', function() {
+                    var url = 'https://www.google.com/jsapi';
+                    $('#internetCheck-error').removeClass('!text-red-700');
+                    $('#internetCheck-error').text('Checking internet connection....');
+                    if ($('#notify').is(':checked')) {
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            dataType: 'jsonp',
+                            timeout: 3000,
+                            success: function() {
+                                $('#internetCheck-error').empty();
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                $('#internetCheck-error').text('Please check your internet connection');
+                                $('#internetCheck-error').addClass('!text-red-700');
+                            }
+                        });
+                    } else {
+                        $('#internetCheck-error').empty();
+
+                    }
+
+
+                });
+
 
                 $('#create-event-btn').on('click', function() {
                     console.log($('#date-time-start').val());

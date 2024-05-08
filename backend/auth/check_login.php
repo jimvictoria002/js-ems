@@ -1,10 +1,16 @@
 <?php
+
+use PhpOffice\PhpSpreadsheet\Shared\PasswordHasher;
+
 include('../../connection.php');
 
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_start();
+
+  
+
 
     $username = isset($_POST['username']) ? $_POST['username'] : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
@@ -44,7 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     } else if ($access == 'student') {
 
-        $stmt = $conn->prepare("SELECT * FROM sis.student_account sa INNER JOIN sis.student_data s  ON sa.username = s.std_id WHERE s.std_id = ?");
+        $stmt = $conn->prepare("SELECT 
+                                    sa.student_id as user_id,
+                                    sa.student_password as password,
+                                    s.first_name as firstname,
+                                    s.middle_name as middlename,
+                                    s.last_name as lastname,
+                                    s.email
+                                FROM schooldb.students_account_info sa INNER JOIN schooldb.students_personal_info s  ON sa.student_id = s.student_id WHERE s.student_id = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -61,6 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
+
+        // print_r($row);
 
         //Guest credentials
         if ($access == 'guest') {

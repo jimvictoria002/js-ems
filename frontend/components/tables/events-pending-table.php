@@ -103,10 +103,10 @@ $pending_events = [];
                     $creator = $r_creator->fetch_assoc();
                     $creator_name =  $creator['firstname'][0] . '. ' . $creator['lastname']  .  ' - ' . ucfirst($p_event['creator_access']);
                 } else if ($p_event['creator_access'] == 'student') {
-                    $q_creator = "SELECT * FROM sis.students s WHERE s.std_id = $creator_id";
+                    $q_creator = "SELECT * FROM schooldb.students_personal_info s WHERE s.student_id = $creator_id";
                     $r_creator = $conn->query($q_creator);
                     $creator = $r_creator->fetch_assoc();
-                    $creator_name =  $creator['firstname'][0] . '. ' . $creator['lastname'] .  ' - ' . ucfirst($p_event['creator_access']);
+                    $creator_name =  $creator['first_name'][0] . '. ' . $creator['last_name'] .  ' - ' . ucfirst($p_event['creator_access']);
                 } else {
                     $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
                     $r_creator = $conn->query($q_creator);
@@ -151,6 +151,8 @@ $pending_events = [];
                                 let buttons = '';
 
                                 let v_id = data.v_id;
+                                let event_id = data.id;
+                                let title = data.title;
                                 let venue = data.venue;
                                 let created_by = data.created_by;
                                 let creator_access = data.creator_access;
@@ -163,18 +165,16 @@ $pending_events = [];
                                 // console.log(creator_access)
 
                                 buttons += `
-                                <button onclick="approveEvent('${data.start}', '${data.end}', '${data.v_id}', '${data.title}', '${data.id}')" class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm bg-green-500 hover:bg-green-400  cursor-pointer transition-default text-white mr- font-semibold rounded-xl" id="upt-btn"> Approve</button>
-                        
-                                    <button onclick='viewEvent(` + JSON.stringify(data) + `)' class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 6 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
-                                        View
-                                    </button>
-                                `;
+                                <button onclick="approveEvent('${data.id}', '${v_id}')" class="w-28 py-1.5 mx-1 self-end md:text-base text-sm bg-green-500 hover:bg-green-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn"> Approve</button>
+                                        
+                                        <button onclick="viewEvent(${JSON.stringify(data).replace(/"/g, '&quot;')})" class="w-28 py-1.5 mx-1 self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                                            View
+                                        </button>
+                                    `;
 
-                                if (total_in_use > 0) {
-                                    buttons += `<button type="button" disabled class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm  bg-red-700  opacity-30 transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete</button>`;
-                                } else {
-                                    buttons += ` <button type="button" onclick="deleteVenue(${v_id})" class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete</button>`;
-                                }
+
+                                buttons += ` <button type="button" onclick="deleteEvent('${event_id}')" class=" w-28 py-1.5  mx-1 self-end md:text-base text-sm  bg-red-700 hover:bg-red-600 cursor-pointer   transition-default text-white font-semibold rounded-xl" id="upt-btn">Delete</button>`;
+
 
 
                                 return `${buttons}
@@ -191,6 +191,7 @@ $pending_events = [];
 
                     }
                 });
+
 
                 function viewEvent(event) {
 
@@ -253,7 +254,7 @@ $pending_events = [];
                         $('#approve-btn').show();
 
                         $('#approve-btn').on('click', function() {
-                            approveEvent(start_datetime, end_datetime, v_id, title, event_id);
+                            approveEvent(event_id, v_id);
                         });
 
                     }
@@ -261,43 +262,57 @@ $pending_events = [];
 
                 }
 
-                function approveEvent(start_datetime, end_datetime, v_id, title, event_id) {
-                    // console.log(start_datetime)
-                    // console.log(end_datetime)
-                    // console.log(v_id)
-                    // console.log(title)
+                function approveEvent(event_id, v_id) {
+                    $.ajax({
+                        type: "POST",
+                        url: "../backend/fetcher/fetch_get_event.php",
+                        data: {
+                            event_id: event_id
+                        },
+                        success: function(response) {
 
-                    let conflict;
+                            let conflict;
 
-                    checkConflict(start_datetime, end_datetime, v_id)
-                        .then(function(result) {
-                            conflict = result;
-                            if (conflict) {
-                                if (confirm(`Do you really want to approve ${title}`)) {
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "../backend/update/approve_event.php",
-                                        data: {
-                                            status: 'approved',
-                                            reqajx: 'reqajx',
-                                            event_id: event_id,
-                                        },
-                                        success: function(response) {
-                                            window.location = '';
-                                        },
-                                        error: function(xhr, status, error) {
+
+                            let data = JSON.parse(response);
+
+                            let start_datetime = data.start_datetime;
+                            let end_datetime = data.end_datetime;
+                            let title = data.title;
+
+                            console.log(start_datetime)
+                            console.log(end_datetime)
+                            console.log(v_id)
+
+                            checkConflict(start_datetime, end_datetime, v_id)
+                                .then(function(result) {
+                                    conflict = result;
+                                    if (conflict) {
+                                        if (confirm(`Do you really want to approve ${title}`)) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "../backend/update/approve_event.php",
+                                                data: {
+                                                    status: 'approved',
+                                                    reqajx: 'reqajx',
+                                                    event_id: event_id,
+                                                },
+                                                success: function(response) {
+                                                    window.location = '';
+                                                },
+                                                error: function(xhr, status, error) {}
+                                            });
                                         }
-                                    });
-                                }
-                            } else {
-                                alert('The venue is not available in that date/time \n\nPlease change the date/time to approve this event');
-                            }
-                        })
-                        .catch(function(error) {
-                            alert('Something wrong' + error);
-                        });
+                                    } else {
+                                        alert('The venue is not available in that date/time \n\nPlease change the date/time to approve this event');
+                                    }
+                                })
+                                .catch(function(error) {
+                                    alert('Something wrong' + error);
+                                });
 
-
+                        }
+                    });
                 }
 
                 function checkConflict(start_datetime, end_datetime, v_id) {
@@ -318,6 +333,38 @@ $pending_events = [];
                             }
                         });
                     });
+                }
+
+                function deleteEvent(event_id) {
+                    $.ajax({
+                        type: "POST",
+                        url: "../backend/fetcher/fetch_get_event.php",
+                        data: {
+                            event_id: event_id
+                        },
+                        success: function(response) {
+
+                            let data = JSON.parse(response);
+
+
+                            let title = data.title;
+
+                            if (confirm("Do you really want to delete the " + title)) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "../backend/delete/delete_event.php",
+                                    data: {
+                                        event_id: event_id
+                                    },
+                                    success: function(response) {
+                                        window.location = "";
+                                    }
+                                });
+                            }
+
+                        }
+                    });
+
                 }
             </script>
 

@@ -45,9 +45,11 @@ require "./components/side-nav.php";
                     ?>
                     <script src="../node_modules/jquery-ui/jquery-ui.min.js"></script>
                     <link rel="stylesheet" href="../node_modules/jquery-ui/jquery-ui.css">
+                    <div class="flex items-center gap-3">
+                        <label for="">Search:</label>
+                        <input type="text" id="autocomplete-input" placeholder="Search event.." autocomplete="off" class="p-1 border md:text-lg">
 
-                    <input type="text" id="autocomplete-input" placeholder="Search event.." autocomplete="off" class="p-1 md:text-lg border">
-
+                    </div>
                     <script>
                         var data_to_search = <?= json_encode($data_to_search) ?>;
                         // console.log(data_to_search);

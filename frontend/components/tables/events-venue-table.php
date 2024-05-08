@@ -22,26 +22,45 @@ while ($venue = $result->fetch_assoc()) {
 
 ?>
 <script>
-    function updateVenue(venue, v_id) {
-        var new_venue = window.prompt("Update venue \n\n!Note: Updating the venue will affect events that use it.", venue);
-        if (!new_venue || new_venue == '') {
-            return;
-        }
-        if (new_venue != venue) {
-            $.ajax({
-                type: "POST",
-                url: "../backend/update/update_venue.php",
-                data: {
-                    venue: new_venue,
-                    v_id: v_id
-                },
-                success: function(response) {
-                    if (response == '1') {
-                        window.location = '';
-                    }
+    function updateVenue(v_id) {
+
+        $.ajax({
+            type: "POST",
+            url: "../backend/fetcher/fetch_get_venue.php",
+            data: {
+                v_id: v_id
+            },
+            success: function(response) {
+
+                let data = JSON.parse(response);
+
+                console.log(data.venue)
+                var new_venue = window.prompt("Update venue \n\n!Note: Updating the venue will affect events that use it.", data.venue);
+                if (!new_venue || new_venue == '') {
+                    return;
                 }
-            });
-        }
+                if (new_venue != venue) {
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "../backend/update/update_venue.php",
+                        data: {
+                            venue: new_venue,
+                            v_id: v_id
+                        },
+                        success: function(response) {
+                            if (response == '1') {
+                                window.location = '';
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
+
+
 
     }
 
@@ -116,12 +135,9 @@ while ($venue = $result->fetch_assoc()) {
                         let creator_access = data.creator_access;
                         let total_in_use = data.total_in_use;
 
-                        console.log(v_id)
-                        console.log(created_by)
-                        console.log(creator_access)
 
                         buttons += `
-                        <button onclick="updateVenue('${venue}',${v_id})" class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 mr-6 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
+                        <button onclick="updateVenue(${v_id})" class="px-6 py-2 mx-auto self-end md:text-base text-sm bg-sky-700 hover:bg-sky-400 mr-6 cursor-pointer transition-default text-white font-semibold rounded-xl" id="upt-btn">
                             Edit
                         </button>
                         `;
