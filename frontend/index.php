@@ -180,13 +180,14 @@
                 <div class=" w-full flex gap-5 flex-wrap md:justify-start justify-center">
                     <a href="./login.php?access=teacher" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm teacher py-1.5  font-semibold bn5 bg-[#218838]">Teacher</a>
                     <a href="./login.php?access=student" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm student py-1.5  font-semibold bn5 bg-[#dc3545]">Student</a>
-                    <a href="./login.php?access=parent" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm parent py-1.5  font-semibold bn5 bg-[#17a2b8]">Parent</a>
+                    <a href="./login.php?access=guest" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm guest py-1.5  font-semibold bn5 bg-[royalblue]">Guest</a>
+
+                    <!-- <a href="./login.php?access=parent" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm parent py-1.5  font-semibold bn5 bg-[#17a2b8]">Parent</a> -->
                 </div>
 
                 <div class="  w-full flex gap-5 flex-wrap md:justify-start justify-center">
                     <a href="./login.php?access=admin" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm admin py-1.5  font-semibold bn5 bg-[gray]">Administrator</a>
                     <a href="./login.php?access=staff" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm staff py-1.5  font-semibold bn5 bg-[#229494]">Staff</a>
-                    <a href="./login.php?access=guest" class="md:w-40 text-center w-32 text-sm md:text-base shadow-md rounded-sm guest py-1.5  font-semibold bn5 bg-[royalblue]">Guest</a>
                 </div>
 
             </div>

@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 if (is_connected()) {
                     if ($_SESSION['access'] == 'teacher') {
-                        $requested_by = $_SESSION['first_name'] .  ' ' . $_SESSION['last_name'] . ' - ' . ucfirst($_SESSION['access']);
+                        $requested_by = $_SESSION['firstname'] .  ' ' . $_SESSION['lastname'] . ' - ' . ucfirst($_SESSION['access']);
                     } else {
                         $requested_by = $_SESSION['firstname'] .  ' ' . $_SESSION['lastname'] . ' - ' . ucfirst($_SESSION['access']);
                     }

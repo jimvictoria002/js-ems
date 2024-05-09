@@ -41,9 +41,9 @@ require "./components/side-nav.php";
                       LEFT JOIN venue v ON
                          e.v_id = v.v_id 
                       WHERE e.created_by = $user_id AND 
-                            e.creator_access = '$access'
+                            e.creator_access = '$access' AND (e.status = 'approved' OR e.status = 'pending' )
                       ORDER BY 
-                        e.created_at DESC;";
+                        e.end_datetime DESC;";
 
 
 
@@ -56,7 +56,7 @@ require "./components/side-nav.php";
             function getEventInfo($event)
             {
 
-
+                global $conn;
 
                 $start_datetime = $event['start_datetime'];
                 $end_datetime = $event['end_datetime'];
@@ -66,28 +66,77 @@ require "./components/side-nav.php";
                 $start_time = date("g:ia", strtotime($start_datetime));
                 $end_time = date("g:ia", strtotime($end_datetime));
 
+                $event_id = $event['event_id'];
+                $f_id = $event['f_id'];
+
+                $q_form = "SELECT * FROM forms WHERE f_id = '$f_id'";
+                $r_form = $conn->query($q_form);
+
+                //Check form if exists
+                if ($r_form->num_rows > 0) {
+
+                    $currentDateTime = strtotime(date('Y-m-d H:i:s'));
+
+                    $eventEndDateTime = strtotime($end_datetime);
+
+                    //Check date if current
+                    if (($currentDateTime < $eventEndDateTime) || ($event['status'] == 'pending')) {
+                        $feedback['allow'] = false;
+                        $feedback['status'] = 'define';
+                    } else {
+                        $form = $r_form->fetch_assoc();
+                        $form_id = $form['f_id'];
+                        $user_id = $_SESSION['user_id'];
+                        $access = $_SESSION['access'];
+                        $q_rf = "SELECT * FROM response_form rf WHERE rf.event_id = $event_id AND rf.f_id = $form_id   AND response_id = $user_id AND respondent = '$access'";
+                        $r_rf = $conn->query($q_rf);
+
+                        //Check user if already response
+                        if ($r_rf->num_rows > 0) {
+                            $rf = $r_rf->fetch_assoc();
+                            $status = $rf['is_done'];
+                            $feedback['r_f_id'] = $rf['r_f_id'];
+
+                            //Check user if done
+                            if ($status == 'yes') {
+                                $feedback['status'] = 'done';
+                            } else {
+                                $feedback['status'] = 'not_done';
+                            }
+                        } else {
+                            $feedback['allow'] = true;
+                            $feedback['form_id'] = $form_id;
+                            $feedback['status'] = 'define';
+                        }
+                    }
+                } else {
+                    $feedback['allow'] = false;
+                    $feedback['status'] = 'define';
+                }
+
                 if ($start_date == $end_date) {
                     $viewDate = $start_date . ' ' . $start_time  . ' - ' . $end_time;
                 } else {
                     $viewDate = $start_date . ' ' . $start_time  . ' - ' . $end_date . ' ' . $end_time;
                 }
 
-                return  [
-                    'id' => $event['event_id'],
+
+
+                return [
+                    'id' => $event_id,
                     'title' => $event['title'],
                     'description' => $event['description'],
                     'start' => $start_datetime,
                     'end' => $end_datetime,
                     'eventImg' => '../uploads/event_img/' . $event['event_img'],
                     'venue' => $event['venue'],
-                    'status' => $event['status'],
+                    'feedback' => $feedback,
                     'viewDate' => $viewDate,
-                    'v_id' => $event['v_id'],
                     'creatorId' => $event['created_by'],
-                    'creatorAccess' => $event['creator_access'],
                     'stime' => $start_time,
                     'etime' => $end_time,
-                    'color' => '#2E6B45'
+                    'color' => '#2E6B45',
+                    'status' => $event['status']
                 ];
             }
 
@@ -153,10 +202,10 @@ require "./components/side-nav.php";
 
                                             // console.log(data.status)
 
-                                            if(data.status == 'pending'){
+                                            if (data.status == 'pending') {
                                                 buttons = `
                                                 <p class="w-10 h-10  mx-auto flex justify-center items-center rounded-full  bg-orange-700 text-white text-center  font-semibold"><i class="fa-regular fa-hourglass-half"></i></p>`;
-                                            }else{
+                                            } else {
                                                 buttons = `
                                                 <p class="w-10 h-10  mx-auto flex justify-center items-center rounded-full  bg-green-500 text-white text-center  font-semibold"> <i class="fa-solid fa-check-circle"></i></p>
                                                `;
@@ -217,7 +266,6 @@ require "./components/side-nav.php";
 
 
 
-
                                 let event_id = event.id;
                                 let title = event.title;
                                 let description = event.description;
@@ -229,6 +277,7 @@ require "./components/side-nav.php";
                                 let v_id = event.v_id;
                                 let creatorId = event.creatorId;
                                 let creatorAccess = event.creatorAccess;
+                                let allow = event.feedback.allow;
 
 
                                 $('#view-event-modal').fadeToggle('fast');
@@ -268,16 +317,74 @@ require "./components/side-nav.php";
                                     $('#edit-btn').on('click', function() {
                                         window.location = "edit_event.php?event_id=" + event_id;
                                     })
+                                };
+
+                                let feedbackBtn = $('#feedback-btn');
+                                feedbackBtn.off('click');
+
+                                console.log(allow);
+
+
+                                if (allow) {
+                                    console.log(allow);
+                                    feedbackBtn.show();
+                                    feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
+                                    feedbackBtn.addClass('bg-main hover:bg-green-700 text-white')
+                                    feedbackBtn.html('Send feedback');
+                                    feedbackBtn.click(function() {
+                                        $.ajax({
+                                            url: '../backend/create/create_response_form.php',
+                                            type: 'POST',
+                                            data: {
+                                                event_id: event_id
+                                            },
+                                            success: function(r_f_id) {
+
+                                                console.log(r_f_id)
+
+                                                window.location = "form.php?r_f_id=" + r_f_id;
+
+                                            }
+                                        });
+                                    })
+
+                                } else {
+                                    let status = event.feedback.status;
+                                    if (status == 'done') {
+                                        let r_f_id = event.feedback.r_f_id;
+                                        console.log('done')
+                                        feedbackBtn.show();
+                                        feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white')
+                                        feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white')
+                                        feedbackBtn.addClass('bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
+                                        feedbackBtn.html('View feedback');
+                                        feedbackBtn.click(function() {
+                                            window.location = "form.php?r_f_id=" + r_f_id;
+                                        })
+
+                                    } else if (status == 'not_done') {
+                                        let r_f_id = event.feedback.r_f_id;
+                                        console.log('not_done')
+                                        feedbackBtn.show();
+
+                                        feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
+                                        feedbackBtn.addClass('bg-orange-500 hover:bg-orange-400 text-white')
+                                        feedbackBtn.html('Resume evaluation');
+
+                                        feedbackBtn.click(function() {
+                                            window.location = "form.php?r_f_id=" + r_f_id;
+                                        })
+
+
+
+                                    } else {
+                                        console.log(status)
+                                        feedbackBtn.hide();
+                                    }
+
                                 }
 
-                                if ('<?= $access ?>' == 'admin' || '<?= $access ?>' == 'staff') {
-                                    $('#approve-btn').show();
 
-                                    $('#approve-btn').on('click', function() {
-                                        approveEvent(event_id, v_id);
-                                    });
-
-                                }
 
 
                             }
@@ -288,7 +395,7 @@ require "./components/side-nav.php";
                                     type: "POST",
                                     url: "../backend/fetcher/fetch_get_event.php",
                                     data: {
-                                        event_id: event_id
+                                        event_id: event_id,
                                     },
                                     success: function(response) {
 
@@ -302,9 +409,11 @@ require "./components/side-nav.php";
                                                 type: "POST",
                                                 url: "../backend/delete/delete_event.php",
                                                 data: {
-                                                    event_id: event_id
+                                                    event_id: event_id,
+                                                    reqAjx: true
                                                 },
                                                 success: function(response) {
+                                                    // console.log(response)
                                                     window.location = "";
                                                 }
                                             });

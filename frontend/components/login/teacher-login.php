@@ -14,7 +14,7 @@
                 <p class="text-3xl text-s-head font-semibold">Teacher login</p>
             </div>
             <div class="flex flex-col w-full mb-7">
-                <label for="Username" class=" mb-2 font-semibold text-sm">Username/Email</label>
+                <label for="Username" class=" mb-2 font-semibold text-sm">Email</label>
                 <div class="relative">
                     <input type="text" name="username" id="username" class="w-full  px-2 py-2 border rounded-md focus:outline-none " placeholder="Enter username">
 

@@ -47,13 +47,13 @@
                 </div>
             </div>
 
-            <!-- <div class="flex flex-col w-full mb-7">
+            <div class="flex flex-col w-full mb-7">
                 <label for="kind" class=" mb-2 font-semibold text-sm capitalize">Kind of guest <span class="text-red-700">*</span></label>
                 <div class="relative">
                     <input type="text" name="kind" id="kind" class="w-full  px-2 py-2 border rounded-md focus:outline-none " placeholder="Please specify guest kind">
 
                 </div>
-            </div> -->
+            </div>
 
 
 

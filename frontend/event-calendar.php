@@ -93,6 +93,9 @@ require "./components/side-nav.php";
                         });
 
                         function viewEvent(event) {
+
+
+
                             let event_id = event.id;
                             let title = event.title;
                             let description = event.description;
@@ -104,6 +107,7 @@ require "./components/side-nav.php";
                             let v_id = event.v_id;
                             let creatorId = event.creatorId;
                             let creatorAccess = event.creatorAccess;
+                            let allow = event.feedback.allow;
 
 
                             $('#view-event-modal').fadeToggle('fast');
@@ -143,6 +147,71 @@ require "./components/side-nav.php";
                                 $('#edit-btn').on('click', function() {
                                     window.location = "edit_event.php?event_id=" + event_id;
                                 })
+                            };
+
+                            let feedbackBtn = $('#feedback-btn');
+                            feedbackBtn.off('click');
+
+                            console.log(allow);
+
+
+                            if (allow) {
+                                console.log(allow);
+                                feedbackBtn.show();
+                                feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
+                                feedbackBtn.addClass('bg-main hover:bg-green-700 text-white')
+                                feedbackBtn.html('Send feedback');
+                                feedbackBtn.click(function() {
+                                    $.ajax({
+                                        url: '../backend/create/create_response_form.php',
+                                        type: 'POST',
+                                        data: {
+                                            event_id: event_id
+                                        },
+                                        success: function(r_f_id) {
+
+                                            console.log(r_f_id)
+
+                                            window.location = "form.php?r_f_id=" + r_f_id;
+
+                                        }
+                                    });
+                                })
+
+                            } else {
+                                let status = event.feedback.status;
+                                if (status == 'done') {
+                                    let r_f_id = event.feedback.r_f_id;
+                                    console.log('done')
+                                    feedbackBtn.show();
+                                    feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white')
+                                    feedbackBtn.removeClass('bg-orange-500 hover:bg-orange-400 text-white')
+                                    feedbackBtn.addClass('bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
+                                    feedbackBtn.html('View feedback');
+                                    feedbackBtn.click(function() {
+                                        window.location = "form.php?r_f_id=" + r_f_id;
+                                    })
+
+                                } else if (status == 'not_done') {
+                                    let r_f_id = event.feedback.r_f_id;
+                                    console.log('not_done')
+                                    feedbackBtn.show();
+
+                                    feedbackBtn.removeClass('bg-main hover:bg-green-700 text-white bg-yellow-400 hover:bg-yellow-300 transition-default text-white ')
+                                    feedbackBtn.addClass('bg-orange-500 hover:bg-orange-400 text-white')
+                                    feedbackBtn.html('Resume evaluation');
+
+                                    feedbackBtn.click(function() {
+                                        window.location = "form.php?r_f_id=" + r_f_id;
+                                    })
+
+
+
+                                } else {
+                                    console.log(status)
+                                    feedbackBtn.hide();
+                                }
+
                             }
 
 

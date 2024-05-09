@@ -33,12 +33,12 @@
                 </div>
             </div>
             <button type="submit" class=" bg-main hover:bg-green-800 text-white transition-all ease duration-300 w-36 text-base text-s-bg rounded-sm py-1 self-center text-center mt-5" id="login-btn">Login</button>
-            <div class="flex flex-col items-start w-full mt-5">
+            <!-- <div class="flex flex-col items-start w-full mt-5">
                 <a href="forgot_password.php" class="hover:underline hover:text-s-head text-sm">Forgot
                     password?</a>
                 <a href="index.php" class="hover:underline mt-7 hover:text-s-head text-sm">Back to homepage</a>
 
-            </div>
+            </div> -->
             
         </form>
     </div>

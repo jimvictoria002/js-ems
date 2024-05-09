@@ -5,17 +5,26 @@ require "../../connection.php";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $f_id = $_POST['f_id'];
-    $event_id = $_POST['event_id'];
+    $hard_delete = isset($_POST['hard']);
 
-    $query = "DELETE FROM response_form WHERE event_id = $event_id;";
-    $result = $conn->query($query);
+    if ($hard_delete) {
 
-    $query = "DELETE FROM forms WHERE f_id = $f_id;";
-    $result = $conn->query($query);
+        $query = "UPDATE forms f SET status = 'permanent_delete' WHERE f.f_id = $f_id;";
+        $result = $conn->query($query);
+    } else {
+        $query = "UPDATE events e SET f_id = NULL WHERE e.f_id = $f_id;";
+
+        $result = $conn->query($query);
+
+        $query = "UPDATE forms f SET status = 'deleted' WHERE f.f_id = $f_id;";
+        $result = $conn->query($query);
+    }
+
+
+
+    session_start();
+    $_SESSION['success'] = "Form deleted successfuly";
 
 
     echo 'deleted';
 }
-
-
-

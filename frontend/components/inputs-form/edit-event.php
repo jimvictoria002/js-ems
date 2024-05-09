@@ -5,7 +5,7 @@
         <?php if ($event['status'] != 'approved') : ?>
             <div class="flex justify-start my-4">
                 <div class="flex flex-col">
-                    <p class="text-lg font-semibold text-orange-700  ml-1">This event is still on pending wait for admin approval</p>
+                    <p class="text-lg font-semibold text-orange-700  ml-1">This event is still on pending, wait for admin approval</p>
                     <!-- <h1
                         class="p-1 tex-sm md:text-lg rounded-lg mt-1 font-semibold inline-block  <?= $event['status'] == 'approved' ? 'bg-green-700' : 'bg-orange-700' ?>  text-white capitalize px-7">
                         <?= $event['status'] ?>
@@ -290,7 +290,6 @@
             });
         </script>
 
-        <?php require "evaluation-form.php"; ?>
 
         <?php
         if (isset($_SESSION['success'])) :

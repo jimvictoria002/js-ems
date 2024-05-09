@@ -53,7 +53,7 @@ while ($event = $result->fetch_assoc()) {
             $form_id = $form['f_id'];
             $user_id = $_SESSION['user_id'];
             $access = $_SESSION['access'];
-            $q_rf = "SELECT * FROM response_form rf WHERE rf.event_id = $event_id  AND response_id = $user_id AND respondent = '$access'";
+            $q_rf = "SELECT * FROM response_form rf WHERE rf.event_id = $event_id AND rf.f_id = $form_id  AND response_id = $user_id AND respondent = '$access'";
             $r_rf = $conn->query($q_rf);
 
             //Check user if already response

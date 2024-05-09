@@ -77,29 +77,17 @@
 
         if (confirm('Do you really want to delete this form?')) {
             let f_id = $(e).data('formId');
-            let event_id = $(e).data('eventId');
-            console.log(f_id)
-            console.log(event_id)
             $.ajax({
                 type: "POST",
                 url: "../backend/delete/delete_form.php",
                 data: {
-                    f_id: f_id,
-                    event_id: event_id
+                    f_id: f_id
                 },
                 success: function(response) {
 
-                    $('#create-form-link').show();
-
-                    $('#form-container').html('');
-                    $('#create-form-btn').show();
-                    $('#create-form-btn').css({
-                        'opacity': '',
-                        'cursor': ''
-                    });
-
-                    $('#create-form-btn').prop('disabled', false);
-                    $('#create-form-btn').addClass('hover:bg-green-700');
+                    
+                    // console.log(response);
+                   window.location = "my-form.php";
 
                 }
             });

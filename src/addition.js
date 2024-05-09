@@ -78,5 +78,5 @@ $(document).ready(function () {
 
         }
     });
-    $(".dt-input").attr("placeholder", "Search event..");
+    $(".dt-input").attr("placeholder", "Search...");
 });

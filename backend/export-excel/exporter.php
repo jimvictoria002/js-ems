@@ -73,11 +73,15 @@ if (isset($_GET['event_id'])) {
     $dataRange = 'A2:' . \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col_count - 1) . ($row - 1);
     $sheet->getStyle($dataRange)->applyFromArray($dataStyle);
 
-    // Save the spreadsheet
-    $query = "SELECT f.title  FROM events e INNER JOIN forms f ON e.f_id = f.f_id WHERE e.event_id = $event_id";
+   
+    $query = "SELECT e.title  FROM events e INNER JOIN forms f ON e.f_id = f.f_id WHERE e.event_id = $event_id";
     $r_event = $conn->query($query);
     $title = $r_event->fetch_assoc()['title'];
-    $fileName = $title . ' responses.xlsx';
+    $title = substr($title, 0, 100); 
+
+    $title = preg_replace('/[^A-Za-z0-9\-]/', '_', $title); 
+
+    $fileName = addslashes($title) . '_responses.xlsx';
     $writer = new Xlsx($spreadsheet);
     $writer->save($fileName);
 
@@ -110,7 +114,7 @@ function get_data($event_id)
         "columns" => $columns
     ];
 
-    $query = "SELECT * FROM response_form rf INNER JOIN respondent_data rd ON rf.r_f_id = rd.r_f_id WHERE event_id = $event_id AND is_done = 'yes' ";
+    $query = "SELECT * FROM response_form rf INNER JOIN respondent_data rd ON rf.r_f_id = rd.r_f_id WHERE event_id = $event_id and f_id = $f_id AND is_done = 'yes' ";
 
     $result = $conn->query($query);
 
@@ -123,7 +127,7 @@ function get_data($event_id)
         $lastname = $response['lastname'];
         $email = $response['email'];
         $my_responses = [];
-        
+
         $query = "SELECT
                     q.q_id,
                     q.question,

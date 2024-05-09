@@ -135,7 +135,7 @@
                         <label for="" class="font-semibold">End date/time<span class="text-red-700">*</span></label>
                         <input type="datetime-local" id="date-time-end" class="p-1 border active:border-green-950 rounded-sm w-full" name="end_datetime">
                     </div>
-                    <?php if(!($access == 'admin' || $access == 'staff')):?>
+                    <?php if(!($_SESSION['access'] == 'admin' || $_SESSION['access']  == 'staff')):?>
                     <div class="flex items-start flex-col  my-7">
                         <p class="text-sm font-semibold">Notification requires internet connection.</p>
                         <div class="flex">

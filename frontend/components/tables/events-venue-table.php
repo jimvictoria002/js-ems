@@ -34,8 +34,9 @@ while ($venue = $result->fetch_assoc()) {
 
                 let data = JSON.parse(response);
 
-                console.log(data.venue)
+                let venue = data.venue;
                 var new_venue = window.prompt("Update venue \n\n!Note: Updating the venue will affect events that use it.", data.venue);
+                
                 if (!new_venue || new_venue == '') {
                     return;
                 }

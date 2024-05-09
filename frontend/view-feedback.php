@@ -38,6 +38,7 @@ if ($result->num_rows < 1) {
 $event = $result->fetch_assoc();
 $start_datetime = $event['start_datetime'];
 $end_datetime = $event['end_datetime'];
+$f_id = $event['f_id'];
 
 $start_date = date("F d, Y", strtotime($start_datetime));
 $end_date = date("F d, Y", strtotime($end_datetime));
@@ -53,10 +54,10 @@ if ($start_date == $end_date) {
 $title = 'Feedbacks';
 require "../connection.php";
 require "./partials/header.php";
-$active = 'feedback';
+$active = '';
 require "./components/side-nav.php";
 
-$query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` rf WHERE rf.event_id = $event_id AND rf.is_done = 'yes' GROUP BY rf.respondent";
+$query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` rf WHERE rf.event_id = $event_id AND rf.f_id = $f_id AND rf.is_done = 'yes' GROUP BY rf.respondent";
 
 
 
@@ -82,7 +83,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                         </tr>
                         <tr>
                             <td class="text-center"><?= $event['feedback_count']    ?></td>
-                            <td class="text-center p-3"><a href="../backend/export-excel/exporter.php?event_id=<?= $event_id ?>" class="bg-green-700 hover:bg-green-600 transition-default rounded-lg font-semibold text-white px-10 py-2 ">Export <i class="fa-solid fa-file-excel"></i></a></td>
+                            <td class="text-center p-3"><a href="../backend/export-excel/exporter.php?event_id=<?= $event_id ?>" target="_blank" class="bg-green-700 hover:bg-green-600 transition-default rounded-lg font-semibold text-white px-10 py-2 ">Export <i class="fa-solid fa-file-excel"></i></a></td>
                         </tr>
                         <tr>
                             <td class="text-center pt-10">
@@ -259,7 +260,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                 ?>
                     <?php if ($question['type'] == 'radio') : ?>
                         <?php
-                        $q_choices = "SELECT * FROM choices c WHERE c.q_id = $q_id ";
+                        $q_choices = "SELECT * FROM choices c WHERE c.q_id = $q_id ORDER BY c.c_id ";
                         $r_choices = $conn->query($q_choices);
                         ?>
                         <?php while ($choice = $r_choices->fetch_assoc()) :
@@ -273,7 +274,8 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                                         WHERE
                                             r.q_id = $q_id  AND r.answer = $c_id AND rf.event_id = $event_id
                                         GROUP BY
-                                            r.answer";
+                                            r.answer
+                                        ";
                             $r_response = $conn->query($q_response);
                             $response = $r_response->fetch_assoc();
 
@@ -286,7 +288,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
 
 
 
-
+                        
                         <?php endwhile; ?>
                         <!-- Radio -->
 
@@ -306,26 +308,29 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                             </div>
                         </div>
                         <script>
-                            var data = <?= json_encode($data) ?>;
+                            var value = <?= json_encode(array_values($data)) ?>;
+                            var key = <?= json_encode(array_keys($data)) ?>;
+                            console.log(key)
+                            console.log(value)
                             const ctx<?= $count ?> = document.getElementById('question-<?= $count ?>');
                             ctx<?= $count ?>.height = 300;
 
-                            var label3s<?= $count ?> = Object.keys(data);
-                            label3s<?= $count ?>.forEach((e, index, array) => {
+
+                            key.forEach((e, index, array) => {
                                 if (e.length > 20) {
                                     array[index] = e.split(' ');
                                 }
                             });
 
 
-
+                            
                             new Chart(ctx<?= $count ?>, {
                                 type: 'bar',
                                 data: {
-                                    labels: label3s<?= $count ?>,
+                                    labels: key,
                                     datasets: [{
                                         label: 'Number of response',
-                                        data: Object.values(data),
+                                        data: value,
                                         borderWidth: 1,
                                         backgroundColor: [
                                             'rgba(255, 99, 132, 0.6)', // Red
@@ -491,7 +496,7 @@ $query = "SELECT rf.respondent, COUNT(rf.r_f_id) as total FROM `response_form` r
                     <!-- <p>You don't have any feedbacks</p> -->
 
                     <?php
-                    $query = "SELECT * FROM response_form rf INNER JOIN respondent_data rd ON rf.r_f_id = rd.r_f_id WHERE rf.event_id = $event_id AND rf.is_done = 'yes'";
+                    $query = "SELECT * FROM response_form rf INNER JOIN respondent_data rd ON rf.r_f_id = rd.r_f_id WHERE rf.event_id = $event_id AND rf.f_id = $f_id AND rf.is_done = 'yes'";
 
                     $result = $conn->query($query);
 

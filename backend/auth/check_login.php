@@ -9,7 +9,7 @@ include('../../connection.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_start();
 
-  
+
 
 
     $username = isset($_POST['username']) ? $_POST['username'] : '';
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         $_SESSION = $_POST;
-        
+
 
         $query = "SELECT response_id FROM response_form WHERE respondent = 'guest' ORDER BY response_id DESC LIMIT 1";
         $result = $conn->query($query);
@@ -50,14 +50,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     } else if ($access == 'student') {
 
-        $stmt = $conn->prepare("SELECT 
-                                    sa.student_id as user_id,
-                                    sa.student_password as password,
-                                    s.first_name as firstname,
-                                    s.middle_name as middlename,
-                                    s.last_name as lastname,
-                                    s.email
-                                FROM schooldb.students_account_info sa INNER JOIN schooldb.students_personal_info s  ON sa.student_id = s.student_id WHERE s.student_id = ?");
+        // $stmt = $conn->prepare("SELECT 
+        //                             sa.student_id as user_id,
+        //                             sa.student_password as password,
+        //                             s.first_name as firstname,
+        //                             s.middle_name as middlename,
+        //                             s.last_name as lastname,
+        //                             s.email
+        //                         FROM schooldb.students_account_info sa INNER JOIN schooldb.students_personal_info s  ON sa.student_id = s.student_id WHERE s.student_id = ?");
+        // $stmt->bind_param("s", $username);
+        // $stmt->execute();
+        // $result = $stmt->get_result();
+
+        $stmt = $conn->prepare("SELECT * FROM sis.student_account sa INNER JOIN sis.student_data s  ON sa.username = s.std_id WHERE s.std_id = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();

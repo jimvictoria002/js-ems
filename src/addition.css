@@ -139,6 +139,16 @@
   transform: translateX(-50%);
 }
 
+.restore-tbl tbody .opac{
+  opacity: .4;
+  /* color: rgb(235, 129, 129); */
+  font-weight: 700;
+}
+
+.\!hidden {
+  display: none !important;
+}
+
 .bg-yellow-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(250 204 21 / var(--tw-bg-opacity));

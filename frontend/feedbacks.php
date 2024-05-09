@@ -95,7 +95,7 @@ require "./components/side-nav.php";
                         },
                         {
                             data: 'form_title',
-                            className: 'border whitespace-nowrap !py-5 !px-2 !text-start',
+                            className: 'border  !py-5 !px-2 !text-start',
                             searchable: false
                         },
                         {

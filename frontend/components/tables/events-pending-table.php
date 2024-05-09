@@ -103,10 +103,10 @@ $pending_events = [];
                     $creator = $r_creator->fetch_assoc();
                     $creator_name =  $creator['firstname'][0] . '. ' . $creator['lastname']  .  ' - ' . ucfirst($p_event['creator_access']);
                 } else if ($p_event['creator_access'] == 'student') {
-                    $q_creator = "SELECT * FROM schooldb.students_personal_info s WHERE s.student_id = $creator_id";
+                    $q_creator = "SELECT * FROM sis.students s WHERE s.std_id = $creator_id";
                     $r_creator = $conn->query($q_creator);
                     $creator = $r_creator->fetch_assoc();
-                    $creator_name =  $creator['first_name'][0] . '. ' . $creator['last_name'] .  ' - ' . ucfirst($p_event['creator_access']);
+                    $creator_name =  $creator['firstname'][0] . '. ' . $creator['lastname'] .  ' - ' . ucfirst($p_event['creator_access']);
                 } else {
                     $q_creator = "SELECT * FROM users u WHERE u.user_id = $creator_id";
                     $r_creator = $conn->query($q_creator);
