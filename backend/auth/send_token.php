@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $mail->Subject = 'Password reset';
     $mail->Body = '
                 This is your password reset link <br>
-                <a href="http://localhost:8080/ems2/frontend/reset_password.php?token=' . $token . '">Password reset link</a>
+                <a href="http://localhost:8080/ems2/frontend/password_reset.php?token=' . $token . '">Password reset link</a>
             ';
 
     if ($mail->send()) {

@@ -83,8 +83,8 @@ while ($event = $result->fetch_assoc()) {
         $viewDate = $start_date . ' ' . $start_time  . ' - ' . $end_date . ' ' . $end_time;
     }
 
-    $q_ea = "SELECT * FROM event_access WHERE event_id = $event_id";
-    $r_eq = $conn->query($q_ea);
+    // $q_ea = "SELECT * FROM event_access WHERE event_id = $event_id";
+    // $r_eq = $conn->query($q_ea);
     $hasAccess = (($event['created_by'] == $_SESSION['user_id'] && $event['creator_access'] == $access) || ($_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff'));
 
     // if (!$hasAccess) {

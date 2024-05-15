@@ -1,3 +1,7 @@
+<?php
+    session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -194,6 +198,13 @@
 
         </div>
     </div>
+
+    <?php
+    if (isset($_SESSION['success'])) :
+        require "./components/success-message.php";
+        unset($_SESSION['success']);
+    endif;
+    ?>
 
 </body>
 
