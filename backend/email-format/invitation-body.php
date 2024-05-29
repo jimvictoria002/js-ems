@@ -1,0 +1,2 @@
+<p style="font-family: Arial, Helvetica, sans-serif; margin-bottom: 10px; font-size: 1.7rem; text-align: center;">You are invited to be a <b>Staff</b> in Event Management System</p>
+<a href="http://localhost:8080/ems2/frontend/staff-registration.php?verification_token=<?= $token ?>" style="display: block; margin:10px auto ; font-family: Arial, Helvetica, sans-serif; text-align:center; width: 4rem; font-size: 1.3rem; background-color: #2E6B45; padding: 8px 30px; border-radius: 6px; color: white; text-decoration: none; text-align: center;">Accept</a>

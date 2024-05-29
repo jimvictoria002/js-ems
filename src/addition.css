@@ -2,6 +2,11 @@
   transition: all ease 0.3s;
 }
 
+.dt-column-title {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
+
 .nav-anchor {
   position: relative;
   transition: all ease 0.4s;
@@ -33,20 +38,25 @@
   flex-direction: column;
   align-items: start;
   box-shadow: 0 0 1px rgba(0, 0, 0, 1);
+  background-color: rgb(253, 253, 204);
+  transition: all ease 0.3s;
+}
+
+.fc-daygrid-dot-event:hover {
+  background-color: rgb(250, 250, 184);
 }
 
 .fc-header-toolbar button {
   padding: 4px 10px !important;
   text-transform: capitalize !important;
 }
-.fc-daygrid-block-event{
-  transition: all ease .2s;
+.fc-daygrid-block-event {
+  transition: all ease 0.3s;
 }
 
-.fc-daygrid-block-event:hover{
+.fc-daygrid-block-event:hover {
   background-color: #4da870 !important;
 }
-
 
 @media (max-width: 750px) {
   .fc-header-toolbar button {
@@ -55,13 +65,31 @@
 }
 .fc .fc-button-primary {
   --tw-bg-opacity: 1;
-  background-color: rgb(133, 211, 133);
+  background-color: #2e6b45;
   border: none !important;
+}
+
+.fc-button {
+  transition: all ease 0.3s;
+}
+
+.fc-button:hover {
+  background-color: #91c9a6 !important;
+}
+
+.fc-button-primary:focus {
+  outline: none !important; /* Remove focus outline */
+  box-shadow: none !important;
+}
+
+.fc-button-primary:active {
+  border: none !important; /* Remove border when button is active (clicked) */
+  box-shadow: none !important;
 }
 
 .fc-button-active {
   --tw-bg-opacity: 1;
-  background-color: rgb(50, 128, 50) !important;
+  background-color: rgb(222, 204, 16) !important;
   border: none !important;
 }
 
@@ -92,4 +120,61 @@
 ::selection {
   background-color: rgb(9, 71, 9);
   color: white;
+}
+
+.view-radio:checked ~ .view-label::after {
+  width: 130%;
+}
+
+.view-label::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: black;
+  border-radius: 20px;
+  transition: all ease 0.3s;
+  transform: translateX(-50%);
+}
+
+.restore-tbl tbody .opac{
+  opacity: .4;
+  /* color: rgb(235, 129, 129); */
+  font-weight: 700;
+}
+
+.\!hidden {
+  display: none !important;
+}
+
+.bg-yellow-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
+}
+.hover\:bg-yellow-300:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+}
+
+.dt-length {
+  display: none !important;
+}
+.dt-paging-button.current {
+  background-color: #35b667 !important; /* Active background color */
+  color: white !important; /* Active text color */
+}
+
+.dt-paging-button {
+  border-radius: 4px !important; /* Border radius */
+  padding: 0 10px !important;
+  /* font-size: 14px !important; */
+}
+.dt-layout-row:last-child{
+  padding: 0 1rem;
+}
+
+.dt-paging{
+  margin-top: .5rem !important;
 }

@@ -2,8 +2,15 @@
 
 session_start();
 
-if(!isset($_SESSION['user_id'])){
-    header('Location: login.php');
+if (!isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+}
+
+$access = $_SESSION['access'];
+
+if (!($access == 'admin' || $access == 'staff' )) {
+    header('Location: dashboard.php');
+    exit;
 }
 
 
@@ -24,19 +31,23 @@ require "./components/side-nav.php";
 
             <?php
             require "./components/tables/events-pending-table.php";
-            
+
             ?>
         </div>
 
     </div>
 
     <?php
-    if (isset($_SESSION['success'])):
+    if (isset($_SESSION['success'])) :
         require "./components/success-message.php";
         unset($_SESSION['success']);
     endif;
     ?>
-    
+
+    <?php
+    require "./components/modals/view-event-modal.php";
+    ?>
+
 
 </main>
 

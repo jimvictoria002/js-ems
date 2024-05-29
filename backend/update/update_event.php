@@ -5,14 +5,29 @@ require "../../connection.php";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     session_start();
 
+    if(!($_SESSION['access'] == 'admin' || $_SESSION['access'] == 'staff')){
+        $status = "pending";
+    }else{
+        $status = "approved";
+
+    }
+
 
     //File handling
 
     //Venue verify
     if (isset($_POST['venue-type'])) {
+        $user_id = $_SESSION['user_id'];
+        $access = $_SESSION['access'];
         $venue = $_POST['input-venue'];
-        $query = "INSERT INTO venue (venue) VALUES ('$venue');";
-        $conn->query($query);
+
+        $query = "INSERT INTO venue (venue, created_by, creator_access) VALUES (?, ?, ?)";
+
+        $stmt = $conn->prepare($query);
+
+        $stmt->bind_param("sis", $venue, $user_id, $access);
+
+        $stmt->execute();
         $_POST['venue'] = $conn->insert_id;
     }
 
@@ -64,6 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+        
+
 
         $query = "UPDATE events SET 
                 title = ?, 
@@ -71,10 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 event_img = ?, 
                 start_datetime = ?, 
                 end_datetime = ?, 
-                v_id = ? 
+                v_id = ?,
+                status = ? 
                 WHERE event_id = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("sssssii", $title, $description, $fileNameToStore, $start_datetime, $end_datetime, $v_id, $event_id);
+        $stmt->bind_param("sssssisi", $title, $description, $fileNameToStore, $start_datetime, $end_datetime, $v_id, $status, $event_id);
         $stmt->execute();
 
         if ($stmt->execute()) {
@@ -86,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             echo "Error updating event event: " . $conn->error;
         }
-
     } else {
 
 
@@ -106,10 +123,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             description = ?, 
             start_datetime = ?, 
             end_datetime = ?, 
-            v_id = ? 
+            v_id = ?,
+            status = ?
             WHERE event_id = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssssii", $title, $description, $start_datetime, $end_datetime, $v_id, $event_id);
+        $stmt->bind_param("ssssisi", $title, $description, $start_datetime, $end_datetime, $v_id, $status, $event_id);
 
         if ($stmt->execute()) {
 
@@ -119,7 +137,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             echo "Error updating event event: " . $conn->error;
         }
-
     }
-
 }

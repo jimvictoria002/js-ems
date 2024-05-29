@@ -1,7 +1,4 @@
 <script>
-
-
-
     function removeChoice(c_id, e) {
         $.ajax({
             type: "POST",
@@ -9,7 +6,7 @@
             data: {
                 c_id: c_id
             },
-            success: function (response) {
+            success: function(response) {
                 $(e).parent().remove();
 
             }
@@ -27,7 +24,7 @@
                 choice_name: choice_name,
                 c_id: c_id
             },
-            success: function (response) {
+            success: function(response) {
                 console.log(response);
                 if (response == '0') {
                     $('#save-note').addClass('text-red-700').text('Could not save');
@@ -54,7 +51,7 @@
             data: {
                 q_id: q_id
             },
-            success: function (c_id) {
+            success: function(c_id) {
 
                 $this.before(`
                             <div class="flex items-center gap-2 my-3 text-lg w-full">
@@ -86,17 +83,45 @@
                 data: {
                     f_id: f_id
                 },
-                success: function (response) {
+                success: function(response) {
 
-                    $('#form-container').html('<p class="text-sm m-1 font-semibold">For feedback purposes (optional)</p>');
-                    $('#create-form-btn').show();
-                    $('#create-form-btn').css({
-                        'opacity': '',
-                        'cursor': ''
-                    });
+                    
+                    // console.log(response);
+                   window.location = "my-form.php";
 
-                    $('#create-form-btn').prop('disabled', false);
-                    $('#create-form-btn').addClass('hover:bg-green-700');
+                }
+            });
+        }
+    }
+
+
+    function unLinkForm(e) {
+
+        if (confirm('Do you really want to unlink this form?')) {
+            let event_id = $(e).data('eventId');
+            $.ajax({
+                type: "POST",
+                url: "../backend/update/unlink_form.php",
+                data: {
+                    event_id: event_id
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response == 'unlinked') {
+                        $('#create-form-link').show();
+
+                        $('#form-container').html('');
+                        $('#create-form-btn').show();
+                        $('#create-form-btn').css({
+                            'opacity': '',
+                            'cursor': ''
+                        });
+
+                        $('#create-form-btn').prop('disabled', false);
+                        $('#create-form-btn').addClass('hover:bg-green-700');
+                    }
+
+
 
                 }
             });
@@ -121,7 +146,7 @@
                 f_id: f_id,
                 value: value
             },
-            success: function (response) {
+            success: function(response) {
                 console.log(response);
                 if (response == '0') {
                     $('#save-note').addClass('text-red-700').text('Could not save');
@@ -156,7 +181,7 @@
                     q_id: q_id,
                     value: value
                 },
-                success: function (response) {
+                success: function(response) {
                     if (response == '0') {
                         $('#save-note').addClass('text-red-700').text('Could not save');
                     } else {
@@ -176,7 +201,7 @@
                         data: {
                             q_id: q_id
                         },
-                        success: function (c_id) {
+                        success: function(c_id) {
                             let to_change = $e.data('change');
                             $('#' + to_change).html(messageOption(q_id));
 
@@ -190,7 +215,7 @@
                         data: {
                             q_id: q_id
                         },
-                        success: function (c_id) {
+                        success: function(c_id) {
                             let to_change = $e.data('change');
                             $('#' + to_change).html(multipleChoice(q_id, 1, '', c_id));
                         }
@@ -209,7 +234,7 @@
                     q_id: q_id,
                     value: value
                 },
-                success: function (response) {
+                success: function(response) {
                     console.log(response)
                     if (response == '0') {
                         $('#save-note').addClass('text-red-700').text('Could not save');
@@ -228,35 +253,35 @@
 
     function multipleChoice(q_id, count, value, c_id) {
         return `
-                            <div class="flex flex-col w-[80%] my-2 items-start">
-                                <div class="flex items-center gap-2 my-3 text-lg w-full">
-                                    <input type="radio" id="" disabled>
-                                    <div class="flex flex-col w-full">
-                                        <input type="text" name="question-choice-${q_id}[]"
-                                            class="question-choice p-1 border-b outline-none border-gray-400 text-sm rounded-sm w-full"
-                                            placeholder="Choice ${count}" onkeyup="checkIfEnter(this)" data-choice-count="${count}"
-                                            value="${value}" id="${c_id}"
-                                            data-choice-id="${c_id}"
-                                            onchange="saveChoice($(this),$(this).val(),${c_id})">
-                                    </div>
-                                    <i class="fa-solid fa-x text-xs text-gray-400 cursor-pointer"
-                                        onclick="removeChoice(${c_id},this);"></i>
+                <div class="flex flex-col w-[80%] my-2 items-start">
+                    <div class="flex items-center gap-2 my-3 text-lg w-full">
+                        <input type="radio" id="" disabled>
+                        <div class="flex flex-col w-full">
+                            <input type="text" name="question-choice-${q_id}[]"
+                                class="question-choice p-1 border-b outline-none border-gray-400 text-sm rounded-sm w-full"
+                                placeholder="Choice ${count}" onkeyup="checkIfEnter(this)" data-choice-count="${count}"
+                                value="${value}" id="${c_id}"
+                                data-choice-id="${c_id}"
+                                onchange="saveChoice($(this),$(this).val(),${c_id})">
+                        </div>
+                        <i class="fa-solid fa-x text-xs text-gray-400 cursor-pointer"
+                            onclick="removeChoice(${c_id},this);"></i>
 
-                                </div>
+                    </div>
 
 
-                                <p class="add-choice font-semibold cursor-pointer my-2 text-xs md:text-sm text-gray-600"
-                                    data-question-id="${q_id}" onclick="addChoice($(this))">Add
-                                    choice
-                                    <i class="fa-solid fa-plus"></i>
-                                </p>
-                            </div>
-                                `;
+                    <p class="add-choice font-semibold cursor-pointer my-2 text-xs md:text-sm text-gray-600"
+                        data-question-id="${q_id}" onclick="addChoice($(this))">Add
+                        choice
+                        <i class="fa-solid fa-plus"></i>
+                    </p>
+                </div>
+                `;
     }
 
     function messageOption(q_id) {
         return `
-                            <input type="text" placeholder="Answer"
+                            <input type="text" placeholder="Message"
                                 class="p-1 border-b mb-3 border-gray-400 mt-4 outline-none text-sm rounded-sm w-[80%]" name="event_title" disabled>
 
                         `;
@@ -274,7 +299,7 @@
                 f_id: <?= $f_id ?>,
                 type: type
             },
-            success: function (response) {
+            success: function(response) {
 
                 $(e).before(response)
             }
@@ -292,7 +317,7 @@
                 data: {
                     q_id: q_id
                 },
-                success: function (response) {
+                success: function(response) {
 
                     $('#' + toDelete).addClass('transition-default');
                     $('#' + toDelete).css('opacity', '0');
@@ -322,5 +347,4 @@
             $(e).trigger(tabKeyEvent);
         }
     }
-
 </script>
